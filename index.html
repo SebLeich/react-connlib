@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Hello React!</title>
+</head>
+
+<body>
+    <div id="upload">
+        Upload File
+    </div>
+
+    <div id="root"></div>
+
+    <!-- Dependencies -->
+    <script src="./node_modules/react/umd/react.development.js"></script>
+    <script src="./node_modules/react-dom/umd/react-dom.development.js"></script>
+
+    <!-- Main -->
+    <script src="./dist/connlib.js"></script>
+</body>
+
+</html>
+<style>
+    body {
+        margin: 0px;
+        padding: 0px;
+        background-color: rgb(245, 245, 245);
+    }
+
+    #scene {
+        background-color: rgb(233, 255, 233);
+        top: 200px;
+        left: 200px;
+        height: 250px;
+        width: 220px;
+        position: absolute;
+    }
+
+    #upload {
+        position: fixed;
+        right: 5px;
+        top: 5px;
+        padding: 5px 10px;
+        background-color: #525252;
+        z-index: 2;
+        border-radius: 2px;
+        cursor: pointer;
+        color: white;
+        font-family: monospace;
+    }
+
+    .connlib-instance {
+        height: 100%;
+        width: 100%;
+        background-color: white;
+        position: absolute;
+    }
+</style>
