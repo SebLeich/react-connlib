@@ -6,5 +6,16 @@ import * as input from "../assets/input.json";
 document.getElementById("upload").addEventListener("click", () => {
     Connlib.importData(input as any);
 });
+document.getElementById("toggle-blocking-cells").addEventListener("click", () => {
+    Connlib.rootInstance.toggleBlockedCells();
+});
 
-setTimeout(() => Connlib.importData(input as any), 200);
+Connlib.standaloneSetupObservable.subscribe(() => {
+    Connlib.importData(input as any);
+    Connlib.moveX = 150;
+    Connlib.moveY = 150;
+    Connlib.applyTransform();
+});
+document.addEventListener("DOMContentLoaded", function () {
+    Connlib.setUpStandalone();
+});

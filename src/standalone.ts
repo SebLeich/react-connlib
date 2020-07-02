@@ -25,7 +25,6 @@ import {
     ConnlibRelationship,
     ConnlibRoleType,
     ConnlibScene,
-    ConnlibTypeMap,
     Connlib,
     ConnlibConnectInit,
     ConnlibConnection,
@@ -58,7 +57,6 @@ export const connlibParameter = ConnlibParameter;
 export const connlibRelationship = ConnlibRelationship;
 export const connlibRoleType = ConnlibRoleType;
 export const connlibScene = ConnlibScene;
-export const connlibTypeMap = ConnlibTypeMap;
 
 // jsPlumb aligned interface types
 export const connlib = Connlib;

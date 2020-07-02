@@ -8,7 +8,10 @@
 
 <body>
     <div id="upload">
-        Upload File
+        Upload file
+    </div>
+    <div id="toggle-blocking-cells">
+        Toggle blocking cells
     </div>
 
     <div id="root"></div>
@@ -27,6 +30,7 @@
         margin: 0px;
         padding: 0px;
         background-color: rgb(245, 245, 245);
+        overflow: hidden;
     }
 
     #scene {
@@ -51,10 +55,29 @@
         font-family: monospace;
     }
 
+    #toggle-blocking-cells {
+        position: fixed;
+        right: 5px;
+        top: 40px;
+        padding: 5px 10px;
+        background-color: #525252;
+        z-index: 2;
+        border-radius: 2px;
+        cursor: pointer;
+        color: white;
+        font-family: monospace;
+    }
+
     .connlib-instance {
         height: 100%;
         width: 100%;
         background-color: white;
         position: absolute;
+    }
+
+    .connlib-element {
+        position: absolute;
+        background-color: rgb(255, 215, 215);
+        border-radius: 3px;
     }
 </style>
