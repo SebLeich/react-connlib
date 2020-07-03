@@ -817,13 +817,9 @@
                     "labels": [
                     ],
                     "connectors": {
-                        "60": {
+                        "591": {
                             "pathPoints": [
-                                {
-                                    "left": 0,
-                                    "top": 0,
-                                    "endpoint": null    
-                                }
+
                             ]
                         }
                     }
