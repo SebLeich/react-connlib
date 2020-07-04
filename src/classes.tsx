@@ -103,22 +103,54 @@ class ConnlibPoint {
 class ConnlibPathPoint extends ConnlibPoint {
     isSettedUp: boolean = false;
     positionChangeObservable: Subject<ConnlibPathPoint>;
-    setPosition(point: ConnlibPoint){
+    setPosition(point: ConnlibPoint) {
         this.left = point.left;
         this.top = point.top;
         this.positionChangeObservable.next(this);
     }
-    setUp(){
+    setUp() {
         this.positionChangeObservable = new Subject();
         this.isSettedUp = true;
     }
 }
-
+/**
+ * the class contains a connlib endpoint
+ */
 class ConnlibEndpoint extends ConnlibPathPoint {
+
+    componentRef: ConnlibEndpointComponent;
     source: ConnlibLayerData;
     direction: number;
-    type: ConnlibTypeMapEntry;
+    type: ConnlibEndpointInterface;
+    connlibInstance: ConnlibInstance;
+
+    render() {
+        this.componentRef = ReactDOM.render(
+            React.createElement(ConnlibEndpointComponent),
+            this.connlibInstance.componentRef.ref.current
+        );
+        this.componentRef.setState({
+            
+        });
+    }
 }
+/**
+ * the connlib endpoint interface
+ * all endpoint's you want to render needs to implement the interface
+ */
+interface ConnlibEndpointInterface {
+    width: number;
+    height: number;
+    fill: string;
+    hasPort: boolean;
+    portWidth: number;
+    portColor: string;
+    portBorderColor: string;
+    portBorderWidth: number;
+    arrowType: number;
+    arrowFill: string;
+}
+
 export class ConnlibConnectorData {
     pathPoints: ConnlibPathPoint[];
 }
@@ -197,7 +229,7 @@ export class Connlib {
     static blockingClassName = "connlib-connection-blocked";
     static connectableClassName = "connlib-connectable";
     static endpointStack = 15;
-    static pathCornerRadius = 10;
+    static pathCornerRadius = 2;
     static elementDOMElementMapLambda = (conatiner: HTMLElement, elementId: number) => {
         return conatiner.querySelector("[data-id='" + elementId + "']");
     };
@@ -719,7 +751,7 @@ export class Connlib {
                 console.log(this.rootInstance.cellRect(p, 'green', []));
             }
             */
-           connector.updatePathPoints(this.cellsArrayToPathPointArray(pathPoints));
+            connector.updatePathPoints(this.cellsArrayToPathPointArray(pathPoints));
             /*
             let sourceP = this.rootInstance.getGridCellForEndpoint(this.getEndpointConnectionPoint(this.rootInstance.rawPointToInstancePoint(eSource.p) as ConnlibEndpoint));
             let targetP = this.rootInstance.getGridCellForEndpoint(this.getEndpointConnectionPoint(this.rootInstance.rawPointToInstancePoint(eTarget.p) as ConnlibEndpoint));
@@ -887,12 +919,12 @@ class ConnlibExtensions {
      * attention! line1.target must be line2.source
      */
     static isClockwise(line1: ConnlibLine, line2: ConnlibLine): boolean {
-        if(line1._target.left != line2._source.left || line1._target.top != line2._source.top){
+        if (line1._target.left != line2._source.left || line1._target.top != line2._source.top) {
             console.warn("cannot calculate clockwise characeristics: target line 1 != source line 2");
             return null;
         }
-        let sum = ((line1._target.left - line1._source.left)*(line1._target.top + line1._target.top)) + ((line2._target.left - line2._source.left)*(line2._target.top + line2._source.top)) + ((line1._source.left - line2._target.left)*(line1._source.top + line2._target.top));
-        if(sum > 0) return true;
+        let sum = ((line1._target.left - line1._source.left) * (line1._target.top + line1._target.top)) + ((line2._target.left - line2._source.left) * (line2._target.top + line2._source.top)) + ((line1._source.left - line2._target.left) * (line1._source.top + line2._target.top));
+        if (sum < 0) return true;
         return false;
     }
     /**
@@ -1055,6 +1087,9 @@ class ConnlibGridCell {
     c: number;
     w: number;
 }
+/**
+ * a internal grid cell storing additionally a cells direction relative to the previous cell
+ */
 class ConnlibAlgorithmGridCell extends ConnlibGridCell {
     d: number;
 }
@@ -1105,18 +1140,18 @@ class ConnlibLine implements ConnlibDragFlagInterface {
     /**
      * the method destroys the line and removes it from all its referenced lists
      */
-    destroy(){
-        if(this.connection){
-            if(!this.connection.removeLine(this)) throw("cannot remove the line from the referenced connection");
+    destroy() {
+        if (this.connection) {
+            if (!this.connection.removeLine(this)) throw ("cannot remove the line from the referenced connection");
             else this.connection = null;
         } else {
-            throw("cannot destory the line: no connection referenced!");
+            throw ("cannot destory the line: no connection referenced!");
         }
-        if(this.connlibInstance){
-            if(!this.connlibInstance.removeLine(this)) throw("cannot remove the line from the referenced connlib instance");
+        if (this.connlibInstance) {
+            if (!this.connlibInstance.removeLine(this)) throw ("cannot remove the line from the referenced connlib instance");
             else this.connection = null;
         } else {
-            throw("cannot destory the line: no connlib instance referenced!");
+            throw ("cannot destory the line: no connlib instance referenced!");
         }
     }
     /**
@@ -1124,16 +1159,16 @@ class ConnlibLine implements ConnlibDragFlagInterface {
      * @param source 
      * @param target 
      */
-    setSourceAndTarget(source: ConnlibPathPoint, target: ConnlibPathPoint){
+    setSourceAndTarget(source: ConnlibPathPoint, target: ConnlibPathPoint) {
         this._setSource(source);
         this._setTarget(target);
-        if(this._source.left == this._target.left){
+        if (this._source.left == this._target.left) {
             this.orientation = ConnlibOrientation.VERTICAL;
-            if(this.sT > this.tT) this.direction = ConnlibDirection.TOP;
+            if (this.sT > this.tT) this.direction = ConnlibDirection.TOP;
             else this.direction = ConnlibDirection.BOTTOM;
-        } else if(this._source.top == this._target.top){
+        } else if (this._source.top == this._target.top) {
             this.orientation = ConnlibOrientation.HORIZONTAL;
-            if(this.sL > this.tL) this.direction = ConnlibDirection.LEFT;
+            if (this.sL > this.tL) this.direction = ConnlibDirection.LEFT;
             else this.direction = ConnlibDirection.RIGHT;
         } else {
             this.orientation = ConnlibOrientation.LOPSIDED;
@@ -1142,9 +1177,9 @@ class ConnlibLine implements ConnlibDragFlagInterface {
         };
     }
 
-    private _setSource(point: ConnlibPathPoint){
-        if(!point.isSettedUp) throw("point is not setted up!");
-        if(this.soureSubscription){
+    private _setSource(point: ConnlibPathPoint) {
+        if (!point.isSettedUp) throw ("point is not setted up!");
+        if (this.soureSubscription) {
             this.soureSubscription.unsubscribe();
             this._source = null;
         }
@@ -1154,9 +1189,9 @@ class ConnlibLine implements ConnlibDragFlagInterface {
         });
     }
 
-    private _setTarget(point: ConnlibPathPoint){
-        if(!point.isSettedUp) throw("point is not setted up!");
-        if(this.targetSubscription){
+    private _setTarget(point: ConnlibPathPoint) {
+        if (!point.isSettedUp) throw ("point is not setted up!");
+        if (this.targetSubscription) {
             this.targetSubscription.unsubscribe();
             this._target = null;
         }
@@ -1166,13 +1201,17 @@ class ConnlibLine implements ConnlibDragFlagInterface {
         });
     }
 }
-
+/**
+ * an element's orientation
+ */
 const ConnlibOrientation = {
     "HORIZONTAL": 0,
     "VERTICAL": 1,
     "LOPSIDED": 2
 }
-
+/**
+ * a connlib connection
+ */
 export class ConnlibConnection {
     guid: string = Guid.newGuid();
     source: ConnlibLayerData;
@@ -1183,20 +1222,19 @@ export class ConnlibConnection {
     componentRef: ConnlibConnectionComponent;
     connlibInstance: ConnlibInstance;
 
-    getEndpoints(){
+    getEndpoints() {
         return this._pathPoints.filter(x => (x as ConnlibEndpoint).source != null);
     }
 
     removeLine(line: ConnlibLine): boolean {
-        if(this._lines[line.guid]){
+        if (this._lines[line.guid]) {
             delete this._lines[line.guid];
             return true;
         }
         return false;
     }
 
-    render(){
-        console.log(this.connlibInstance.componentRef.ref.current);
+    render() {
         this.componentRef = ReactDOM.render(
             React.createElement(ConnlibConnectionComponent),
             this.connlibInstance.componentRef.ref.current
@@ -1206,36 +1244,40 @@ export class ConnlibConnection {
         });
     }
 
-    updatePathPoints(points: ConnlibPathPoint[]){
-        if(points.length < 2){
+    updatePathPoints(points: ConnlibPathPoint[]) {
+        if (points.length < 2) {
             console.warn("path is invalid: no path points found - started path auto calculation");
             Connlib.startCompletePathCalculation(this);
         } else {
-            while(Object.keys(this._lines).length > 0){
+            while (Object.keys(this._lines).length > 0) {
                 this._lines[Object.keys(this._lines)[0]].destroy();
             }
             this._pathPoints = points;
-            for(var i = 1; i < points.length; i++){
+            for (var i = 1; i < points.length; i++) {
                 let l = new ConnlibLine();
                 l.connection = this;
                 l.connlibInstance = this.connlibInstance;
-                l.setSourceAndTarget(points[i-1], points[i]);
+                l.setSourceAndTarget(points[i - 1], points[i]);
                 this._lines[l.guid] = l;
             }
             console.log(this._lines);
         }
     }
 }
+
 class ConnlibConnectionValidationInit {
     isValid: boolean;
     callback: Subject<ConnlibConnection>;
 }
+
 export class ConnlibDropInfoInit {
     sourceId: string;
     targetId: string;
     connection: ConnlibConnection;
 }
-
+/**
+ * a connlib instance
+ */
 export class ConnlibInstance {
     // is the current instance rendered?
     rendered: boolean = false;
@@ -1439,7 +1481,7 @@ export class ConnlibInstance {
      * @param connlibLine 
      */
     removeLine(line: ConnlibLine): boolean {
-        if(this._lines[line.guid]){
+        if (this._lines[line.guid]) {
             delete this._lines[line.guid];
             return true;
         }
@@ -1448,7 +1490,7 @@ export class ConnlibInstance {
     /**
      * the method calculates the rect position and renders the cell
      */
-    cellRect(cell: ConnlibGridCell, color: string, classList: string[]){
+    cellRect(cell: ConnlibGridCell, color: string, classList: string[]) {
         return this.centeredRect({
             left: cell.c,
             top: cell.r
@@ -1525,7 +1567,7 @@ export class ConnlibInstance {
             }
             this.renderEndpoints();
         }
-        for(let connectorId in this._connections) this._connections[connectorId].render();
+        for (let connectorId in this._connections) this._connections[connectorId].render();
     }
 
     renderEndpoints() {
@@ -1682,6 +1724,29 @@ export class ConnlibInstance {
     public renderedObservable: Subject<ConnlibInstance> = new Subject();
 }
 /**
+ * the react component of the endpoint
+ */
+class ConnlibEndpointComponent extends React.Component {
+    ref: React.RefObject<SVGSVGElement> = React.createRef();
+    /**
+     * the method enables user's to (hard) clear the svg
+     */
+    clear() {
+        while (this.ref.current.lastChild) {
+            this.ref.current.removeChild(this.ref.current.lastChild);
+        }
+    }
+    /**
+     * the method is called on component rendering
+     */
+    render() {
+        if (this.state as any) {
+            return 
+        }
+        return null;
+    }
+}
+/**
  * a connlib instance's react component for DOM interaction
  */
 class ConnlibInstanceComponent extends React.Component {
@@ -1726,74 +1791,94 @@ class ConnlibConnectionComponent extends React.Component {
             this.ref.current.removeChild(this.ref.current.lastChild);
         }
     }
+    private pathWithoutR(lines: ConnlibLine[]): string {
+        let max = lines.length;
+        var i = 0;
+        var d = "";
+        for (let line of (this.state as any).lines) {
+            if (i == 0) {
+                if (max > 2) {
+                    d += "M " + (line as ConnlibLine).sL + " " + (line as ConnlibLine).sT + " ARC " + " L " + (line as ConnlibLine).tL + " " + (line as ConnlibLine).tT;
+                } else {
+                    d += "M " + (line as ConnlibLine).sL + " " + (line as ConnlibLine).sT + " L " + (line as ConnlibLine).tL + " " + (line as ConnlibLine).tT;
+                }
+            } else if (i == (max - 1)) {
+                d += " L " + (line as ConnlibLine).tL + " " + (line as ConnlibLine).tT;
+            } else {
+
+                d += " L " + (line as ConnlibLine).tL + " " + (line as ConnlibLine).tT;
+            }
+            i++;
+        }
+        return d;
+    }
     /**
      * the method is called on component rendering
      */
     render() {
         if ((this.state as any) && Array.isArray((this.state as any).lines)) {
             var d: string;
-            var i = 0;
             var max = (this.state as any).lines.length;
-            for(let i = 1; i < max; i++){
-                let prevLine = (this.state as any).lines[i-1] as ConnlibLine;
-                let currLine = (this.state as any).lines[i] as ConnlibLine;
-                let clockwise = ConnlibExtensions.isClockwise(prevLine, currLine);
-                let cW: string;
-                let r = Connlib.pathCornerRadius;
-                if(clockwise == null){
-                    r = 0;
-                } else {
-                    if(clockwise) cW = "0 0 1";
-                    cW = "0 0 0";
-                }
-                if(r == 0){
-
-                } else {
-                    if(i == 1){
-                        // only end
-                        d += "M" + prevLine.sL + "," + prevLine.sT + " L";
-                        if(prevLine.orientation == ConnlibOrientation.HORIZONTAL){
-                            if(prevLine.tL > prevLine.sL){
-                                d += (prevLine.tL-r) + ",";
-                            } else if(prevLine.tL < prevLine.sL){
-                                d += (prevLine.tL+r) + ",";
-                            }
-                            d += prevLine.sT;
-                        } else if(prevLine.orientation == ConnlibOrientation.VERTICAL){
-                            d += prevLine.sL + ",";
-                            if(prevLine.tT > prevLine.sT){
-                                d += (prevLine.tT-r);
-                            } else if(prevLine.tT < prevLine.sT){
-                                d += (prevLine.tL+r);
-                            }
+            if(Connlib.pathCornerRadius > 0){
+                for (let i = 1; i < max; i++) {
+                    let prevLine = (this.state as any).lines[i-1] as ConnlibLine;
+                    let currLine = (this.state as any).lines[i] as ConnlibLine;
+                    let clockwise = ConnlibExtensions.isClockwise(prevLine, currLine);
+                    let cW: string;
+                    let r = Connlib.pathCornerRadius;
+                    if (clockwise == null) {
+                        r = 0;
+                    } else {
+                        if (clockwise){
+                            cW = "0 0 1";
                         } else {
-                            console.warn("don't know how to handle lopsided connectors ...");
-                            d += prevLine.tL + "," + prevLine.tT;
+                            cW = "0 0 0";
                         }
-                        d += " A" + r + "," + r + " " + cW + " " + prevLine.;
-                    } else if(i == (max-1)) {
+                    }
+                    if (i == 1) {
+                        d = "M" + prevLine.sL + "," + prevLine.sT + " L";
+                    } else {
+                        d += " L ";
+                    }
+                    if (prevLine.orientation == ConnlibOrientation.HORIZONTAL) {
+                        if (prevLine.direction == ConnlibDirection.RIGHT) {
+                            d += (prevLine.tL - r) + ",";
+                        } else if (prevLine.direction == ConnlibDirection.LEFT) {
+                            d += (prevLine.tL + r) + ",";
+                        }
+                        d += prevLine.sT;
+                    } else if (prevLine.orientation == ConnlibOrientation.VERTICAL) {
+                        d += prevLine.sL + ",";
+                        if (prevLine.direction == ConnlibDirection.BOTTOM) {
+                            d += (prevLine.tT - r);
+                        } else if (prevLine.direction == ConnlibDirection.TOP) {
+                            d += (prevLine.tT + r);
+                        }
+                    } else {
+                        console.warn("don't know how to handle lopsided connectors ...");
+                        d += prevLine.tL + "," + prevLine.tT;
+                    }
+                    switch (currLine.direction) {
+                        case ConnlibDirection.TOP:
+                            d += " A" + r + "," + r + " " + cW + " " + prevLine.tL + "," + (prevLine.tT - Connlib.pathCornerRadius);
+                            break;
+                        case ConnlibDirection.RIGHT:
+                            d += " A" + r + "," + r + " "+ cW + " " + (prevLine.tL + Connlib.pathCornerRadius) + "," + prevLine.tT;
+                            break;
+                        case ConnlibDirection.BOTTOM:
+                            d += " A" + r + "," + r + " " + cW + " " + prevLine.tL + "," + (prevLine.tT+ Connlib.pathCornerRadius);
+                            break;
+                        case ConnlibDirection.RIGHT:
+                            d += " A" + r + "," + r + " " + cW + " " + (prevLine.tL - Connlib.pathCornerRadius) + "," + prevLine.tT;
+                            break;
+                    }
+                    if (i == (max - 1)) {
                         // only start
-
-                    } else {
-                        // both
-                        d += " " + prevLine.sL + " " + prevLine.sT + " A" + r + "," + r + " " + cW + " L "
+                        d += " L" + currLine.tL + "," + currLine.tT;
                     }
                 }
-            }
-            for(let line of (this.state as any).lines){
-                if(i == 0){
-                    if(max > 2){
-                        d += "M " + (line as ConnlibLine).sL + " " + (line as ConnlibLine).sT + " ARC " + " L " + (line as ConnlibLine).tL + " " + (line as ConnlibLine).tT;
-                    } else {
-                        d += "M " + (line as ConnlibLine).sL + " " + (line as ConnlibLine).sT + " L " + (line as ConnlibLine).tL + " " + (line as ConnlibLine).tT;
-                    }
-                } else if(i == (max-1)){
-                    d += " L " + (line as ConnlibLine).tL + " " + (line as ConnlibLine).tT;
-                } else {
-
-                    d +=  " L " + (line as ConnlibLine).tL + " " + (line as ConnlibLine).tT;
-                }
-                i++;
+            } else {
+                d = this.pathWithoutR((this.state as any).lines);
             }
             return <path d={d} stroke="black" fill="transparent" strokeWidth="1" />
         }
