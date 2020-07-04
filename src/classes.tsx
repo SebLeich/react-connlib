@@ -46,8 +46,6 @@ export class ConnlibComposition extends ConnlibAbstractRelationship { }
 export class ConnlibCreateRelationship extends ConnlibAbstractRelationship { }
 export class ConnlibDestroyRelationship extends ConnlibAbstractRelationship { }
 export class ConnlibFulfillmentRelationship extends ConnlibAbstractRelationship { }
-export class ConnlibInheritance extends ConnlibAbstractRelationship { }
-export class ConnlibRelationship extends ConnlibAbstractRelationship { }
 export class ConnlibLabel {
     text: string;
     left: number;
@@ -99,8 +97,11 @@ class ConnlibPoint {
     left: number;
     top: number;
 }
-
+/**
+ * a basic connlib pathpoint used for connections
+ */
 class ConnlibPathPoint extends ConnlibPoint {
+    connlibInstance: ConnlibInstance;
     isSettedUp: boolean = false;
     positionChangeObservable: Subject<ConnlibPathPoint>;
     setPosition(point: ConnlibPoint) {
@@ -108,7 +109,8 @@ class ConnlibPathPoint extends ConnlibPoint {
         this.top = point.top;
         this.positionChangeObservable.next(this);
     }
-    setUp() {
+    setUp(connlibInstance: ConnlibInstance) {
+        this.connlibInstance = connlibInstance;
         this.positionChangeObservable = new Subject();
         this.isSettedUp = true;
     }
@@ -117,20 +119,54 @@ class ConnlibPathPoint extends ConnlibPoint {
  * the class contains a connlib endpoint
  */
 class ConnlibEndpoint extends ConnlibPathPoint {
-
+    guid: string = Guid.newGuid();
     componentRef: ConnlibEndpointComponent;
     source: ConnlibLayerData;
     direction: number;
     type: ConnlibEndpointInterface;
     connlibInstance: ConnlibInstance;
+    rawXPosition: number;
+    rawYPosition: number;
+    positionInitiallySetted: boolean = false;
 
-    render() {
-        this.componentRef = ReactDOM.render(
-            React.createElement(ConnlibEndpointComponent),
-            this.connlibInstance.componentRef.ref.current
-        );
+    setPosition(point: ConnlibPoint) {
+        this.left = point.left;
+        this.top = point.top;
+        this.setRawPosition(this.connlibInstance.instancePointToRawPoint(point));
+        this.positionChangeObservable.next(this);
+    }
+    setRawPosition(point: ConnlibPoint) {
+        if (!this.connlibInstance) {
+            console.warn("cannot transform instance position to raw position: no connlib instance referenced ...");
+            return;
+        }
+        let p = this.connlibInstance.instancePointToRawPoint(point);
+        this.rawXPosition = p.left;
+        this.rawYPosition = p.top;
+        this.positionInitiallySetted = true;
+    }
+    setUp(connlibInstance: ConnlibInstance) {
+        this.connlibInstance = connlibInstance;
+        this.positionChangeObservable = new Subject();
+        this.type = new ConnlibRelationship();
+        this.type.width = 20;
+        this.type.height = Connlib.endpointHeightFormula(20);
+        if (this.top && this.left && connlibInstance) this.setRawPosition(this.connlibInstance.instancePointToRawPoint({
+            top: this.top,
+            left: this.left
+        }));
+        this.isSettedUp = true;
+    }
+    validate() {
+        if (!this.positionInitiallySetted) {
+            console.warn("cannot render endpoint: position is not setted!", this);
+            return;
+        }
         this.componentRef.setState({
-            
+            left: this.left,
+            top: this.top,
+            direction: this.direction,
+            type: this.type
         });
     }
 }
@@ -150,6 +186,7 @@ interface ConnlibEndpointInterface {
     arrowType: number;
     arrowFill: string;
 }
+
 
 export class ConnlibConnectorData {
     pathPoints: ConnlibPathPoint[];
@@ -203,17 +240,6 @@ export class ConnlibMetaData {
     modifiedDate: string;
     author: string;
 }
-export class ConnlibRoleType extends ConnlibAbstractStructuralType {
-    name: string;
-    occurrenceConstraint: string;
-    attributes: [[string, ConnlibAttribute]];
-    methods: [[string, ConnlibMethod]];
-}
-export class ConnlibScene extends ConnlibAbstractStructuralType {
-    name: string;
-    attributes: [[string, ConnlibAttribute]];
-    children: [[string, ConnlibModelElement]]
-}
 /**
  * the static connlib interface
  */
@@ -223,6 +249,8 @@ export class Connlib {
     /**
      * does the connlib library listen to window events, containing:
      * arrow keys (keycodes: 37 - 40)
+     * pan
+     * 
      */
     static windowListenersSettedUp = false;
     static useOverlapDetection = true;
@@ -230,6 +258,10 @@ export class Connlib {
     static connectableClassName = "connlib-connectable";
     static endpointStack = 15;
     static pathCornerRadius = 2;
+
+    static endpointSize: 20; // the endpoint svg's width & the height is calculated with the formula below
+    static endpointHeightFormula = (size: number) => { return size * 1.5 };
+
     static elementDOMElementMapLambda = (conatiner: HTMLElement, elementId: number) => {
         return conatiner.querySelector("[data-id='" + elementId + "']");
     };
@@ -423,7 +455,7 @@ export class Connlib {
             let point = new ConnlibPathPoint();
             point.left = x.c;
             point.top = x.r;
-            point.setUp();
+            point.setUp(this.rootInstance);
             return point;
         });
     }
@@ -452,7 +484,7 @@ export class Connlib {
         point.type = endpoint.type;
         point.left = endpoint.left;
         point.top = endpoint.top;
-        point.setUp();
+        point.setUp(this.rootInstance);
         switch (endpoint.direction) {
             case ConnlibDirection.TOP:
                 point.top = endpoint.top - this.endpointStack;
@@ -555,14 +587,26 @@ export class Connlib {
             connector.source = rootInstance.getLayerByElementId(connectorObjectArray[1].sourceId);
             connector.target = rootInstance.getLayerByElementId(connectorObjectArray[1].targetId);
             connector.updatePathPoints(connectorData.pathPoints);
-            rootInstance.addConnector(connector);
+            rootInstance.registerConnector(connector);
         }
 
         rootInstance.render();
-        rootInstance.renderEndpoints();
-        rootInstance.renderConnectors();
+        //rootInstance.renderEndpoints();
+        //rootInstance.renderConnectors();
         let end = performance.now();
         console.log("finished in: " + (end - start).toFixed(0) + "ms")
+    }
+    /**
+     * the method registers a type within the map
+     * @param namespace 
+     * @param entry 
+     */
+    public static registerType(namespace: string, entry: ConnlibTypeMapEntry) {
+        if (ConnlibTypeMap[namespace]) {
+            console.warn("cannot register " + namespace + ": already registered!");
+            return;
+        }
+        ConnlibTypeMap[namespace] = entry;
     }
     /**
      * the method is currently used for render debug components
@@ -739,23 +783,25 @@ export class Connlib {
             let interTarget = this.calculateBoundingIntersections(connector.target, fun);
             if (!this.rootInstance.rendered) this.rootInstance.render();
             let eSource = ConnlibExtensions.getClosestPointToRefPoint(interSource, connector.target.middle).p as ConnlibEndpoint;
+            var source = new ConnlibEndpoint();
+            source.left = eSource.left;
+            source.top = eSource.top;
+            source.source = connector.source;
+            source.direction = eSource.direction;
+            source.setUp(this.rootInstance);
+            this.rootInstance.registerEndpoint(source);
             let eTarget = ConnlibExtensions.getClosestPointToRefPoint(interTarget, connector.source.middle).p as ConnlibEndpoint;
-            console.log(eSource, eTarget);
-            let sourceCell = this.rootInstance.getGridCellForRawEndpoint(this.getEndpointConnectionPoint(eSource));
-            let targetCell = this.rootInstance.getGridCellForRawEndpoint(this.getEndpointConnectionPoint(eTarget));
-            console.log(sourceCell, targetCell);
-            let pathPoints = ConnlibExtensions.IDAStar(this.rootInstance, sourceCell, targetCell, eSource.direction);
-            console.log(pathPoints);
-            /*
-            for(let p of pathPoints){
-                console.log(this.rootInstance.cellRect(p, 'green', []));
-            }
-            */
+            var target = new ConnlibEndpoint();
+            target.left = eTarget.left;
+            target.top = eTarget.top;
+            target.source = connector.source;
+            target.direction = eTarget.direction;
+            target.setUp(this.rootInstance);
+            this.rootInstance.registerEndpoint(target);
+            let sourceCell = this.rootInstance.getGridCellForRawEndpoint(this.getEndpointConnectionPoint(source));
+            let targetCell = this.rootInstance.getGridCellForRawEndpoint(this.getEndpointConnectionPoint(target));
+            let pathPoints = ConnlibExtensions.IDAStar(this.rootInstance, sourceCell, targetCell, source.direction);
             connector.updatePathPoints(this.cellsArrayToPathPointArray(pathPoints));
-            /*
-            let sourceP = this.rootInstance.getGridCellForEndpoint(this.getEndpointConnectionPoint(this.rootInstance.rawPointToInstancePoint(eSource.p) as ConnlibEndpoint));
-            let targetP = this.rootInstance.getGridCellForEndpoint(this.getEndpointConnectionPoint(this.rootInstance.rawPointToInstancePoint(eTarget.p) as ConnlibEndpoint));
-            connector.pathPoints = this.cellsArrayToPathPointArray(ConnlibExtensions.IDAStar(this.rootInstance, sourceP, targetP, (eSource.p as ConnlibEndpoint).direction));*/
 
         }
     }
@@ -1234,16 +1280,6 @@ export class ConnlibConnection {
         return false;
     }
 
-    render() {
-        this.componentRef = ReactDOM.render(
-            React.createElement(ConnlibConnectionComponent),
-            this.connlibInstance.componentRef.ref.current
-        );
-        this.componentRef.setState({
-            lines: Object.keys(this._lines).map(key => this._lines[key])
-        });
-    }
-
     updatePathPoints(points: ConnlibPathPoint[]) {
         if (points.length < 2) {
             console.warn("path is invalid: no path points found - started path auto calculation");
@@ -1262,6 +1298,12 @@ export class ConnlibConnection {
             }
             console.log(this._lines);
         }
+    }
+
+    validate() {
+        this.componentRef.setState({
+            lines: Object.keys(this._lines).map(key => this._lines[key])
+        });
     }
 }
 
@@ -1298,7 +1340,7 @@ export class ConnlibInstance {
     // the lines
     private _lines: { [key: string]: ConnlibLine } = {};
     // the endpoints
-    private _endPoints: { [key: string]: ConnlibPathPoint } = {};
+    private _endPoints: { [key: string]: ConnlibEndpoint } = {};
     // the layers represented within the 
     private _layers: { [key: number]: ConnlibLayerData } = {};
 
@@ -1325,10 +1367,6 @@ export class ConnlibInstance {
     _blockingCellsRendered: boolean = false;
     _renderCellsWalkable: boolean = true;
     _renderCellsNotWalkable: boolean = true;
-
-    addConnector(connector: ConnlibConnection) {
-        this._connections[connector.guid] = connector;
-    }
 
     addEndpoint(target: HTMLElement, options: ConnlibEndpointOptionsInit) {
 
@@ -1473,8 +1511,15 @@ export class ConnlibInstance {
         o.source = point.source;
         o.direction = point.direction;
         o.type = point.type;
-        o.setUp();
+        o.setUp(this);
         return o;
+    }
+    registerConnector(connector: ConnlibConnection) {
+        this._connections[connector.guid] = connector;
+    }
+
+    registerEndpoint(point: ConnlibEndpoint) {
+        this._endPoints[point.guid] = point;
     }
     /**
      * the method removes a line from the current instance
@@ -1541,38 +1586,19 @@ export class ConnlibInstance {
      * the method renders the current instance
      */
     render() {
+        let connectorArray = Object.keys(this._connections).map(key => this._connections[key]);
+        let endpointArray = Object.keys(this._endPoints).map(key => this._endPoints[key]);
         this.componentRef.setState({
             guid: this.guid,
             layer: this.layer,
-            deepth: this._deepth
+            deepth: this._deepth,
+            endpoints: endpointArray,
+            connectors: connectorArray
         });
+        for (let endPoint of endpointArray) endPoint.validate();
+        for (let connector of connectorArray) connector.validate();
         this.rendered = true;
         this.renderedObservable.next(this);
-    }
-    /**
-     * the method renders the instance's connectors
-     */
-    renderConnectors(preventRenderIfInstanceIsNotRenderedYet?: boolean) {
-        if (!this.rendered) {
-            if (preventRenderIfInstanceIsNotRenderedYet) {
-                console.warn("the connlib instance is not rendered and you setted the flag to prevent render of instance if is not rendered to true: thus, the connectors could not be rendered!");
-                return;
-            }
-            this.render();
-        }
-        if (!this.endpointsRendered) {
-            if (preventRenderIfInstanceIsNotRenderedYet) {
-                console.warn("the connlib instance is not rendered and you setted the flag to prevent render of instance if is not rendered to true: thus, the connectors could not be rendered!");
-                return;
-            }
-            this.renderEndpoints();
-        }
-        for (let connectorId in this._connections) this._connections[connectorId].render();
-    }
-
-    renderEndpoints() {
-        console.log("render endpoints ...");
-        this.endpointsRendered = true;
     }
     /**
      * only for debugging
@@ -1741,7 +1767,65 @@ class ConnlibEndpointComponent extends React.Component {
      */
     render() {
         if (this.state as any) {
-            return 
+            let type = (this.state as any).type as ConnlibEndpointInterface;
+            var top: number;
+            var height: number;
+            var left: number;
+            var width: number;
+            switch ((this.state as any).direction) {
+                case ConnlibDirection.TOP:
+                    if (type.hasPort && type.portWidth > type.width) {
+                        left = ((this.state as any).left - (type.portWidth / 2));
+                        width = type.portWidth;
+                    } else {
+                        left = ((this.state as any).left - (type.width / 2));
+                        width = type.width;
+                    }
+                    top = (this.state as any).top - type.height;
+                    height = type.height;
+                    break;
+                case ConnlibDirection.RIGHT:
+                    left = (this.state as any).left;
+                    width = type.height;
+                    if (type.hasPort && type.portWidth > type.width) {
+                        top = ((this.state as any).top - (type.portWidth / 2));
+                        height = type.portWidth;
+                    } else {
+                        top = ((this.state as any).top - (type.width / 2));
+                        height = type.width;
+                    }
+                    break;
+                case ConnlibDirection.BOTTOM:
+                    if (type.hasPort && type.portWidth > type.width) {
+                        left = ((this.state as any).left - (type.portWidth / 2));
+                        width = type.portWidth;
+                    } else {
+                        left = ((this.state as any).left - (type.width / 2));
+                        width = type.width;
+                    }
+                    top = (this.state as any).top;
+                    height = type.height;
+                    break;
+                case ConnlibDirection.LEFT:
+                    left = (this.state as any).left - type.height;
+                    width = type.height;
+                    if (type.hasPort && type.portWidth > type.width) {
+                        top = ((this.state as any).top - (type.portWidth / 2));
+                        height = type.portWidth;
+                    } else {
+                        top = ((this.state as any).top - (type.portWidth / 2));
+                        height = type.width;
+                    }
+                    break;
+            }
+            let style: React.CSSProperties = {
+                position: "absolute",
+                top: top,
+                height: height,
+                left: left,
+                width: width
+            };
+            return <svg className="connlib-endpoint" style={style}></svg>
         }
         return null;
     }
@@ -1750,6 +1834,7 @@ class ConnlibEndpointComponent extends React.Component {
  * a connlib instance's react component for DOM interaction
  */
 class ConnlibInstanceComponent extends React.Component {
+
     ref: React.RefObject<SVGSVGElement> = React.createRef();
     /**
      * the method enables user's to (hard) clear the svg
@@ -1764,17 +1849,33 @@ class ConnlibInstanceComponent extends React.Component {
      */
     render() {
         if ((this.state as any)) {
-
             let style = {
                 height: (this.state as any).layer.height,
                 width: (this.state as any).layer.width,
                 left: (this.state as any).layer.left,
                 top: (this.state as any).layer.top
             };
+            let connectors: any[] = [];
+            let endpoints: any[] = [];
+            for (let c of (this.state as any).connectors) {
+                connectors.push(React.createElement(ConnlibConnectionComponent, {
+                    key: (c as ConnlibConnection).guid,
+                    ref: ref => (c as ConnlibConnection).componentRef = ref
+                }));
+            }
+            for (let e of (this.state as any).endpoints) {
+                endpoints.push(React.createElement(ConnlibEndpointComponent, {
+                    key: (e as ConnlibEndpoint).guid,
+                    ref: ref => (e as ConnlibEndpoint).componentRef = ref
+                }));
+            }
             return (
-                <svg className="connlib-instance" data-deepth={(this.state as any).deepth} style={style} ref={this.ref} >
-                    {(this.state as any).guid}
-                </svg>
+                <div>
+                    {endpoints}
+                    <svg className="connlib-instance" data-deepth={(this.state as any).deepth} style={style} ref={this.ref} >
+                        {connectors}
+                    </svg>
+                </div>
             );
         }
         return null;
@@ -1819,9 +1920,9 @@ class ConnlibConnectionComponent extends React.Component {
         if ((this.state as any) && Array.isArray((this.state as any).lines)) {
             var d: string;
             var max = (this.state as any).lines.length;
-            if(Connlib.pathCornerRadius > 0){
+            if (Connlib.pathCornerRadius > 0) {
                 for (let i = 1; i < max; i++) {
-                    let prevLine = (this.state as any).lines[i-1] as ConnlibLine;
+                    let prevLine = (this.state as any).lines[i - 1] as ConnlibLine;
                     let currLine = (this.state as any).lines[i] as ConnlibLine;
                     let clockwise = ConnlibExtensions.isClockwise(prevLine, currLine);
                     let cW: string;
@@ -1829,7 +1930,7 @@ class ConnlibConnectionComponent extends React.Component {
                     if (clockwise == null) {
                         r = 0;
                     } else {
-                        if (clockwise){
+                        if (clockwise) {
                             cW = "0 0 1";
                         } else {
                             cW = "0 0 0";
@@ -1863,10 +1964,10 @@ class ConnlibConnectionComponent extends React.Component {
                             d += " A" + r + "," + r + " " + cW + " " + prevLine.tL + "," + (prevLine.tT - Connlib.pathCornerRadius);
                             break;
                         case ConnlibDirection.RIGHT:
-                            d += " A" + r + "," + r + " "+ cW + " " + (prevLine.tL + Connlib.pathCornerRadius) + "," + prevLine.tT;
+                            d += " A" + r + "," + r + " " + cW + " " + (prevLine.tL + Connlib.pathCornerRadius) + "," + prevLine.tT;
                             break;
                         case ConnlibDirection.BOTTOM:
-                            d += " A" + r + "," + r + " " + cW + " " + prevLine.tL + "," + (prevLine.tT+ Connlib.pathCornerRadius);
+                            d += " A" + r + "," + r + " " + cW + " " + prevLine.tL + "," + (prevLine.tT + Connlib.pathCornerRadius);
                             break;
                         case ConnlibDirection.RIGHT:
                             d += " A" + r + "," + r + " " + cW + " " + (prevLine.tL - Connlib.pathCornerRadius) + "," + prevLine.tT;
@@ -1995,29 +2096,9 @@ const ConnlibTypeMap: { [key: string]: ConnlibTypeMapEntry } = {
         class: "fulfillment",
         hasChildren: false
     },
-    "io.framed.model.Inheritance": {
-        type: ConnlibInheritance,
-        class: "inheritance",
-        hasChildren: false
-    },
-    "io.framed.model.Relationship": {
-        type: ConnlibRelationship,
-        class: "relationship",
-        hasChildren: false
-    },
-    "io.framed.model.RoleType": {
-        type: ConnlibRoleType,
-        class: "roletype",
-        hasChildren: false
-    },
     "io.framed.model.Package": {
         type: ConnlibPackage,
         class: "package",
-        hasChildren: true
-    },
-    "io.framed.model.Scene": {
-        type: ConnlibScene,
-        class: "scene",
         hasChildren: true
     }
 }
@@ -2114,5 +2195,44 @@ class ConnlibPanWrapper implements ConnlibDragFlagInterface {
      */
     calculateTransform(x: number, y: number) {
         return { x: (this.initialXTransform + (x - this.mouseX)) * 1, y: (this.initialYTransform + (y - this.mouseY)) * 1 };
+    }
+}
+
+// the default stencil
+/**
+ * a default inheritance
+ */
+class ConnlibInheritance implements ConnlibEndpointInterface {
+    width: number = Connlib.endpointSize;
+    height: number = Connlib.endpointHeightFormula(Connlib.endpointSize);
+    hasPort: boolean = false;
+    fill: string = "transparent";
+    portBorderColor: string;
+    portBorderWidth: number;
+    portColor: string;
+    portWidth: number;
+    arrowFill: string = "#ffffff";
+    arrowType: number = ConnlibEndpointType.INHERITANCE;
+}
+/**
+ * a default relation without arrows
+ */
+class ConnlibRelationship implements ConnlibEndpointInterface {
+    width: number;
+    height: number;
+    hasPort: boolean;
+    fill: string;
+    portBorderColor: string;
+    portBorderWidth: number;
+    portColor: string;
+    portWidth: number;
+    arrowFill: string;
+    arrowType: number;
+    constructor() {
+        this.arrowType = ConnlibEndpointType.DEFAULT;
+        this.fill = "transparent";
+        this.hasPort = false;
+        this.width = Connlib.endpointSize;
+        this.height = Connlib.endpointHeightFormula(this.width);
     }
 }
