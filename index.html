@@ -91,4 +91,30 @@
         border-radius: 3px;
         z-index: 1;
     }
+
+    .connlib-line-overlay {
+        z-index: 1;
+        stroke: rgba(255, 255, 255, 0);
+        stroke-width: 6;
+    }
+
+    .connlib-line-overlay:hover {
+        stroke: rgba(255, 0, 0, 0.489);
+    }
+
+    .connlib-line-overlay.horizontal {
+        cursor: ns-resize;
+    }
+
+    .connlib-line-overlay.vertical {
+        cursor: ew-resize;
+    }
+    .connlib-pathpoint-overlay {
+        fill: rgba(255, 255, 255, 0);
+    }
+    .connlib-pathpoint-overlay:hover {
+        cursor: all-scroll;
+        z-index: 3;
+        fill: rgba(0, 0, 255, 0.625);
+    }
 </style>
