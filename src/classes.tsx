@@ -148,7 +148,7 @@ class ConnlibEndpoint extends ConnlibPathPoint {
     setUp(connlibInstance: ConnlibInstance) {
         this.connlibInstance = connlibInstance;
         this.positionChangeObservable = new Subject();
-        this.type = new ConnlibPortRelationship();
+        this.type = new ConnlibInheritance();
         this.type.width = Connlib.endpointSize;
         this.type.height = Connlib.endpointHeightFormula(Connlib.endpointSize);
         if (this.top && this.left && connlibInstance) this.setRawPosition(this.connlibInstance.instancePointToRawPoint({
@@ -177,14 +177,9 @@ class ConnlibEndpoint extends ConnlibPathPoint {
 interface ConnlibEndpointInterface {
     width: number;
     height: number;
-    fill: string;
-    hasPort: boolean;
-    portWidth: number;
-    portColor: string;
-    portBorderColor: string;
-    portBorderWidth: number;
-    arrowType: number;
-    arrowFill: string;
+    fill?: string;
+    portType?: ConnlibPortTypeOptions; 
+    arrowType?: ConnlibArrowTypeOptions;
 }
 
 
@@ -1784,62 +1779,98 @@ class ConnlibEndpointComponent extends React.Component {
             var portLeft: number;
             var portTop: number;
             let portSize: number = Connlib.endpointSize - (2 * (Connlib.endpointPadding));
-            var arrowPointer: number;
-            var arrowFooter1: number;
-            var arrowFooter2: number;
-            var routeEnd: number;
+            var arrowPointer: ConnlibPoint = new ConnlibPoint();
+            var arrowFooter1: ConnlibPoint = new ConnlibPoint();
+            var arrowFooter2: ConnlibPoint = new ConnlibPoint();
+            var routeEnd: ConnlibPoint = new ConnlibPoint();
             switch ((this.state as any).direction) {
                 case ConnlibDirection.TOP:
-                    if (type.hasPort && type.portWidth > type.width) {
-                        left = ((this.state as any).left - (type.portWidth / 2));
-                        width = type.portWidth;
-                    } else {
-                        left = ((this.state as any).left - (type.width / 2));
-                        width = type.width;
-                    }
+                    left = ((this.state as any).left - (type.width / 2));
+                    width = type.width;
                     top = (this.state as any).top - type.height;
                     height = type.height + Connlib.endpointIndent;
                     portLeft = Connlib.endpointPadding;
                     portTop = type.height - portSize;
+                    arrowPointer.left = width/2;
+                    if(type.portType){
+                        arrowPointer.top = portTop;
+                    } else {
+                        arrowPointer.top = type.height;
+                    }
+                    if(type.arrowType){
+                        routeEnd.left = arrowPointer.left;
+                        routeEnd.top = arrowPointer.top - (type.arrowType.intend * 2);
+                        arrowFooter1.left = arrowPointer.left + (type.arrowType.width/2);
+                        arrowFooter1.top = arrowPointer.top - (type.arrowType.intend);
+                        arrowFooter2.left = arrowPointer.left - (type.arrowType.width/2);
+                        arrowFooter2.top = arrowPointer.top - (type.arrowType.intend);
+                    }
                     break;
                 case ConnlibDirection.RIGHT:
                     left = (this.state as any).left - Connlib.endpointIndent;
                     width = type.height + Connlib.endpointIndent;
-                    if (type.hasPort && type.portWidth > type.width) {
-                        top = ((this.state as any).top - (type.portWidth / 2));
-                        height = type.portWidth;
-                    } else {
-                        top = ((this.state as any).top - (type.width / 2));
-                        height = type.width;
-                    }
+                    top = ((this.state as any).top - (type.width / 2));
+                    height = type.width;
                     portLeft = Connlib.endpointIndent;
                     portTop = Connlib.endpointIndent;
+                    arrowPointer.top = portTop + (portSize/2);
+                    if(type.portType){
+                        arrowPointer.left = Connlib.endpointIndent + portSize;
+                    } else {
+                        arrowPointer.left = Connlib.endpointIndent;
+                    }
+                    if(type.arrowType){
+                        arrowFooter2.left = arrowPointer.left + type.arrowType.intend;
+                        arrowFooter2.top = arrowPointer.top - (type.arrowType.width/2);
+                        routeEnd.left = arrowPointer.left + (type.arrowType.intend*2);
+                        routeEnd.top = arrowPointer.top;
+                        arrowFooter1.left = arrowPointer.left + type.arrowType.intend;
+                        arrowFooter1.top = arrowPointer.top + (type.arrowType.width/2);
+                    }
                     break;
                 case ConnlibDirection.BOTTOM:
-                    if (type.hasPort && type.portWidth > type.width) {
-                        left = ((this.state as any).left - (type.portWidth / 2));
-                        width = type.portWidth;
-                    } else {
-                        left = ((this.state as any).left - (type.width / 2));
-                        width = type.width;
-                    }
+                    left = ((this.state as any).left - (type.width / 2));
+                    width = type.width;
                     top = (this.state as any).top - Connlib.endpointIndent;
                     height = type.height + Connlib.endpointIndent;
                     portLeft = Connlib.endpointPadding;
                     portTop = Connlib.endpointIndent;
+                    arrowPointer.left = width/2;
+                    if(type.portType){
+                        arrowPointer.top = portTop;
+                    } else {
+                        arrowPointer.top = Connlib.endpointIndent;
+                    }
+                    if(type.arrowType){
+                        arrowFooter2.left = arrowPointer.left + (type.arrowType.width/2);
+                        arrowFooter2.top = arrowPointer.top + (type.arrowType.intend);
+                        routeEnd.left = arrowPointer.left;
+                        routeEnd.top = arrowPointer.top + (type.arrowType.intend * 2);
+                        arrowFooter1.left = arrowPointer.left - (type.arrowType.width/2);
+                        arrowFooter1.top = arrowPointer.top + (type.arrowType.intend);
+                    }
                     break;
                 case ConnlibDirection.LEFT:
                     left = (this.state as any).left - type.height;
                     width = type.height + Connlib.endpointIndent;
-                    if (type.hasPort && type.portWidth > type.width) {
-                        top = ((this.state as any).top - (type.portWidth / 2));
-                        height = type.portWidth;
-                    } else {
-                        top = ((this.state as any).top - (type.portWidth / 2));
-                        height = type.width;
-                    }
+                    top = ((this.state as any).top - (type.width / 2));
+                    height = type.width;
                     portLeft = type.height - portSize;
                     portTop = Connlib.endpointPadding;
+                    arrowPointer.top = portTop + (portSize/2);
+                    if(type.portType){
+                        arrowPointer.left = type.height - portSize;
+                    } else {
+                        arrowPointer.left = type.height;
+                    }
+                    if(type.arrowType){
+                        arrowFooter1.left = arrowPointer.left - type.arrowType.intend;
+                        arrowFooter1.top = arrowPointer.top - (type.arrowType.width/2);
+                        arrowFooter2.left = arrowPointer.left - type.arrowType.intend;
+                        arrowFooter2.top = arrowPointer.top + (type.arrowType.width/2);
+                        routeEnd.left = arrowPointer.left - (type.arrowType.intend*2);
+                        routeEnd.top = arrowPointer.top;
+                    }
                     break;
             }
             let style: React.CSSProperties = {
@@ -1850,9 +1881,20 @@ class ConnlibEndpointComponent extends React.Component {
                 width: width
             };
             var inner: any[] = [];
-            if(type.hasPort){
+            if(type.portType){
                 inner.push(
-                    <rect x={portLeft} y={portTop} height={portSize} width={portSize} className="connlib-port" />
+                    <rect x={portLeft} y={portTop} height={portSize} width={portSize} strokeWidth={type.portType.portBorderWidth} stroke={type.portType.portBorderColor} fill={type.portType.portColor} className="connlib-port" />
+                );
+            }
+            if(type.arrowType){
+                var d = "M" + arrowFooter1.left + "," + arrowFooter1.top + " L" + arrowPointer.left + "," + arrowPointer.top + " L" + arrowFooter2.left + "," + arrowFooter2.top;
+                if(type.arrowType.isRoute){
+                    d += " L" + routeEnd.left + "," + routeEnd.top;
+                } else if(type.arrowType.isClosedArrow){
+                    d += " L" + arrowFooter1.left + "," + arrowFooter1.top;
+                }
+                inner.push(
+                    <path d={d} fill={type.arrowType.fillColor} strokeWidth={type.arrowType.borderWidth} stroke={type.arrowType.borderColor} />
                 );
             }
             return (
@@ -2024,7 +2066,6 @@ class ConnlibConnectionComponent extends React.Component {
             }
             // final line to final connection point
             d += " L" + realTarget.left + "," + realTarget.top;
-            console.log(d);
             return <path d={d} stroke="black" fill="transparent" strokeWidth="1" />
         }
         return null;
@@ -2093,11 +2134,49 @@ const ConnlibDirection = {
     "BOTTOM": 2,
     "LEFT": 3
 }
-const ConnlibEndpointType = {
-    "DEFAULT": 0,
-    "ARROW": 1,
-    "INHERITANCE": 2,
-    "PORT": 3
+const ConnlibArrowType = {
+    "OpenArrow": {
+        id: 1,
+        isRoute: false,
+        fillColor: "transparent",
+        borderColor: "black",
+        borderWidth: 1,
+        intend: (Connlib.endpointSize - (Connlib.endpointPadding * 2)) / 2,
+        width: (Connlib.endpointSize - (Connlib.endpointPadding * 2)) / 2,
+        isClosedArrow: false
+    },
+    "Inheritance": {
+        id: 2,
+        isRoute: false,
+        fillColor: "white",
+        borderColor: "black",
+        borderWidth: 1,
+        intend: (Connlib.endpointSize - (Connlib.endpointPadding * 2)),
+        width: (Connlib.endpointSize - (Connlib.endpointPadding * 2)),
+        isClosedArrow: true
+    }
+}
+const ConnlibPortType = {
+    "Default": {
+        portBorderColor: "black",
+        portBorderWidth: 1,
+        portColor: "white"
+    }
+}
+class ConnlibArrowTypeOptions {
+    id: number;
+    isRoute: boolean;
+    fillColor?: string;
+    borderColor?: string;
+    borderWidth?: number;
+    intend?: number;
+    width?: number;
+    isClosedArrow?: boolean;
+}
+class ConnlibPortTypeOptions {
+    portColor: string;
+    portBorderColor: string;
+    portBorderWidth: number;
 }
 const ConnlibTypeMap: { [key: string]: ConnlibTypeMapEntry } = {
     "io.framed.model.Attribute": {
@@ -2249,57 +2328,20 @@ class ConnlibPanWrapper implements ConnlibDragFlagInterface {
 class ConnlibInheritance implements ConnlibEndpointInterface {
     width: number = Connlib.endpointSize;
     height: number = Connlib.endpointHeightFormula(Connlib.endpointSize);
-    hasPort: boolean = false;
-    fill: string = "transparent";
-    portBorderColor: string;
-    portBorderWidth: number;
-    portColor: string;
-    portWidth: number;
-    arrowFill: string = "#ffffff";
-    arrowType: number = ConnlibEndpointType.INHERITANCE;
+    arrowType: ConnlibArrowTypeOptions = ConnlibArrowType.Inheritance;
 }
 /**
  * a default relation without arrows
  */
 class ConnlibRelationship implements ConnlibEndpointInterface {
-    width: number;
-    height: number;
-    hasPort: boolean;
-    fill: string;
-    portBorderColor: string;
-    portBorderWidth: number;
-    portColor: string;
-    portWidth: number;
-    arrowFill: string;
-    arrowType: number;
-    constructor() {
-        this.arrowType = ConnlibEndpointType.DEFAULT;
-        this.fill = "transparent";
-        this.hasPort = false;
-        this.width = Connlib.endpointSize;
-        this.height = Connlib.endpointHeightFormula(this.width);
-    }
+    width: number = Connlib.endpointSize;
+    height: number = Connlib.endpointHeightFormula(Connlib.endpointSize);
 }
 /**
  * a default relation with a port arrows
  */
 class ConnlibPortRelationship implements ConnlibEndpointInterface {
-    width: number;
-    height: number;
-    hasPort: boolean;
-    fill: string;
-    portBorderColor: string;
-    portBorderWidth: number;
-    portColor: string;
-    portWidth: number;
-    arrowFill: string;
-    arrowType: number;
-    constructor() {
-        this.arrowType = ConnlibEndpointType.DEFAULT;
-        this.fill = "transparent";
-        this.hasPort = true;
-        this.portWidth = Connlib.endpointSize;
-        this.width = Connlib.endpointSize;
-        this.height = Connlib.endpointHeightFormula(this.width);
-    }
+    width: number = Connlib.endpointSize;
+    height: number = Connlib.endpointHeightFormula(Connlib.endpointSize);
+    portType: ConnlibPortTypeOptions = ConnlibPortType.Default;
 }
