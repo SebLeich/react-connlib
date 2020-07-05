@@ -1,7 +1,9 @@
-import { Connlib, ConnlibDataInterface } from './classes';
+import { Connlib } from './classes';
 import * as input from "../assets/input.json";
+import { FramedIoModule } from "./framed.io.extensions";
 
 (window as any).Connlib = Connlib;
+FramedIoModule.registerAllConstructs();
 
 document.getElementById("upload").addEventListener("click", () => {
     Connlib.importData(input as any);
