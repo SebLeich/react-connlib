@@ -823,6 +823,7 @@ export class Connlib {
             }
         });
         window.addEventListener("mouseup", () => {
+            if(!this.dragFlag) return;
             switch (this.dragFlag.constructor) {
                 case ConnlibConnectionCreateWrapper:
                     (this.dragFlag as ConnlibConnectionCreateWrapper).destroy();
@@ -2327,7 +2328,7 @@ class ConnlibConnectionComponent extends React.Component {
                     break;
                 case ConnlibDirection.LEFT:
                 case ConnlibDirection.RIGHT:
-                    if (realTarget.left != targetPoint.left) console.warn("target endpoint is lopsided! (top) " + realTarget.top + ", " + targetPoint.top);
+                    if (realTarget.top != targetPoint.top) console.warn("target endpoint is lopsided! (top) " + realTarget.top + ", " + targetPoint.top);
                     break;
             }
             var d: string = "M " + realSource.left + "," + realSource.top;
@@ -2409,7 +2410,7 @@ class ConnlibConnectionComponent extends React.Component {
                             case ConnlibDirection.BOTTOM:
                                 d += " A" + r + "," + r + " " + cW + " " + prevLine.tL + "," + (prevLine.tT + Connlib.pathCornerRadius);
                                 break;
-                            case ConnlibDirection.RIGHT:
+                            case ConnlibDirection.LEFT:
                                 d += " A" + r + "," + r + " " + cW + " " + (prevLine.tL - Connlib.pathCornerRadius) + "," + prevLine.tT;
                                 break;
                         }
