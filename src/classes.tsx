@@ -22,12 +22,7 @@ class Guid {
 }
 
 
-export class ConnlibAbstractRelationship {
-    id: number;
-    sourceId: number;
-    targetId: number;
-    name: string;
-}
+
 export class ConnlibAttribute implements ConnlibModelElement {
     id: number;
     name: string;
@@ -44,10 +39,6 @@ export class ConnlibMethod {
     type: string;
     parameters: [string, ConnlibParameter];
 }
-export class ConnlibComposition extends ConnlibAbstractRelationship { }
-export class ConnlibCreateRelationship extends ConnlibAbstractRelationship { }
-export class ConnlibDestroyRelationship extends ConnlibAbstractRelationship { }
-export class ConnlibFulfillmentRelationship extends ConnlibAbstractRelationship { }
 export class ConnlibLabel {
     text: string;
     left: number;
@@ -153,9 +144,19 @@ class ConnlibEndpoint extends ConnlibPathPoint {
         } else {
             console.log(event);
         }
-        this.outOfSourceBound();
-        this.validateInstancePosition();
-        this.validate();
+        let result = this.outOfSourceBound();
+        if (!result.value) {
+            this.validateInstancePosition();
+            this.validate();
+        } else {
+            this.left = result.point.left;
+            this.top = result.point.top;
+            this.direction = result.direction;
+            this.validateInstancePosition();
+            this.validate();
+            if (Connlib.dragFlag == this) Connlib.dragFlag = null;
+            this.sourceSideChangeObservable.next(this);
+        }
     }
 
     getInstancePosition(): ConnlibPoint {
@@ -168,7 +169,6 @@ class ConnlibEndpoint extends ConnlibPathPoint {
     outOfSourceBound(): { value: boolean, point: ConnlibPoint, direction: number } {
         switch (this.direction) {
             case ConnlibDirection.BOTTOM:
-            case ConnlibDirection.TOP:
                 if (this.source.left > this.left) {
                     return {
                         value: true,
@@ -189,12 +189,67 @@ class ConnlibEndpoint extends ConnlibPathPoint {
                     }
                 }
                 break;
+            case ConnlibDirection.TOP:
+                if (this.source.left > this.left) {
+                    return {
+                        value: true,
+                        point: {
+                            left: this.source.left,
+                            top: this.source.top + 5,
+                        },
+                        direction: ConnlibDirection.LEFT
+                    }
+                } else if (this.source.right < this.left) {
+                    return {
+                        value: true,
+                        point: {
+                            left: this.source.right,
+                            top: this.source.top + 5
+                        },
+                        direction: ConnlibDirection.RIGHT
+                    }
+                }
+                break;
             case ConnlibDirection.LEFT:
+                if (this.source.top > this.top) {
+                    return {
+                        value: true,
+                        point: {
+                            left: this.source.left + 5,
+                            top: this.source.top,
+                        },
+                        direction: ConnlibDirection.TOP
+                    }
+                } else if (this.source.bottom < this.top) {
+                    return {
+                        value: true,
+                        point: {
+                            left: this.source.left + 5,
+                            top: this.source.bottom,
+                        },
+                        direction: ConnlibDirection.BOTTOM
+                    }
+                }
+                break;
             case ConnlibDirection.RIGHT:
                 if (this.source.top > this.top) {
-                    console.log("to top");
+                    return {
+                        value: true,
+                        point: {
+                            left: this.source.right - 5,
+                            top: this.source.top,
+                        },
+                        direction: ConnlibDirection.TOP
+                    }
                 } else if (this.source.bottom < this.top) {
-                    console.log("to bottom");
+                    return {
+                        value: true,
+                        point: {
+                            left: this.source.right - 5,
+                            top: this.source.bottom,
+                        },
+                        direction: ConnlibDirection.BOTTOM
+                    }
                 }
                 break;
         }
@@ -321,7 +376,7 @@ export class ConnlibAbstractStructuralType implements ConnlibModelElement {
     id: number;
 }
 export class ConnlibConnectionWrapper {
-    connections: [[string, ConnlibAbstractRelationship]]
+    connections: [[string, any]]
 }
 export class ConnlibMetaData {
     creationDate: string;
@@ -1474,24 +1529,26 @@ export class ConnlibConnection {
         let lines = Object.keys(this._lines).map(key => this._lines[key]);
         if (lines.length < 2) throw ("not implemented now ...");
         var source: ConnlibPathPoint;
+        let prev;
+        let next;
         if (line._source == this.sourcePoint) source = this.sourcePoint;
         else {
-            let prev = lines.find(x => x._target == line._source);
+            prev = lines.find(x => x._target == line._source);
             source = prev._source;
             this.removePathPoint(prev._target);
-            prev.destroy();
         }
         var target: ConnlibPathPoint;
         if (line._target == this.targetPoint) target = this.targetPoint;
         else {
-            let next = lines.find(x => x._source == line._target);
+            next = lines.find(x => x._source == line._target);
             target = next._target;
             this.removePathPoint(next._source);
-            next.destroy();
         }
         let l = this.setUpNewLine(source, target);
-        if (Connlib.dragFlag == line) Connlib.dragFlag = l;
+        if (Connlib.dragFlag && (Connlib.dragFlag == line) || (Connlib.dragFlag == prev) || (Connlib.dragFlag == next)) Connlib.dragFlag = l;
         line.destroy();
+        if(prev) prev.destroy();
+        if(next) next.destroy();
         this.validate();
     }
     /**
@@ -1543,14 +1600,34 @@ export class ConnlibConnection {
             }
             if (this.realSourceSubscription) this.realSourceSubscription.unsubscribe();
             if (this.sourceSideChangeSubscription) this.sourceSideChangeSubscription.unsubscribe();
+            if (this.sourcePointSubscription) this.sourcePointSubscription.unsubscribe();
             this.realSourceSubscription = realSource.positionChangeObservable.subscribe((event: ConnlibPositionChangeEvent) => {
                 this.sourcePoint.cascadingUpdate(event);
                 this.validate();
             });
-            // HEREEE
             this.sourceSideChangeSubscription = realSource.sourceSideChangeObservable.subscribe((endpoint: ConnlibEndpoint) => {
-                let connPoint = Connlib.getEndpointConnectionPoint(endpoint);
-                console.log(connPoint);
+                let tempPoint = this.connlibInstance.rawPointToInstancePoint(Connlib.getEndpointConnectionPoint(endpoint));
+                let connPoint = new ConnlibPathPoint();
+                connPoint.left = tempPoint.left;
+                connPoint.top = tempPoint.top;
+                connPoint.setUp(this.connlibInstance);
+                let helpPoint = new ConnlibPathPoint();
+                switch (endpoint.direction) {
+                    case ConnlibDirection.LEFT:
+                    case ConnlibDirection.RIGHT:
+                        helpPoint.left = connPoint.left;
+                        helpPoint.top = this.targetPoint.top;
+                        break;
+                    case ConnlibDirection.TOP:
+                    case ConnlibDirection.BOTTOM:
+                        helpPoint.top = connPoint.top;
+                        helpPoint.left = this.targetPoint.left;
+                        break;
+                }
+                this.targetPoint = connPoint;
+                helpPoint.setUp(this.connlibInstance);
+                this.updatePathPoints([connPoint, helpPoint, ...this._pathPoints], this.realSource, this.realTarget);
+                this.validate();
             });
             this.sourcePointSubscription = this.sourcePoint.positionChangeObservable.subscribe((event: ConnlibPositionChangeEvent) => {
                 if (
@@ -1566,6 +1643,7 @@ export class ConnlibConnection {
             });
             if (this.realTargetSubscription) this.realTargetSubscription.unsubscribe();
             if (this.targetSideChangeSubscription) this.targetSideChangeSubscription.unsubscribe();
+            if (this.targetPointSubscription) this.targetPointSubscription.unsubscribe();
             this.realTargetSubscription = realTarget.positionChangeObservable.subscribe((event: ConnlibPositionChangeEvent) => {
                 this.targetPoint.cascadingUpdate(event);
                 this.validate();
@@ -2400,6 +2478,7 @@ class ConnlibConnectionComponent extends React.Component {
                         <circle cx={prevLine.tL} cy={prevLine.tT} r="5" className="connlib-pathpoint-overlay" />
                     );
                     if (linesLongEnough) {
+                        // HEREEE
                         switch (currLine.direction) {
                             case ConnlibDirection.TOP:
                                 d += " A" + r + "," + r + " " + cW + " " + prevLine.tL + "," + (prevLine.tT - Connlib.pathCornerRadius);
@@ -2422,10 +2501,10 @@ class ConnlibConnectionComponent extends React.Component {
                         targetPointReached = true;
                         switch (currLine.orientation) {
                             case ConnlibOrientation.HORIZONTAL:
-                                dragOverlays.push(currLine.JSXComponent(overlayClass + " horizontal"));
+                                dragOverlays.push(currLine.JSXComponent(overlayClass + " horizontal target-connected"));
                                 break;
                             case ConnlibOrientation.VERTICAL:
-                                dragOverlays.push(currLine.JSXComponent(overlayClass + " vertical"));
+                                dragOverlays.push(currLine.JSXComponent(overlayClass + " vertical target-connected"));
                                 break;
                         }
                     }
@@ -2558,26 +2637,6 @@ const ConnlibTypeMap: { [key: string]: ConnlibTypeMapEntry } = {
     "io.framed.model.Attribute": {
         type: ConnlibAttribute,
         class: "attribute",
-        hasChildren: false
-    },
-    "io.framed.model.Composition": {
-        type: ConnlibComposition,
-        class: "composition",
-        hasChildren: false
-    },
-    "io.framed.model.CreateRelationship": {
-        type: ConnlibCreateRelationship,
-        class: "create-relationship",
-        hasChildren: false
-    },
-    "io.framed.model.DestroyRelationship": {
-        type: ConnlibDestroyRelationship,
-        class: "destroy-relationship",
-        hasChildren: false
-    },
-    "io.framed.model.Fulfillment": {
-        type: ConnlibFulfillmentRelationship,
-        class: "fulfillment",
         hasChildren: false
     }
 }

@@ -6,6 +6,18 @@ import {
     ConnlibMetaData
 } from './classes';
 
+export class FramedIoAbstractRelationship {
+    id: number;
+    sourceId: number;
+    targetId: number;
+    name: string;
+}
+
+export class FramedIoComposition extends FramedIoAbstractRelationship { }
+export class FramedIoCreateRelationship extends FramedIoAbstractRelationship { }
+export class FramedIoDestroyRelationship extends FramedIoAbstractRelationship { }
+export class FramedIoFulfillmentRelationship extends FramedIoAbstractRelationship { }
+
 export class FramedIoClass {
     id: number;
     name: string;
@@ -73,5 +85,9 @@ export class FramedIoModule {
         Connlib.registerType("io.framed.model.Relationship", { type: FramedIoRelationship, class: "relationship", hasChildren: false });
         Connlib.registerType("io.framed.model.RoleType", { type: FramedIoRoleType, class: "roletype", hasChildren: false });
         Connlib.registerType("io.framed.model.Scene", { type: FramedIoScene, class: "scene", hasChildren: true });
+        Connlib.registerType("io.framed.model.Composition", { type: FramedIoComposition, class: "composition", hasChildren: false });
+        Connlib.registerType("io.framed.model.CreateRelationship", { type: FramedIoCreateRelationship, class: "create-relationship", hasChildren: false });
+        Connlib.registerType("io.framed.model.DestroyRelationship", { type: FramedIoDestroyRelationship, class: "destroy-relationship", hasChildren: false }),
+        Connlib.registerType("io.framed.model.Fulfillment", { type: FramedIoFulfillmentRelationship, class: "fulfillment", hasChildren: false });
     }
 }
