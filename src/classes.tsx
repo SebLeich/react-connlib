@@ -77,7 +77,6 @@ export class ConnlibLayerData {
     layerSizeObservable: Subject<ConnlibLayerData>;
     connlibInstance: ConnlibInstance;
     middle: ConnlibPoint = null;
-
     setPosition(left: number, top: number) {
         this.left = left;
         this.top = top;
@@ -152,6 +151,7 @@ class ConnlibEndpoint extends ConnlibPathPoint {
         } else {
             console.log(event);
         }
+        this.outOfSourceBound();
         this.validateInstancePosition();
         this.validate();
     }
@@ -162,6 +162,47 @@ class ConnlibEndpoint extends ConnlibPathPoint {
     onMousedown() {
         Connlib.dragFlag = this;
     }
+
+    outOfSourceBound(): { value: boolean, point: ConnlibPoint, direction: number } {
+        switch(this.direction){
+            case ConnlibDirection.BOTTOM:
+            case ConnlibDirection.TOP:
+                if(this.source.left > this.left){
+                    return {
+                        value: true,
+                        point: {
+                            left: this.source.left,
+                            top: this.source.bottom - 5,
+                        },
+                        direction: ConnlibDirection.LEFT
+                    }
+                } else if(this.source.right < this.left){
+                    return {
+                        value: true,
+                        point: {
+                            left: this.source.right,
+                            top: this.source.bottom - 5
+                        },
+                        direction: ConnlibDirection.RIGHT
+                    }
+                }
+                break;
+            case ConnlibDirection.LEFT:
+            case ConnlibDirection.RIGHT:
+                if(this.source.top > this.top){
+                    console.log("to top");
+                } else if(this.source.bottom < this.top){
+                    console.log("to bottom");
+                }
+                break;
+        }
+        return {
+            value: false,
+            point: null,
+            direction: null
+        };
+    }
+
     setPosition(point: ConnlibPoint) {
         this.left = point.left;
         this.top = point.top;
@@ -182,13 +223,22 @@ class ConnlibEndpoint extends ConnlibPathPoint {
         }
         let diff = left - this.left;
         this.left = left;
-        this.validateInstancePosition();
-        this.validate();
-        let event = new ConnlibPositionChangeEvent();
-        event.participants.push(this);
-        event.movementOrientation = ConnlibOrientation.HORIZONTAL;
-        event.diffX = diff;
-        this.positionChangeObservable.next(event);
+        let result = this.outOfSourceBound();
+        if(!result.value){
+            this.validateInstancePosition();
+            this.validate();
+            let event = new ConnlibPositionChangeEvent();
+            event.participants.push(this);
+            event.movementOrientation = ConnlibOrientation.HORIZONTAL;
+            event.diffX = diff;
+            this.positionChangeObservable.next(event);
+        } else {
+            this.left = result.point.left;
+            this.top = result.point.top;
+            this.direction = result.direction;
+            this.validateInstancePosition();
+            this.validate();
+        }
     }
     updateTop(top: number) {
         if (this.direction == ConnlibDirection.TOP || this.direction == ConnlibDirection.BOTTOM) {
@@ -197,6 +247,7 @@ class ConnlibEndpoint extends ConnlibPathPoint {
         }
         let diff = top - this.top;
         this.top = top;
+        this.outOfSourceBound();
         this.validateInstancePosition();
         this.validate();
         let event = new ConnlibPositionChangeEvent();
@@ -574,12 +625,11 @@ export class Connlib {
         let rootLayer = data.layer[rootId].data;
         let rootLayerLayer = rootLayer[rootId];
         if (!rootLayerLayer) throw ("the layer needs to be represent within itself");
-
         let rootInstance = this.getInstance();
         this.rootInstance = rootInstance;
         rootInstance.deepth = 0;
         rootInstance.setContainer(this.renderComponentsRoot, rootLayerLayer);
-
+        rootLayerLayer.connlibInstance = rootInstance;
         // first render all childs (if neccessary)
         if (type.hasChildren) {
             for (let child of rootElement.children) {
@@ -722,30 +772,28 @@ export class Connlib {
             if (!this.dragFlag) return;
             let c = ConnlibExtensions.cumulativeOffset(event.target as HTMLElement);
             let corr = { left: event.offsetX + c.left, top: event.offsetY + c.top };
-            var dragFlag: any;
             switch (this.dragFlag.constructor) {
                 case ConnlibLine:
-                    dragFlag = this.dragFlag as ConnlibLine;
-                    console.log(dragFlag);
-                    switch(dragFlag.orientation){
+                    var line = (this.dragFlag as ConnlibLine);
+                    switch(line.orientation){
                         case ConnlibOrientation.HORIZONTAL:
-                            dragFlag.updateLeft(corr.left);
+                            line.updateTop(corr.top - line.connlibInstance.layer.top);
                             break;
                         case ConnlibOrientation.VERTICAL:
-                            dragFlag.updateTop(corr.top);
+                            line.updateLeft(corr.left  - line.connlibInstance.layer.left);
                             break;
                     }
                     break;
                 case ConnlibEndpoint:
-                    dragFlag = this.dragFlag as ConnlibEndpoint;
-                    switch (dragFlag.direction) {
+                    var endpoint = this.dragFlag as ConnlibEndpoint;
+                    switch (endpoint.direction) {
                         case ConnlibDirection.TOP:
                         case ConnlibDirection.BOTTOM:
-                            dragFlag.updateLeft(corr.left);
+                            endpoint.updateLeft(corr.left);
                             break;
                         case ConnlibDirection.RIGHT:
                         case ConnlibDirection.LEFT:
-                            dragFlag.updateTop(corr.top);
+                            endpoint.updateTop(corr.top);
                             break;
                     }
                     break;
@@ -814,8 +862,8 @@ export class Connlib {
                 let e2 = new ConnlibEndpoint();
                 e2.left = connector.target.middle.left;
                 e2.top = connector.target.bottom;
-                e1.direction = ConnlibDirection.BOTTOM;
-                e1.source = connector.target;
+                e2.direction = ConnlibDirection.BOTTOM;
+                e2.source = connector.target;
             } else {
                 console.warn("cannot calculate path: overlaping source and target");
                 return;
@@ -857,7 +905,7 @@ export class Connlib {
                     target.top = Connlib.roundValueToScale(eTarget.top);
                     break;
             }
-            target.source = connector.source;
+            target.source = connector.target;
             target.direction = eTarget.direction;
             target.setUp(this.rootInstance);
             this.rootInstance.registerEndpoint(target);
@@ -1265,6 +1313,8 @@ class ConnlibLine implements ConnlibDragFlagInterface {
         } else {
             throw ("cannot destory the line: no connlib instance referenced!");
         }
+        if(this.soureSubscription) this.soureSubscription.unsubscribe();
+        if(this.targetSubscription) this.targetSubscription.unsubscribe();
     }
     /**
      * the method returns the line's JSX representation
@@ -1340,19 +1390,16 @@ class ConnlibLine implements ConnlibDragFlagInterface {
         });
     }
     updateLeft(left: number) {
-        console.log("update left");
         let event = new ConnlibPositionChangeEvent();
         event.participants.push(this);
         event.movementOrientation = ConnlibOrientation.HORIZONTAL;
         event.diffX = left - this.sL;
-        console.log(event);
         this._source.cascadingUpdate(event);
         event.diffX = left - this.tL;
         this._target.cascadingUpdate(event);
         this.connection.validate();
     }
     updateTop(top: number) {
-        console.log("update top");
         let event = new ConnlibPositionChangeEvent();
         event.participants.push(this);
         event.movementOrientation = ConnlibOrientation.VERTICAL;
@@ -1409,15 +1456,22 @@ export class ConnlibConnection {
     lineHasZeroLength(line: ConnlibLine){
         let lines = Object.keys(this._lines).map(key => this._lines[key]);
         if(lines.length < 2) throw("not implemented now ...");
-        if(this.sourcePoint == line._source){
-            let next = lines.find(x => x._source == line._target);
-            this.setUpNewLine(line._source, next._target);
-            next.destroy();
-        } else {
+        var source: ConnlibPathPoint;
+        if(line._source == this.sourcePoint) source = this.sourcePoint;
+        else {
             let prev = lines.find(x => x._target == line._source);
-            this.setUpNewLine(prev._source, line._target);
+            source = prev._source;
             prev.destroy();
         }
+        var target: ConnlibPathPoint;
+        if(line._target == this.targetPoint) target = this.targetPoint;
+        else {
+            let next = lines.find(x => x._source == line._target);
+            target = next._target;
+            next.destroy();
+        }
+        let l = this.setUpNewLine(source, target);
+        if(Connlib.dragFlag == line) Connlib.dragFlag = l;
         line.destroy();
         this.validate();
     }
@@ -1430,7 +1484,7 @@ export class ConnlibConnection {
         return false;
     }
 
-    setUpNewLine(source: ConnlibPathPoint, target: ConnlibPathPoint){
+    setUpNewLine(source: ConnlibPathPoint, target: ConnlibPathPoint): ConnlibLine {
         let l = new ConnlibLine();
         l.connection = this;
         l.connlibInstance = this.connlibInstance;
@@ -1438,6 +1492,7 @@ export class ConnlibConnection {
         this._lines[l.guid] = l;
         this.connlibInstance.registerLine(l);
         l.zeroLengthObservable.subscribe((line: ConnlibLine) => this.lineHasZeroLength(line));
+        return l;
     }
 
     updatePathPoints(points: ConnlibPathPoint[], realSource: ConnlibEndpoint, realTarget: ConnlibEndpoint) {
@@ -2190,6 +2245,7 @@ class ConnlibConnectionComponent extends React.Component {
     render() {
         if ((this.state as any) && Array.isArray((this.state as any).lines)) {
             let dragOverlays: any[] = [];
+            let overlayClass = "connlib-line-overlay";
             let realSource = ((this.state as any).realSource as ConnlibEndpoint).getInstancePosition();
             let realTarget = ((this.state as any).realTarget as ConnlibEndpoint).getInstancePosition();
             let sourcePoint = (this.state as any).sourcePoint as ConnlibPathPoint;
@@ -2218,14 +2274,31 @@ class ConnlibConnectionComponent extends React.Component {
             if (Connlib.pathCornerRadius > 0) {
                 var prevLine = ((this.state as any).lines as ConnlibLine[]).find(x => x._source == sourcePoint);
                 var currLine = ((this.state as any).lines as ConnlibLine[]).find(x => x._source == prevLine._target);
-                if(!prevLine || !currLine){
-                    console.warn("something went wrong: cannot find first two lines of the connector!", this, prevLine, currLine);
-                    return null;
+                if(!currLine){
+                    if(!prevLine){
+                        console.warn("something went wrong: cannot find first two lines of the connector!", this, prevLine, currLine);
+                        return null;
+                    } else {
+                        switch(prevLine.orientation){
+                            case ConnlibOrientation.HORIZONTAL:
+                                dragOverlays.push(prevLine.JSXComponent(overlayClass + " horizontal"));
+                                break;
+                            case ConnlibOrientation.VERTICAL:
+                                dragOverlays.push(prevLine.JSXComponent(overlayClass + " vertical"));
+                                break;
+                        }
+                        d += " L" + realTarget.left + ", " + realTarget.top;
+                        return (
+                            <g>
+                                <path d={d} stroke={Connlib.connectorColor} fill="transparent" strokeWidth="1" />
+                                {dragOverlays}
+                            </g>
+                        );
+                    }
                 }
                 var targetPointReached = false;
                 while(!targetPointReached){
                     let linesLongEnough = (currLine.length > (2*Connlib.pathCornerRadius)) && (prevLine.length > (2*Connlib.pathCornerRadius));
-                    var overlayClass="connlib-line-overlay";
                     let clockwise = ConnlibExtensions.isClockwise(prevLine, currLine);
                     let cW: string;
                     let r = Connlib.pathCornerRadius;
@@ -2244,7 +2317,7 @@ class ConnlibConnectionComponent extends React.Component {
                         d += " L";
                     }
                     if (linesLongEnough && prevLine.orientation == ConnlibOrientation.HORIZONTAL) {
-                        overlayClass += " horizontal";
+                        dragOverlays.push(prevLine.JSXComponent(overlayClass + " horizontal"));
                         if (prevLine.direction == ConnlibDirection.RIGHT) {
                             d += (prevLine.tL - r) + ",";
                         } else if (prevLine.direction == ConnlibDirection.LEFT) {
@@ -2252,7 +2325,7 @@ class ConnlibConnectionComponent extends React.Component {
                         }
                         d += prevLine.sT;
                     } else if (linesLongEnough && prevLine.orientation == ConnlibOrientation.VERTICAL) {
-                        overlayClass += " vertical";
+                        dragOverlays.push(prevLine.JSXComponent(overlayClass + " vertical"));
                         d += prevLine.sL + ",";
                         if (prevLine.direction == ConnlibDirection.BOTTOM) {
                             d += (prevLine.tT - r);
@@ -2262,7 +2335,6 @@ class ConnlibConnectionComponent extends React.Component {
                     } else {
                         d += prevLine.tL + "," + prevLine.tT;
                     }
-                    dragOverlays.push(prevLine.JSXComponent(overlayClass));
                     dragOverlays.push(
                         <circle cx={prevLine.tL} cy={prevLine.tT} r="5" className="connlib-pathpoint-overlay" />
                     );
@@ -2287,9 +2359,14 @@ class ConnlibConnectionComponent extends React.Component {
                     if (currLine._target == targetPoint) {
                         d += " L" + currLine.tL + "," + currLine.tT;
                         targetPointReached = true;
-                        dragOverlays.push(
-                            <line x1={currLine.sL} y1={currLine.sT} x2={currLine.tL} y2={currLine.tT} className={overlayClass} />
-                        );
+                        switch(currLine.orientation){
+                            case ConnlibOrientation.HORIZONTAL:
+                                dragOverlays.push(currLine.JSXComponent(overlayClass + " horizontal"));
+                                break;
+                            case ConnlibOrientation.VERTICAL:
+                                dragOverlays.push(currLine.JSXComponent(overlayClass + " vertical"));
+                                break;
+                        }
                     }
                     prevLine = currLine;
                     currLine = ((this.state as any).lines as ConnlibLine[]).find(x => x._source == prevLine._target);
@@ -2299,7 +2376,6 @@ class ConnlibConnectionComponent extends React.Component {
             }
             // final line to final connection point
             d += " L" + realTarget.left + "," + realTarget.top;
-            console.log(d);
             return (
                 <g>
                     <path d={d} stroke={Connlib.connectorColor} fill="transparent" strokeWidth="1" />
