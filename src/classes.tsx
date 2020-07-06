@@ -267,7 +267,7 @@ class ConnlibEndpoint extends ConnlibPathPoint {
     }
     setUp(connlibInstance: ConnlibInstance) {
         this.connlibInstance = connlibInstance;
-        this.type = new ConnlibInheritance();
+        this.type = new ConnlibOpenArrow();
         this.type.width = Connlib.endpointSize;
         this.type.height = Connlib.endpointHeightFormula(Connlib.endpointSize);
         if (this.top && this.left && connlibInstance) this.validateInstancePosition();
@@ -1616,12 +1616,12 @@ export class ConnlibConnection {
                     case ConnlibDirection.LEFT:
                     case ConnlibDirection.RIGHT:
                         helpPoint.left = connPoint.left;
-                        helpPoint.top = this.targetPoint.top;
+                        helpPoint.top = this.sourcePoint.top;
                         break;
                     case ConnlibDirection.TOP:
                     case ConnlibDirection.BOTTOM:
                         helpPoint.top = connPoint.top;
-                        helpPoint.left = this.targetPoint.left;
+                        helpPoint.left = this.sourcePoint.left;
                         break;
                 }
                 this.targetPoint = connPoint;
@@ -2177,7 +2177,7 @@ class ConnlibEndpointComponent extends React.Component {
                     portTop = type.height - portSize;
                     arrowPointer.left = width / 2;
                     if (type.portType) {
-                        arrowPointer.top = portTop;
+                        arrowPointer.top = portTop - 1;
                     } else {
                         arrowPointer.top = type.height;
                     }
@@ -2221,7 +2221,7 @@ class ConnlibEndpointComponent extends React.Component {
                     portTop = Connlib.endpointIndent;
                     arrowPointer.left = width / 2;
                     if (type.portType) {
-                        arrowPointer.top = portTop;
+                        arrowPointer.top = portTop + portSize + 1;
                     } else {
                         arrowPointer.top = Connlib.endpointIndent;
                     }
@@ -2747,6 +2747,14 @@ class ConnlibInheritance implements ConnlibEndpointInterface {
     arrowType: ConnlibArrowTypeOptions = ConnlibArrowType.Inheritance;
 }
 /**
+ * a default open arrow
+ */
+class ConnlibOpenArrow implements ConnlibEndpointInterface {
+    width: number = Connlib.endpointSize;
+    height: number = Connlib.endpointHeightFormula(Connlib.endpointSize);
+    arrowType: ConnlibArrowTypeOptions = ConnlibArrowType.OpenArrow;
+}
+/**
  * a default relation without arrows
  */
 class ConnlibRelationship implements ConnlibEndpointInterface {
@@ -2754,7 +2762,16 @@ class ConnlibRelationship implements ConnlibEndpointInterface {
     height: number = Connlib.endpointHeightFormula(Connlib.endpointSize);
 }
 /**
- * a default relation with a port arrows
+ * a default inheritance with a port
+ */
+class ConnlibPortInheritance implements ConnlibEndpointInterface {
+    width: number = Connlib.endpointSize;
+    height: number = Connlib.endpointHeightFormula(Connlib.endpointSize);
+    arrowType: ConnlibArrowTypeOptions = ConnlibArrowType.Inheritance;
+    portType: ConnlibPortTypeOptions = ConnlibPortType.Default;
+}
+/**
+ * a default relation with a port
  */
 class ConnlibPortRelationship implements ConnlibEndpointInterface {
     width: number = Connlib.endpointSize;
