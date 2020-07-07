@@ -1438,7 +1438,7 @@ class ConnlibLine implements ConnlibDragFlagInterface {
                 this._target.cascadingUpdate(event);
             }
             this.length = ConnlibExtensions.eukDist(this._source, this._target);
-            if (this.length < 1) this.zeroLengthObservable.next(this);
+            if (this.length < 3) this.zeroLengthObservable.next(this);
         });
     }
 
@@ -1544,6 +1544,19 @@ export class ConnlibConnection {
             target = next._target;
             this.removePathPoint(next._source);
         }
+        let event = new ConnlibPositionChangeEvent();
+        event.participants.push(line);
+        event.participants.push(target);
+        event.movementOrientation = line.orientation;
+        switch(event.movementOrientation){
+            case ConnlibOrientation.HORIZONTAL:
+                event.diffX = target.left - source.left;
+                break;
+            case ConnlibOrientation.VERTICAL:
+                event.diffY = target.top - source.top;
+                break;
+        }
+        source.cascadingUpdate(event);
         let l = this.setUpNewLine(source, target);
         if (Connlib.dragFlag && (Connlib.dragFlag == line) || (Connlib.dragFlag == prev) || (Connlib.dragFlag == next)) Connlib.dragFlag = l;
         line.destroy();
@@ -1748,6 +1761,16 @@ export class ConnlibInstance {
     }
     public set deepth(deepth: number) {
         this._deepth = deepth;
+        this.deepthChangeObservable.next(this);
+    }
+
+    private _zIndex: number = 0;
+    public get zIndex(): number {
+        return this._zIndex;
+    }
+    public set zIndex(zIndex: number) {
+        this._zIndex = zIndex;
+        this.render();
         this.deepthChangeObservable.next(this);
     }
 
@@ -1980,7 +2003,8 @@ export class ConnlibInstance {
             layer: this.layer,
             deepth: this._deepth,
             endpoints: endpointArray,
-            connectors: connectorArray
+            connectors: connectorArray,
+            zIndex: this.zIndex
         });
         for (let endPoint of endpointArray) endPoint.validate();
         for (let connector of connectorArray) connector.validate();
@@ -2309,11 +2333,12 @@ class ConnlibInstanceComponent extends React.Component {
      */
     render() {
         if ((this.state as any)) {
-            let style = {
+            let style: React.CSSProperties = {
                 height: (this.state as any).layer.height,
                 width: (this.state as any).layer.width,
                 left: (this.state as any).layer.left,
-                top: (this.state as any).layer.top
+                top: (this.state as any).layer.top,
+                zIndex: (this.state as any).layer.zIndex
             };
             let connectors: any[] = [];
             let endpoints: any[] = [];
