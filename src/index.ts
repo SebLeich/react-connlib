@@ -1,19 +1,41 @@
 import { Connlib } from './classes';
 import * as input from "../assets/input.json";
-import { FramedIoModule } from "./framed.io.extensions";
+import { FramedIoModule, FramedIoDataInterface } from "./framed.io.extensions";
 
 (window as any).Connlib = Connlib;
 FramedIoModule.registerAllConstructs();
 
 document.getElementById("upload").addEventListener("click", () => {
-    Connlib.importData(input as any);
+    let callback = (event: Event) => {
+        let target = event.target as HTMLInputElement;
+        if(target.files.length == 0) {
+            console.log("no files selected!");
+            return;
+        }
+        let reader = new FileReader();
+        reader.onloadend = (data: any) => {
+            try {
+                var json = JSON.parse(data.target.result) as FramedIoDataInterface;
+                FramedIoModule.importData(json);
+            } catch(e){
+
+            } finally {
+                target.value = "";
+                target.removeEventListener("change", callback);
+            }
+        }
+        reader.readAsText(target.files[0], "utf-8");
+    };
+    document.getElementById("upload-input").addEventListener("change", callback);
+    document.getElementById("upload-input").click();
 });
+
 document.getElementById("toggle-blocking-cells").addEventListener("click", () => {
     Connlib.rootInstance.toggleBlockedCells();
 });
 
 Connlib.standaloneSetupObservable.subscribe(() => {
-    Connlib.importData(input as any);
+    FramedIoModule.importData(input as any);
     Connlib.moveX = 150;
     Connlib.moveY = 150;
     Connlib.applyTransform();

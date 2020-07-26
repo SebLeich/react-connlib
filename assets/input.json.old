@@ -1,0 +1,5706 @@
+{
+    "root": ["io.framed.model.Package", {
+            "id": 1,
+            "metadata": {
+                "creationDate": "Mon Jan 21 2019 15:14:11 GMT+0100 (Mitteleuropäische Normalzeit)",
+                "modifiedDate": "Mon Jan 21 2019 15:14:11 GMT+0100 (Mitteleuropäische Normalzeit)",
+                "author": ""
+            },
+            "name": "AssignmentProcess",
+            "children": [
+                ["io.framed.model.Class", {
+                        "id": 380,
+                        "name": "User",
+                        "attributes": [
+                            ["io.framed.model.Attribute", {
+                                    "id": 381,
+                                    "name": "guid",
+                                    "type": "Guid"
+                                }
+                            ],
+                            ["io.framed.model.Attribute", {
+                                    "id": 582,
+                                    "name": "name",
+                                    "type": "string"
+                                }
+                            ]
+                        ],
+                        "methods": [
+                            ["io.framed.model.Method", {
+                                    "id": 583,
+                                    "name": "toString",
+                                    "type": "string",
+                                    "parameters": [
+                                    ]
+                                }
+                            ]
+                        ]
+                    }
+                ],
+                ["io.framed.model.Scene", {
+                        "id": 56,
+                        "name": "Distribution department process",
+                        "attributes": [
+                        ],
+                        "children": [
+                            ["io.framed.model.Event", {
+                                    "id": 58,
+                                    "type": "STANDARD",
+                                    "desc": "customer request arrived"
+                                }
+                            ],
+                            ["io.framed.model.RoleType", {
+                                    "id": 59,
+                                    "name": "RequestEditor",
+                                    "occurrenceConstraint": "",
+                                    "attributes": [
+                                    ],
+                                    "methods": [
+                                    ]
+                                }
+                            ],
+                            ["io.framed.model.Event", {
+                                    "id": 61,
+                                    "type": "STANDARD",
+                                    "desc": "customer request received"
+                                }
+                            ],
+                            ["io.framed.model.RoleType", {
+                                    "id": 63,
+                                    "name": "ShoppingCartEditor",
+                                    "occurrenceConstraint": "",
+                                    "attributes": [
+                                    ],
+                                    "methods": [
+                                    ]
+                                }
+                            ],
+                            ["io.framed.model.Event", {
+                                    "id": 65,
+                                    "type": "STANDARD",
+                                    "desc": "Shopping cart composed (all products in portfolio)"
+                                }
+                            ],
+                            ["io.framed.model.Event", {
+                                    "id": 66,
+                                    "type": "STANDARD",
+                                    "desc": "Shopping cart composed (at least one not in portfolio)"
+                                }
+                            ],
+                            ["io.framed.model.RoleType", {
+                                    "id": 70,
+                                    "name": "RequestSender",
+                                    "occurrenceConstraint": "",
+                                    "attributes": [
+                                    ],
+                                    "methods": [
+                                    ]
+                                }
+                            ],
+                            ["io.framed.model.Event", {
+                                    "id": 72,
+                                    "type": "STANDARD",
+                                    "desc": "Request sent to main contractor"
+                                }
+                            ],
+                            ["io.framed.model.Event", {
+                                    "id": 74,
+                                    "type": "STANDARD",
+                                    "desc": "Positive feasibility check of the main contractor"
+                                }
+                            ],
+                            ["io.framed.model.RoleType", {
+                                    "id": 76,
+                                    "name": "AssignmentCreator",
+                                    "occurrenceConstraint": "",
+                                    "attributes": [
+                                    ],
+                                    "methods": [
+                                    ]
+                                }
+                            ],
+                            ["io.framed.model.Event", {
+                                    "id": 79,
+                                    "type": "STANDARD",
+                                    "desc": "Assignment created"
+                                }
+                            ],
+                            ["io.framed.model.RoleType", {
+                                    "id": 81,
+                                    "name": "CreatedAssignmentSender",
+                                    "occurrenceConstraint": "",
+                                    "attributes": [
+                                    ],
+                                    "methods": [
+                                    ]
+                                }
+                            ],
+                            ["io.framed.model.RoleType", {
+                                    "id": 82,
+                                    "name": "AssignmentClearer",
+                                    "occurrenceConstraint": "",
+                                    "attributes": [
+                                    ],
+                                    "methods": [
+                                    ]
+                                }
+                            ],
+                            ["io.framed.model.Event", {
+                                    "id": 87,
+                                    "type": "STANDARD",
+                                    "desc": "Assignment sended to customer"
+                                }
+                            ],
+                            ["io.framed.model.Event", {
+                                    "id": 89,
+                                    "type": "STANDARD",
+                                    "desc": "Assignment cleared"
+                                }
+                            ],
+                            ["io.framed.model.RoleType", {
+                                    "id": 122,
+                                    "name": "ClearedAssignmentSender",
+                                    "occurrenceConstraint": "",
+                                    "attributes": [
+                                    ],
+                                    "methods": [
+                                    ]
+                                }
+                            ],
+                            ["io.framed.model.ReturnEvent", {
+                                    "id": 124,
+                                    "type": "STANDARD",
+                                    "desc": "Cleared assignment sended to main contractor"
+                                }
+                            ],
+                            ["io.framed.model.RoleType", {
+                                    "id": 585,
+                                    "name": "ProcessIssue",
+                                    "occurrenceConstraint": "",
+                                    "attributes": [
+                                    ],
+                                    "methods": [
+                                    ]
+                                }
+                            ]
+                        ]
+                    }
+                ],
+                ["io.framed.model.Scene", {
+                        "id": 125,
+                        "name": "TechnicalServicdeDepartment",
+                        "attributes": [
+                        ],
+                        "children": [
+                            ["io.framed.model.Event", {
+                                    "id": 126,
+                                    "type": "STANDARD",
+                                    "desc": "Customer request received"
+                                }
+                            ],
+                            ["io.framed.model.RoleType", {
+                                    "id": 128,
+                                    "name": "ControlSlipCreator",
+                                    "occurrenceConstraint": "",
+                                    "attributes": [
+                                    ],
+                                    "methods": [
+                                    ]
+                                }
+                            ],
+                            ["io.framed.model.Event", {
+                                    "id": 130,
+                                    "type": "STANDARD",
+                                    "desc": "Control slip created"
+                                }
+                            ],
+                            ["io.framed.model.Event", {
+                                    "id": 132,
+                                    "type": "STANDARD",
+                                    "desc": "Assignment from main contractor"
+                                }
+                            ],
+                            ["io.framed.model.RoleType", {
+                                    "id": 134,
+                                    "name": "ReceiptConfirmationResponsible",
+                                    "occurrenceConstraint": "",
+                                    "attributes": [
+                                    ],
+                                    "methods": [
+                                    ]
+                                }
+                            ],
+                            ["io.framed.model.Event", {
+                                    "id": 137,
+                                    "type": "STANDARD",
+                                    "desc": "Receipt confirmed"
+                                }
+                            ],
+                            ["io.framed.model.RoleType", {
+                                    "id": 139,
+                                    "name": "MeetingManager",
+                                    "occurrenceConstraint": "",
+                                    "attributes": [
+                                    ],
+                                    "methods": [
+                                    ]
+                                }
+                            ],
+                            ["io.framed.model.RoleType", {
+                                    "id": 141,
+                                    "name": "AssignmentProcessor",
+                                    "occurrenceConstraint": "",
+                                    "attributes": [
+                                    ],
+                                    "methods": [
+                                    ]
+                                }
+                            ],
+                            ["io.framed.model.Event", {
+                                    "id": 142,
+                                    "type": "STANDARD",
+                                    "desc": "Meeting arranged"
+                                }
+                            ],
+                            ["io.framed.model.RoleType", {
+                                    "id": 145,
+                                    "name": "AssignmentLogCreator",
+                                    "occurrenceConstraint": "",
+                                    "attributes": [
+                                    ],
+                                    "methods": [
+                                    ]
+                                }
+                            ],
+                            ["io.framed.model.Event", {
+                                    "id": 146,
+                                    "type": "STANDARD",
+                                    "desc": "Assignment processed"
+                                }
+                            ],
+                            ["io.framed.model.RoleType", {
+                                    "id": 205,
+                                    "name": "AssignmentLogSender",
+                                    "occurrenceConstraint": "",
+                                    "attributes": [
+                                    ],
+                                    "methods": [
+                                    ]
+                                }
+                            ],
+                            ["io.framed.model.Event", {
+                                    "id": 206,
+                                    "type": "STANDARD",
+                                    "desc": "Assignment log created"
+                                }
+                            ],
+                            ["io.framed.model.Event", {
+                                    "id": 209,
+                                    "type": "STANDARD",
+                                    "desc": "AssignmentLogSended"
+                                }
+                            ],
+                            ["io.framed.model.RoleType", {
+                                    "id": 211,
+                                    "name": "CompleteAssignmentLogSender",
+                                    "occurrenceConstraint": "",
+                                    "attributes": [
+                                    ],
+                                    "methods": [
+                                    ]
+                                }
+                            ],
+                            ["io.framed.model.Event", {
+                                    "id": 213,
+                                    "type": "STANDARD",
+                                    "desc": "Complete assignment reported"
+                                }
+                            ],
+                            ["io.framed.model.RoleType", {
+                                    "id": 215,
+                                    "name": "ProductBookResponsible",
+                                    "occurrenceConstraint": "",
+                                    "attributes": [
+                                    ],
+                                    "methods": [
+                                    ]
+                                }
+                            ],
+                            ["io.framed.model.Event", {
+                                    "id": 217,
+                                    "type": "STANDARD",
+                                    "desc": "Products booked"
+                                }
+                            ],
+                            ["io.framed.model.RoleType", {
+                                    "id": 219,
+                                    "name": "IssueArchiever",
+                                    "occurrenceConstraint": "",
+                                    "attributes": [
+                                    ],
+                                    "methods": [
+                                    ]
+                                }
+                            ],
+                            ["io.framed.model.RoleType", {
+                                    "id": 221,
+                                    "name": "FinishIssueResponsible",
+                                    "occurrenceConstraint": "",
+                                    "attributes": [
+                                    ],
+                                    "methods": [
+                                    ]
+                                }
+                            ],
+                            ["io.framed.model.Event", {
+                                    "id": 222,
+                                    "type": "STANDARD",
+                                    "desc": "Issue archieved"
+                                }
+                            ],
+                            ["io.framed.model.ReturnEvent", {
+                                    "id": 225,
+                                    "type": "STANDARD",
+                                    "desc": "Issue finished"
+                                }
+                            ],
+                            ["io.framed.model.RoleType", {
+                                    "id": 587,
+                                    "name": "ProcessIssue",
+                                    "occurrenceConstraint": "",
+                                    "attributes": [
+                                    ],
+                                    "methods": [
+                                    ]
+                                }
+                            ]
+                        ]
+                    }
+                ],
+                ["io.framed.model.Class", {
+                        "id": 589,
+                        "name": "Issue",
+                        "attributes": [
+                        ],
+                        "methods": [
+                        ]
+                    }
+                ],
+                ["io.framed.model.Class", {
+                        "id": 590,
+                        "name": "AbstractIssue",
+                        "attributes": [
+                        ],
+                        "methods": [
+                        ]
+                    }
+                ]
+            ]
+        }
+    ],
+    "connections": {
+        "connections": [
+            ["io.framed.model.CreateRelationship", {
+                    "id": 60,
+                    "sourceId": 58,
+                    "targetId": 59,
+                    "name": ""
+                }
+            ],
+            ["io.framed.model.Fulfillment", {
+                    "id": 62,
+                    "sourceId": 59,
+                    "targetId": 61,
+                    "name": ""
+                }
+            ],
+            ["io.framed.model.Fulfillment", {
+                    "id": 64,
+                    "sourceId": 56,
+                    "targetId": 125,
+                    "name": ""
+                }
+            ],
+            ["io.framed.model.DestroyRelationship", {
+                    "id": 67,
+                    "sourceId": 63,
+                    "targetId": 65,
+                    "name": ""
+                }
+            ],
+            ["io.framed.model.DestroyRelationship", {
+                    "id": 68,
+                    "sourceId": 63,
+                    "targetId": 66,
+                    "name": ""
+                }
+            ],
+            ["io.framed.model.CreateRelationship", {
+                    "id": 71,
+                    "sourceId": 66,
+                    "targetId": 70,
+                    "name": ""
+                }
+            ],
+            ["io.framed.model.DestroyRelationship", {
+                    "id": 73,
+                    "sourceId": 70,
+                    "targetId": 72,
+                    "name": ""
+                }
+            ],
+            ["io.framed.model.CreateRelationship", {
+                    "id": 77,
+                    "sourceId": 65,
+                    "targetId": 76,
+                    "name": ""
+                }
+            ],
+            ["io.framed.model.CreateRelationship", {
+                    "id": 78,
+                    "sourceId": 74,
+                    "targetId": 76,
+                    "name": ""
+                }
+            ],
+            ["io.framed.model.DestroyRelationship", {
+                    "id": 80,
+                    "sourceId": 76,
+                    "targetId": 79,
+                    "name": ""
+                }
+            ],
+            ["io.framed.model.CreateRelationship", {
+                    "id": 83,
+                    "sourceId": 79,
+                    "targetId": 81,
+                    "name": ""
+                }
+            ],
+            ["io.framed.model.CreateRelationship", {
+                    "id": 84,
+                    "sourceId": 79,
+                    "targetId": 82,
+                    "name": ""
+                }
+            ],
+            ["io.framed.model.DestroyRelationship", {
+                    "id": 88,
+                    "sourceId": 81,
+                    "targetId": 87,
+                    "name": ""
+                }
+            ],
+            ["io.framed.model.DestroyRelationship", {
+                    "id": 90,
+                    "sourceId": 82,
+                    "targetId": 89,
+                    "name": ""
+                }
+            ],
+            ["io.framed.model.CreateRelationship", {
+                    "id": 123,
+                    "sourceId": 89,
+                    "targetId": 122,
+                    "name": ""
+                }
+            ],
+            ["io.framed.model.CreateRelationship", {
+                    "id": 129,
+                    "sourceId": 126,
+                    "targetId": 128,
+                    "name": ""
+                }
+            ],
+            ["io.framed.model.DestroyRelationship", {
+                    "id": 131,
+                    "sourceId": 128,
+                    "targetId": 130,
+                    "name": ""
+                }
+            ],
+            ["io.framed.model.CreateRelationship", {
+                    "id": 135,
+                    "sourceId": 132,
+                    "targetId": 134,
+                    "name": ""
+                }
+            ],
+            ["io.framed.model.CreateRelationship", {
+                    "id": 136,
+                    "sourceId": 130,
+                    "targetId": 134,
+                    "name": ""
+                }
+            ],
+            ["io.framed.model.DestroyRelationship", {
+                    "id": 138,
+                    "sourceId": 134,
+                    "targetId": 137,
+                    "name": ""
+                }
+            ],
+            ["io.framed.model.CreateRelationship", {
+                    "id": 140,
+                    "sourceId": 137,
+                    "targetId": 139,
+                    "name": ""
+                }
+            ],
+            ["io.framed.model.DestroyRelationship", {
+                    "id": 143,
+                    "sourceId": 139,
+                    "targetId": 142,
+                    "name": ""
+                }
+            ],
+            ["io.framed.model.CreateRelationship", {
+                    "id": 144,
+                    "sourceId": 142,
+                    "targetId": 141,
+                    "name": ""
+                }
+            ],
+            ["io.framed.model.DestroyRelationship", {
+                    "id": 147,
+                    "sourceId": 141,
+                    "targetId": 146,
+                    "name": ""
+                }
+            ],
+            ["io.framed.model.CreateRelationship", {
+                    "id": 148,
+                    "sourceId": 146,
+                    "targetId": 145,
+                    "name": ""
+                }
+            ],
+            ["io.framed.model.DestroyRelationship", {
+                    "id": 207,
+                    "sourceId": 145,
+                    "targetId": 206,
+                    "name": ""
+                }
+            ],
+            ["io.framed.model.CreateRelationship", {
+                    "id": 208,
+                    "sourceId": 206,
+                    "targetId": 205,
+                    "name": ""
+                }
+            ],
+            ["io.framed.model.DestroyRelationship", {
+                    "id": 210,
+                    "sourceId": 205,
+                    "targetId": 209,
+                    "name": ""
+                }
+            ],
+            ["io.framed.model.CreateRelationship", {
+                    "id": 212,
+                    "sourceId": 206,
+                    "targetId": 211,
+                    "name": ""
+                }
+            ],
+            ["io.framed.model.DestroyRelationship", {
+                    "id": 214,
+                    "sourceId": 211,
+                    "targetId": 213,
+                    "name": ""
+                }
+            ],
+            ["io.framed.model.CreateRelationship", {
+                    "id": 216,
+                    "sourceId": 213,
+                    "targetId": 215,
+                    "name": ""
+                }
+            ],
+            ["io.framed.model.DestroyRelationship", {
+                    "id": 218,
+                    "sourceId": 215,
+                    "targetId": 217,
+                    "name": ""
+                }
+            ],
+            ["io.framed.model.CreateRelationship", {
+                    "id": 220,
+                    "sourceId": 217,
+                    "targetId": 219,
+                    "name": ""
+                }
+            ],
+            ["io.framed.model.DestroyRelationship", {
+                    "id": 223,
+                    "sourceId": 219,
+                    "targetId": 222,
+                    "name": ""
+                }
+            ],
+            ["io.framed.model.CreateRelationship", {
+                    "id": 224,
+                    "sourceId": 222,
+                    "targetId": 221,
+                    "name": ""
+                }
+            ],
+            ["io.framed.model.Fulfillment", {
+                    "id": 382,
+                    "sourceId": 380,
+                    "targetId": 59,
+                    "name": ""
+                }
+            ],
+            ["io.framed.model.Fulfillment", {
+                    "id": 383,
+                    "sourceId": 380,
+                    "targetId": 63,
+                    "name": ""
+                }
+            ],
+            ["io.framed.model.Fulfillment", {
+                    "id": 384,
+                    "sourceId": 380,
+                    "targetId": 70,
+                    "name": ""
+                }
+            ],
+            ["io.framed.model.Fulfillment", {
+                    "id": 385,
+                    "sourceId": 380,
+                    "targetId": 76,
+                    "name": ""
+                }
+            ],
+            ["io.framed.model.Fulfillment", {
+                    "id": 386,
+                    "sourceId": 380,
+                    "targetId": 81,
+                    "name": ""
+                }
+            ],
+            ["io.framed.model.Fulfillment", {
+                    "id": 388,
+                    "sourceId": 380,
+                    "targetId": 82,
+                    "name": ""
+                }
+            ],
+            ["io.framed.model.Fulfillment", {
+                    "id": 389,
+                    "sourceId": 380,
+                    "targetId": 122,
+                    "name": ""
+                }
+            ],
+            ["io.framed.model.Fulfillment", {
+                    "id": 476,
+                    "sourceId": 380,
+                    "targetId": 128,
+                    "name": ""
+                }
+            ],
+            ["io.framed.model.Fulfillment", {
+                    "id": 477,
+                    "sourceId": 380,
+                    "targetId": 134,
+                    "name": ""
+                }
+            ],
+            ["io.framed.model.Fulfillment", {
+                    "id": 478,
+                    "sourceId": 380,
+                    "targetId": 139,
+                    "name": ""
+                }
+            ],
+            ["io.framed.model.Fulfillment", {
+                    "id": 479,
+                    "sourceId": 380,
+                    "targetId": 141,
+                    "name": ""
+                }
+            ],
+            ["io.framed.model.Fulfillment", {
+                    "id": 480,
+                    "sourceId": 380,
+                    "targetId": 145,
+                    "name": ""
+                }
+            ],
+            ["io.framed.model.Fulfillment", {
+                    "id": 481,
+                    "sourceId": 380,
+                    "targetId": 205,
+                    "name": ""
+                }
+            ],
+            ["io.framed.model.Fulfillment", {
+                    "id": 482,
+                    "sourceId": 380,
+                    "targetId": 211,
+                    "name": ""
+                }
+            ],
+            ["io.framed.model.Fulfillment", {
+                    "id": 483,
+                    "sourceId": 380,
+                    "targetId": 215,
+                    "name": ""
+                }
+            ],
+            ["io.framed.model.Fulfillment", {
+                    "id": 484,
+                    "sourceId": 380,
+                    "targetId": 219,
+                    "name": ""
+                }
+            ],
+            ["io.framed.model.Fulfillment", {
+                    "id": 485,
+                    "sourceId": 380,
+                    "targetId": 221,
+                    "name": ""
+                }
+            ],
+            ["io.framed.model.CreateRelationship", {
+                    "id": 586,
+                    "sourceId": 58,
+                    "targetId": 585,
+                    "name": ""
+                }
+            ],
+            ["io.framed.model.CreateRelationship", {
+                    "id": 588,
+                    "sourceId": 126,
+                    "targetId": 587,
+                    "name": ""
+                }
+            ],
+            ["io.framed.model.Inheritance", {
+                    "id": 591,
+                    "sourceId": 589,
+                    "targetId": 590,
+                    "name": "",
+                    "sourceCardinality": "",
+                    "targetCardinality": ""
+                }
+            ],
+            ["io.framed.model.Fulfillment", {
+                    "id": 592,
+                    "sourceId": 589,
+                    "targetId": 587,
+                    "name": ""
+                }
+            ],
+            ["io.framed.model.Fulfillment", {
+                    "id": 593,
+                    "sourceId": 589,
+                    "targetId": 585,
+                    "name": ""
+                }
+            ]
+        ]
+    },
+    "layer": {
+        "1": {
+            "data": {
+                "1": {
+                    "left": -100,
+                    "top": -100,
+                    "width": 4000,
+                    "height": 3000,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                    ],
+                    "connectors": {
+                        "64": {
+                            "pathPoints": [
+
+                            ]
+                        },
+                        "591": {
+                            "pathPoints": [
+
+                            ]
+                        }
+                    }
+                },
+                "2": {
+                    "left": 32,
+                    "top": 32,
+                    "width": 621,
+                    "height": 480,
+                    "autosize": false,
+                    "data": {
+                        "flat-preview": "true"
+                    },
+                    "labels": [
+                    ]
+                },
+                "3": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                },
+                "4": {
+                    "left": 829.8261339092873,
+                    "top": 56.26349892008639,
+                    "width": 352,
+                    "height": 320,
+                    "autosize": false,
+                    "data": {
+                        "flat-preview": "true"
+                    },
+                    "labels": [
+                    ]
+                },
+                "5": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 266,
+                    "height": 21,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                },
+                "6": {
+                    "left": 820.0061987041042,
+                    "top": 87.43013131749456,
+                    "width": 194,
+                    "height": 111,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                },
+                "7": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 101,
+                    "height": 21,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                },
+                "8": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 178,
+                    "height": 21,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                },
+                "9": {
+                    "left": 246.74936112311008,
+                    "top": 219.918161987041,
+                    "width": 227,
+                    "height": 153,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                },
+                "10": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 167,
+                    "height": 21,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                },
+                "11": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 211,
+                    "height": 21,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                },
+                "15": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 200,
+                    "height": 21,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                },
+                "16": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 189,
+                    "height": 21,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                },
+                "17": {
+                    "left": 368,
+                    "top": 544,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                },
+                "18": {
+                    "left": 68.05622030237583,
+                    "top": 218.27854427645786,
+                    "width": 227,
+                    "height": 153,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                },
+                "19": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 156,
+                    "height": 21,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                },
+                "20": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 211,
+                    "height": 21,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                },
+                "21": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 189,
+                    "height": 21,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                },
+                "22": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 167,
+                    "height": 21,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                },
+                "23": {
+                    "left": 32,
+                    "top": 32,
+                    "width": 116,
+                    "height": 69,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                },
+                "24": {
+                    "left": 32,
+                    "top": 112,
+                    "width": 116,
+                    "height": 69,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                },
+                "25": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                },
+                "27": {
+                    "left": 197.963,
+                    "top": 112.12923023758098,
+                    "width": 599.2294254859612,
+                    "height": 403.1717343412528,
+                    "autosize": false,
+                    "data": {
+                        "flat-preview": "true"
+                    },
+                    "labels": [
+                    ]
+                },
+                "28": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 156,
+                    "height": 21,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                },
+                "29": {
+                    "left": 34.03237969762419,
+                    "top": 20.967607775377964,
+                    "width": 183,
+                    "height": 90,
+                    "autosize": true,
+                    "data": {
+                        "complete-view": "true"
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0,
+                            "id": "occurrence"
+                        }
+                    ]
+                },
+                "30": {
+                    "left": 352,
+                    "top": 18,
+                    "width": 249,
+                    "height": 90,
+                    "autosize": true,
+                    "data": {
+                        "complete-view": "true"
+                    },
+                    "labels": [
+                    ]
+                },
+                "31": {
+                    "left": 65.17925831533482,
+                    "top": 148.46763066954645,
+                    "width": 172,
+                    "height": 111,
+                    "autosize": true,
+                    "data": {
+                        "complete-view": "true"
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0,
+                            "id": "occurrence"
+                        }
+                    ]
+                },
+                "32": {
+                    "left": 370.03288336933036,
+                    "top": 25.7235,
+                    "width": 205,
+                    "height": 90,
+                    "autosize": true,
+                    "data": {
+                        "complete-view": "true"
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0,
+                            "id": "occurrence"
+                        }
+                    ]
+                },
+                "33": {
+                    "left": 297.9031166306696,
+                    "top": 156.39517494600435,
+                    "width": 282,
+                    "height": 90,
+                    "autosize": true,
+                    "data": {
+                        "complete-view": "true"
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0,
+                            "id": "occurrence"
+                        }
+                    ]
+                },
+                "35": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 233,
+                    "height": 21,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                },
+                "38": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 101,
+                    "height": 21,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                },
+                "39": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 156,
+                    "height": 21,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                },
+                "34": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 167,
+                    "height": 21,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                },
+                "36": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 156,
+                    "height": 21,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                },
+                "37": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 266,
+                    "height": 21,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                },
+                "40": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 167,
+                    "height": 21,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                },
+                "41": {
+                    "left": 1248,
+                    "top": 160,
+                    "width": 161,
+                    "height": 272,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                },
+                "42": {
+                    "left": 96,
+                    "top": 272,
+                    "width": 44,
+                    "height": 46,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "43": {
+                    "left": 1226.2889179265655,
+                    "top": 92.88446868250554,
+                    "width": 44,
+                    "height": 46,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "transfer",
+                            "left": 21.71,
+                            "top": -3.1155,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "44": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        },
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": -30,
+                            "id": "source"
+                        },
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 31,
+                            "id": "target"
+                        }
+                    ]
+                },
+                "-31": {
+                    "left": 171.0002341252671,
+                    "top": 0,
+                    "width": 24,
+                    "height": 24,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "RoleType: Customer",
+                            "left": -107,
+                            "top": -32,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "45": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "46": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "47": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "-29": {
+                    "left": 0,
+                    "top": 202.99979141364997,
+                    "width": 24,
+                    "height": 24,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "RoleType: Consultant",
+                            "left": -59.01511879049674,
+                            "top": -27.868250539956758,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "48": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "-32": {
+                    "left": 394.9999295411298,
+                    "top": 0,
+                    "width": 24,
+                    "height": 24,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "RoleType: CheckingAccount",
+                            "left": 149,
+                            "top": -32,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "49": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "-33": {
+                    "left": 599,
+                    "top": 267.0002721382331,
+                    "width": 24,
+                    "height": 24,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "RoleType: SavingAccount",
+                            "left": 105,
+                            "top": 21,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "50": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "51": {
+                    "left": 12,
+                    "top": 12,
+                    "width": 116,
+                    "height": 69,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0,
+                            "id": "occurrence"
+                        }
+                    ]
+                },
+                "52": {
+                    "left": 12,
+                    "top": 134,
+                    "width": 116,
+                    "height": 69,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0,
+                            "id": "occurrence"
+                        }
+                    ]
+                },
+                "53": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        },
+                        {
+                            "text": "1",
+                            "left": 0,
+                            "top": 0,
+                            "position": -30,
+                            "id": "source"
+                        },
+                        {
+                            "text": "1",
+                            "left": 0,
+                            "top": 0,
+                            "position": 31,
+                            "id": "target"
+                        }
+                    ]
+                },
+                "-51": {
+                    "left": 0,
+                    "top": 53.1261233308411,
+                    "width": 24,
+                    "height": 24,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "RoleType: Source",
+                            "left": -96,
+                            "top": 21,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "54": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "-52": {
+                    "left": 0,
+                    "top": 153.82903601327848,
+                    "width": 24,
+                    "height": 24,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "RoleType: Target",
+                            "left": -96,
+                            "top": 21,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "55": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "56": {
+                    "left": 456.91121468327674,
+                    "top": 40.3788051190791,
+                    "width": 664.1875469690657,
+                    "height": 1038.02,
+                    "autosize": false,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                },
+                "57": {
+                    "left": 779.2491470274009,
+                    "top": 154.48254482955429,
+                    "width": 44,
+                    "height": 46,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "58": {
+                    "left": 77.07162256972777,
+                    "top": 25.690569907029655,
+                    "width": 44,
+                    "height": 46,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "customer request arrived",
+                            "left": 24.026736865111754,
+                            "top": -7.2422851998050355,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "59": {
+                    "left": 311.85889204545447,
+                    "top": 88.21672045454542,
+                    "width": 117.32761917382913,
+                    "height": 43.74614153572372,
+                    "autosize": false,
+                    "data": {
+                        "complete-view": "false"
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0,
+                            "id": "occurrence"
+                        }
+                    ]
+                },
+                "60": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "61": {
+                    "left": 79.583911740333,
+                    "top": 125.94200131136961,
+                    "width": 44,
+                    "height": 46,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "customer request received",
+                            "left": 22.900747460446976,
+                            "top": -14.09307416739393,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "62": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "63": {
+                    "left": 306.60244246579765,
+                    "top": 176.10612120308747,
+                    "width": 161.73529968573695,
+                    "height": 41.10310543334214,
+                    "autosize": false,
+                    "data": {
+                        "complete-view": "false"
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0,
+                            "id": "occurrence"
+                        }
+                    ]
+                },
+                "64": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "65": {
+                    "left": 171.06046363907376,
+                    "top": 362.44558177481986,
+                    "width": 44,
+                    "height": 46,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "Shopping cart composed (all products in portfolio)",
+                            "left": 24.60136667660378,
+                            "top": -20.12839091722128,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "66": {
+                    "left": 171.06095151876502,
+                    "top": 279.6950211732761,
+                    "width": 44,
+                    "height": 46,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "Shopping cart composed (at least one not in portfolio)",
+                            "left": 24.601366676603778,
+                            "top": -13.418927278147514,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "67": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "68": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "69": {
+                    "left": 291.8313997793573,
+                    "top": 1027,
+                    "width": 44,
+                    "height": 46,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "70": {
+                    "left": 389.108382372285,
+                    "top": 268.516,
+                    "width": 183,
+                    "height": 37,
+                    "autosize": true,
+                    "data": {
+                        "complete-view": "false"
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0,
+                            "id": "occurrence"
+                        }
+                    ]
+                },
+                "71": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "72": {
+                    "left": 457.628568702434,
+                    "top": 387.7366587785391,
+                    "width": 44,
+                    "height": 46,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "Request sent to main contractor",
+                            "left": 31.219920814964954,
+                            "top": -18.67186192575424,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "73": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "74": {
+                    "left": 180.00646363907376,
+                    "top": 485.4527818344426,
+                    "width": 44,
+                    "height": 46,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "Positive feasibility check of the main contractor",
+                            "left": 6.709457564013714,
+                            "top": -15.655383639073776,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "75": {
+                    "left": 468.5139422749662,
+                    "top": 1027,
+                    "width": 44,
+                    "height": 46,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "76": {
+                    "left": 311.96014544370496,
+                    "top": 476.50629088740993,
+                    "width": 227,
+                    "height": 37,
+                    "autosize": true,
+                    "data": {
+                        "complete-view": "false"
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0,
+                            "id": "occurrence"
+                        }
+                    ]
+                },
+                "77": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "78": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "79": {
+                    "left": 182.8,
+                    "top": 588.8692822287343,
+                    "width": 44,
+                    "height": 46,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "Assignment created",
+                            "left": 19.717607429114704,
+                            "top": -19.717607429114704,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "80": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "81": {
+                    "left": 400.63854696906566,
+                    "top": 589.7494638976184,
+                    "width": 195.5506607095528,
+                    "height": 45.69689712619743,
+                    "autosize": false,
+                    "data": {
+                        "complete-view": "false"
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0,
+                            "id": "occurrence"
+                        }
+                    ]
+                },
+                "82": {
+                    "left": 324.909,
+                    "top": 669.8527851417709,
+                    "width": 146.49837189049993,
+                    "height": 45.69689712619743,
+                    "autosize": false,
+                    "data": {
+                        "complete-view": "false"
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0,
+                            "id": "occurrence"
+                        }
+                    ]
+                },
+                "83": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "84": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "85": {
+                    "left": 1460.3407474796977,
+                    "top": 655.5633794907562,
+                    "width": 44,
+                    "height": 47,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "86": {
+                    "left": 689.5427474796977,
+                    "top": 675.6269187478448,
+                    "width": 44,
+                    "height": 47,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "87": {
+                    "left": 477.0797131119605,
+                    "top": 758.0797725190265,
+                    "width": 44,
+                    "height": 46,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "Assignment sended to customer",
+                            "left": 30.52464728332898,
+                            "top": 63.96983610238158,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "88": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "89": {
+                    "left": 184.77147851417706,
+                    "top": 786.045631827974,
+                    "width": 44,
+                    "height": 46,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "Assignment cleared",
+                            "left": 19.717607429114704,
+                            "top": -9.858803714557254,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "90": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "122": {
+                    "left": 305.993752716671,
+                    "top": 891.6577418499869,
+                    "width": 193.43219681193443,
+                    "height": 40,
+                    "autosize": false,
+                    "data": {
+                        "complete-view": "false"
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0,
+                            "id": "occurrence"
+                        }
+                    ]
+                },
+                "123": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "124": {
+                    "left": 537.1380223308665,
+                    "top": 1038,
+                    "width": 44,
+                    "height": 46,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "Cleared assignment sended to main contractor",
+                            "left": 0.0002563751025455276,
+                            "top": 34.258643559223934,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "125": {
+                    "left": 1639.6146735526856,
+                    "top": 100,
+                    "width": 610.1310108666842,
+                    "height": 1226.696144409527,
+                    "autosize": false,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                },
+                "126": {
+                    "left": 84.00694701497858,
+                    "top": 31.141011308844504,
+                    "width": 44,
+                    "height": 46,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "Customer request received",
+                            "left": 22.240890470756046,
+                            "top": -8.340333926533509,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "127": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "128": {
+                    "left": 253.32148579545444,
+                    "top": 104.51121193181812,
+                    "width": 138.43219681193435,
+                    "height": 44.185469330960586,
+                    "autosize": false,
+                    "data": {
+                        "complete-view": "false"
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0,
+                            "id": "occurrence"
+                        }
+                    ]
+                },
+                "129": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "130": {
+                    "left": 86.78699822039941,
+                    "top": 128.44521727888733,
+                    "width": 44,
+                    "height": 46,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "Control slip created",
+                            "left": 13.90055654422255,
+                            "top": -16.680667853067064,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "131": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "132": {
+                    "left": 89.5674,
+                    "top": 211.84933392653352,
+                    "width": 44,
+                    "height": 46,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "Assignment from main contractor",
+                            "left": 19.460779161911574,
+                            "top": -13.900556544222557,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "133": {
+                    "left": 317.53711216012243,
+                    "top": 334.173598206679,
+                    "width": 44,
+                    "height": 46,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "134": {
+                    "left": 248.03566785306705,
+                    "top": 200.72811130884452,
+                    "width": 219.5890632690925,
+                    "height": 47.736405433342185,
+                    "autosize": false,
+                    "data": {
+                        "complete-view": "false"
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0,
+                            "id": "occurrence"
+                        }
+                    ]
+                },
+                "135": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "136": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "137": {
+                    "left": 95.12855298502141,
+                    "top": 298.0323250285315,
+                    "width": 44,
+                    "height": 46,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "Receipt confirmed",
+                            "left": 19.46077916191151,
+                            "top": -11.120445235378103,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "138": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "139": {
+                    "left": 245.25377382310987,
+                    "top": 348.074102410842,
+                    "width": 135.20494952860557,
+                    "height": 40,
+                    "autosize": false,
+                    "data": {
+                        "complete-view": "false"
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0,
+                            "id": "occurrence"
+                        }
+                    ]
+                },
+                "140": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "141": {
+                    "left": 246.91366607346646,
+                    "top": 455.37789580955734,
+                    "width": 164.26144409526336,
+                    "height": 42.78324153572373,
+                    "autosize": false,
+                    "data": {
+                        "complete-view": "false"
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0,
+                            "id": "occurrence"
+                        }
+                    ]
+                },
+                "142": {
+                    "left": 100.68841130884451,
+                    "top": 417.57721727888764,
+                    "width": 44,
+                    "height": 47,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "Meeting arranged",
+                            "left": 22.240890470756046,
+                            "top": -2.780111308844467,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "143": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "144": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "145": {
+                    "left": 248.5738886911555,
+                    "top": 559.902,
+                    "width": 164.66912460717117,
+                    "height": 47.020169330960584,
+                    "autosize": false,
+                    "data": {
+                        "complete-view": "false"
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0,
+                            "id": "occurrence"
+                        }
+                    ]
+                },
+                "146": {
+                    "left": 103.46822083808831,
+                    "top": 520.4413250285301,
+                    "width": 44,
+                    "height": 46,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "Assignment processed",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "147": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "148": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "205": {
+                    "left": 255.79411130884452,
+                    "top": 664.4258886911555,
+                    "width": 164.26144409526327,
+                    "height": 45.563341535723794,
+                    "autosize": false,
+                    "data": {
+                        "complete-view": "false"
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0,
+                            "id": "occurrence"
+                        }
+                    ]
+                },
+                "206": {
+                    "left": 103.468,
+                    "top": 628.8646660734664,
+                    "width": 44,
+                    "height": 46,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "Assignment log created",
+                            "left": 16.68066785306705,
+                            "top": -19.460779161911823,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "207": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "208": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "209": {
+                    "left": 492.27769137859207,
+                    "top": 661.9592888190526,
+                    "width": 44,
+                    "height": 47,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "AssignmentLogSended",
+                            "left": 25.02102261768901,
+                            "top": -16.680677382310932,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "210": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "211": {
+                    "left": 12.748997159090907,
+                    "top": 746.5999943181818,
+                    "width": 220.4844856309871,
+                    "height": 43.68763322857899,
+                    "autosize": false,
+                    "data": {
+                        "complete-view": "false"
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0,
+                            "id": "occurrence"
+                        }
+                    ]
+                },
+                "212": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "213": {
+                    "left": 106.24844345577748,
+                    "top": 867.954777382311,
+                    "width": 44,
+                    "height": 46,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "Complete assignment reported",
+                            "left": 5.560222617689027,
+                            "top": -13.900556544222528,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "214": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "215": {
+                    "left": 266.56675271667103,
+                    "top": 872.7807111809474,
+                    "width": 176.07680511907915,
+                    "height": 43.499477638105304,
+                    "autosize": false,
+                    "data": {
+                        "complete-view": "false"
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0,
+                            "id": "occurrence"
+                        }
+                    ]
+                },
+                "216": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "217": {
+                    "left": 154.70595846427625,
+                    "top": 957.9016083071447,
+                    "width": 44,
+                    "height": 47,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "Products booked",
+                            "left": 22.240890470756078,
+                            "top": -11.120445235378138,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "218": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "219": {
+                    "left": 278.61615527621035,
+                    "top": 1013.9115974404602,
+                    "width": 121.97222748097386,
+                    "height": 40,
+                    "autosize": false,
+                    "data": {
+                        "complete-view": "false"
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0,
+                            "id": "occurrence"
+                        }
+                    ]
+                },
+                "220": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "221": {
+                    "left": 232.49484665480273,
+                    "top": 1100.9154223618937,
+                    "width": 163.36602173336865,
+                    "height": 42.83784153572378,
+                    "autosize": false,
+                    "data": {
+                        "complete-view": "false"
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0,
+                            "id": "occurrence"
+                        }
+                    ]
+                },
+                "222": {
+                    "left": 122.9297738231098,
+                    "top": 1061.5666607346657,
+                    "width": 44,
+                    "height": 47,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "Issue archieved",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "223": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "224": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "225": {
+                    "left": 567.700630248935,
+                    "top": 1227,
+                    "width": 44,
+                    "height": 46,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "Issue finished",
+                            "left": -2.780111308844503,
+                            "top": 33.36133570613444,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "380": {
+                    "left": 1270,
+                    "top": 250,
+                    "width": 100,
+                    "height": 42.14031661428953,
+                    "autosize": false,
+                    "data": {
+                        "complete-view": "false"
+                    },
+                    "labels": [
+                    ]
+                },
+                "381": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 134,
+                    "height": 21,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                },
+                "-59": {
+                    "left": 664,
+                    "top": 158.0626330084836,
+                    "width": 24,
+                    "height": 24,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "RoleType: RequestEditor",
+                            "left": 15.555555555555472,
+                            "top": 28.888888888888964,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "382": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "-63": {
+                    "left": 664,
+                    "top": 243.1283972457177,
+                    "width": 24,
+                    "height": 24,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "RoleType: ShoppingCartEditor",
+                            "left": 13.333333333333004,
+                            "top": 17.777777777777814,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "383": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "-70": {
+                    "left": 664,
+                    "top": 301.4937605271507,
+                    "width": 24,
+                    "height": 24,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "RoleType: RequestSender",
+                            "left": 8.888888888888836,
+                            "top": 31.111111111111178,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "384": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "-76": {
+                    "left": 664,
+                    "top": 380.1893930566375,
+                    "width": 24,
+                    "height": 24,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "RoleType: AssignmentCreator",
+                            "left": 8.88888888888874,
+                            "top": 24.444444444444528,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "385": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "-81": {
+                    "left": 664,
+                    "top": 619.5826989577345,
+                    "width": 24,
+                    "height": 24,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "RoleType: CreatedAssignmentSender",
+                            "left": 19.368141790920568,
+                            "top": 31.87364035818415,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "386": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "387": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "-82": {
+                    "left": 664,
+                    "top": 773.9696579194504,
+                    "width": 24,
+                    "height": 24,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "RoleType: AssignmentClearer",
+                            "left": 2.222222222222179,
+                            "top": 33.33333333333341,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "388": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "-122": {
+                    "left": 664,
+                    "top": 928.4900905958688,
+                    "width": 24,
+                    "height": 24,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "RoleType: ClearedAssignmentSender",
+                            "left": 4.444444444444358,
+                            "top": 39.999999999999616,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "389": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "-128": {
+                    "left": 0,
+                    "top": 333.7038535536716,
+                    "width": 24,
+                    "height": 24,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "RoleType: ControlSlipCreator",
+                            "left": -14.128403536717176,
+                            "top": 32.96627491900677,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "476": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "-134": {
+                    "left": 0,
+                    "top": 427.3991325688986,
+                    "width": 24,
+                    "height": 24,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "RoleType: ReceiptConfirmationResponsible",
+                            "left": -16.48313745950337,
+                            "top": 30.611540996220604,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "477": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "-139": {
+                    "left": 0,
+                    "top": 499.50373050252495,
+                    "width": 24,
+                    "height": 24,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "RoleType: MeetingManager",
+                            "left": -14.128403536717176,
+                            "top": 32.9662749190066,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "478": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "-141": {
+                    "left": 0,
+                    "top": 618.8497511700153,
+                    "width": 24,
+                    "height": 24,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "RoleType: AssignmentProcessor",
+                            "left": -9.418935691144785,
+                            "top": 30.611540996220356,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "479": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "-145": {
+                    "left": 0,
+                    "top": 759.1472432174935,
+                    "width": 24,
+                    "height": 24,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "RoleType: AssignmentLogCreator",
+                            "left": -9.418935691144785,
+                            "top": 30.611540996220377,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "480": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "-205": {
+                    "left": 0,
+                    "top": 891.4158853719969,
+                    "width": 24,
+                    "height": 24,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "RoleType: AssignmentLogSender",
+                            "left": -9.418935691144785,
+                            "top": 32.96627491900649,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "481": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "-211": {
+                    "left": 0,
+                    "top": 1097.3400619318788,
+                    "width": 24,
+                    "height": 24,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "RoleType: CompleteAssignmentLogSender",
+                            "left": -23.54733922786197,
+                            "top": 30.611540996220306,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "482": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "-215": {
+                    "left": 143.244778531556,
+                    "top": 1227,
+                    "width": 24,
+                    "height": 24,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "RoleType: ProductBookResponsible",
+                            "left": -138.92930144438554,
+                            "top": 23.547339227861862,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "483": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "-219": {
+                    "left": 198.92075783903624,
+                    "top": 1227,
+                    "width": 24,
+                    "height": 24,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "RoleType: IssueArchiever",
+                            "left": -21.192605305075887,
+                            "top": 68.2872837607992,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "484": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "-221": {
+                    "left": 360.96992296485973,
+                    "top": 1227,
+                    "width": 24,
+                    "height": 24,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "RoleType: FinishIssueResponsible",
+                            "left": 4.709467845572295,
+                            "top": 65.93254983801312,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "485": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "582": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 156,
+                    "height": 21,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                },
+                "583": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 222,
+                    "height": 21,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                },
+                "584": {
+                    "left": 316.4080056818182,
+                    "top": 2.8242994318182095,
+                    "width": 183,
+                    "height": 75.52308964909949,
+                    "autosize": false,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0,
+                            "id": "occurrence"
+                        }
+                    ]
+                },
+                "585": {
+                    "left": 314.5865710227268,
+                    "top": 9.072273863636362,
+                    "width": 118.74054696906586,
+                    "height": 45.69689712619741,
+                    "autosize": false,
+                    "data": {
+                        "complete-view": "false"
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0,
+                            "id": "occurrence"
+                        }
+                    ]
+                },
+                "586": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "587": {
+                    "left": 260.96959943181804,
+                    "top": 12.72059375000001,
+                    "width": 112.6830108666843,
+                    "height": 40,
+                    "autosize": false,
+                    "data": {
+                        "complete-view": "false"
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0,
+                            "id": "occurrence"
+                        }
+                    ]
+                },
+                "588": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "589": {
+                    "left": 1214.596022727272,
+                    "top": 400,
+                    "width": 116,
+                    "height": 37,
+                    "autosize": true,
+                    "data": {
+                        "complete-view": "false"
+                    },
+                    "labels": [
+                    ]
+                },
+                "590": {
+                    "left": 1340,
+                    "top": 86.62295740411196,
+                    "width": 116.79800319942456,
+                    "height": 47.75339031085531,
+                    "autosize": false,
+                    "data": {
+                        "complete-view": "false"
+                    },
+                    "labels": [
+                    ]
+                },
+                "591": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "-587": {
+                    "left": 0,
+                    "top": 116.9736881824897,
+                    "width": 24,
+                    "height": 24,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "RoleType: ProcessIssue",
+                            "left": -16.352985795454547,
+                            "top": 29.9805,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "592": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "-585": {
+                    "left": 664,
+                    "top": 84.3914773336771,
+                    "width": 24,
+                    "height": 24,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "RoleType: ProcessIssue",
+                            "left": 0,
+                            "top": 21.80397727272726,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "593": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                }
+            }
+        },
+        "4": {
+            "data": {
+                "4": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                },
+                "23": {
+                    "left": 240,
+                    "top": 224,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                },
+                "24": {
+                    "left": 464,
+                    "top": 432,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                }
+            }
+        },
+        "2": {
+            "data": {
+                "2": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                },
+                "25": {
+                    "left": 112,
+                    "top": 144,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                },
+                "26": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                }
+            }
+        },
+        "27": {
+            "data": {
+                "27": {
+                    "left": -20,
+                    "top": 27,
+                    "width": 1077,
+                    "height": 759,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                },
+                "29": {
+                    "left": 192,
+                    "top": 128,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                },
+                "30": {
+                    "left": 608,
+                    "top": 128,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                },
+                "31": {
+                    "left": 192,
+                    "top": 355.5,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                },
+                "32": {
+                    "left": 608,
+                    "top": 306,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                },
+                "33": {
+                    "left": 608,
+                    "top": 429,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                },
+                "34": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                },
+                "35": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                },
+                "36": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                },
+                "37": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                },
+                "38": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                },
+                "39": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                }
+            }
+        },
+        "41": {
+            "data": {
+                "41": {
+                    "left": -69.80885529157683,
+                    "top": 186.96112311015145,
+                    "width": 1172,
+                    "height": 699,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                },
+                "49": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "46": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "45": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "44": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        },
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": -30,
+                            "id": "source"
+                        },
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 31,
+                            "id": "target"
+                        }
+                    ]
+                },
+                "48": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "50": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "42": {
+                    "left": 320,
+                    "top": 272,
+                    "width": 42,
+                    "height": 44,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "51": {
+                    "left": 144,
+                    "top": 144,
+                    "width": 116,
+                    "height": 72,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                },
+                "52": {
+                    "left": 464,
+                    "top": 160,
+                    "width": 116,
+                    "height": 72,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                },
+                "53": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        },
+                        {
+                            "text": "1",
+                            "left": -5.5,
+                            "top": -9,
+                            "position": -30,
+                            "id": "source"
+                        },
+                        {
+                            "text": "1",
+                            "left": 10.5,
+                            "top": 13.5,
+                            "position": 31,
+                            "id": "target"
+                        }
+                    ]
+                },
+                "54": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "55": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                }
+            }
+        },
+        "56": {
+            "data": {
+                "56": {
+                    "left": -930.9321097788817,
+                    "top": -79.34303040949484,
+                    "width": 1024,
+                    "height": 463,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                },
+                "60": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "62": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "64": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "67": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "68": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "71": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "73": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "77": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "78": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "80": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "83": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "84": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "88": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "90": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "123": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                }
+            }
+        },
+        "125": {
+            "data": {
+                "125": {
+                    "left": -1953.7911749329453,
+                    "top": -440.16274395917463,
+                    "width": 383,
+                    "height": 404,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                    ]
+                },
+                "60": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "62": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "64": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "67": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "68": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "71": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "73": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "77": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "78": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "80": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "83": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "84": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "88": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "90": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "123": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "129": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "131": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "135": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "136": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "138": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "140": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "143": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "144": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "147": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "148": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "207": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "208": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "210": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "126": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 44,
+                    "height": 46,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "Customer request received",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "128": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 238,
+                    "height": 69,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0,
+                            "id": "occurrence"
+                        }
+                    ]
+                },
+                "130": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 44,
+                    "height": 46,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "Control slip created",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "132": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 44,
+                    "height": 46,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "Assignment from main contractor",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "134": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 370,
+                    "height": 69,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0,
+                            "id": "occurrence"
+                        }
+                    ]
+                },
+                "137": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 44,
+                    "height": 46,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "Receipt confirmed",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "139": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 194,
+                    "height": 69,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0,
+                            "id": "occurrence"
+                        }
+                    ]
+                },
+                "141": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 249,
+                    "height": 69,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0,
+                            "id": "occurrence"
+                        }
+                    ]
+                },
+                "142": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 44,
+                    "height": 46,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "Meeting arranged",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "145": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 260,
+                    "height": 69,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0,
+                            "id": "occurrence"
+                        }
+                    ]
+                },
+                "146": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 44,
+                    "height": 46,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "Assignment processed",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "205": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 249,
+                    "height": 69,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0,
+                            "id": "occurrence"
+                        }
+                    ]
+                },
+                "206": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 44,
+                    "height": 46,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "Assignment log created",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "209": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 44,
+                    "height": 46,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "AssignmentLogSended",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "212": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "214": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "211": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 337,
+                    "height": 69,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0,
+                            "id": "occurrence"
+                        }
+                    ]
+                },
+                "213": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 44,
+                    "height": 46,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "Complete assignment reported",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "216": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "218": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "220": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "223": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                },
+                "224": {
+                    "left": 0,
+                    "top": 0,
+                    "width": 0,
+                    "height": 0,
+                    "autosize": true,
+                    "data": {
+                    },
+                    "labels": [
+                        {
+                            "text": "",
+                            "left": 0,
+                            "top": 0,
+                            "position": 0.5,
+                            "id": "name"
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}
