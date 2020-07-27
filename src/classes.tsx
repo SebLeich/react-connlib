@@ -76,6 +76,8 @@ export class ConnlibLayerData {
     domElement: HTMLElement;
     layerPositionObservable: Subject<ConnlibLayerData>;
     layerSizeObservable: Subject<ConnlibLayerData>;
+    positionChangeStartedObservable: Subject<any> = new Subject();
+    positionChangeReadyObservable: Subject<any> = new Subject();
     connlibInstance: ConnlibInstance;
     middle: ConnlibPoint = null;
     setPosition(left: number, top: number) {
@@ -139,6 +141,7 @@ class ConnlibEndpoint extends ConnlibPathPoint {
     connector: ConnlibConnection;
     instanceX: number;
     instanceY: number;
+    hidden: boolean = false;
     sourceSideChangeObservable: Subject<ConnlibEndpoint> = new Subject<ConnlibEndpoint>();
     /**
      * this method is analogue to a path point's position change, but it should not cascade the event back!
@@ -173,6 +176,12 @@ class ConnlibEndpoint extends ConnlibPathPoint {
     getInstancePosition(): ConnlibPoint {
         return this.connlibInstance.rawPointToInstancePoint(this);
     }
+
+    hide(){
+        this.hidden = true;
+        this.validate();
+    }
+
     onMousedown() {
         Connlib.dragFlag = this;
     }
@@ -276,6 +285,7 @@ class ConnlibEndpoint extends ConnlibPathPoint {
         this.top = point.top;
         this.validateInstancePosition();
     }
+
     setUp(connlibInstance: ConnlibInstance) {
         this.connlibInstance = connlibInstance;
         this.type = new ConnlibOpenArrowEndpoint();
@@ -284,6 +294,12 @@ class ConnlibEndpoint extends ConnlibPathPoint {
         if (this.top && this.left && connlibInstance) this.validateInstancePosition();
         this.isSettedUp = true;
     }
+
+    show(){
+        this.hidden = false;
+        this.validate();
+    }
+
     updateLeft(left: number) {
         if (this.direction == ConnlibDirection.LEFT || this.direction == ConnlibDirection.RIGHT) {
             console.warn("this method should not be called: only for horizontal movement of TOP/BOTTOM endpoints");
@@ -310,6 +326,7 @@ class ConnlibEndpoint extends ConnlibPathPoint {
             this.sourceSideChangeObservable.next(this);
         }
     }
+
     updateTop(top: number) {
         if (this.direction == ConnlibDirection.TOP || this.direction == ConnlibDirection.BOTTOM) {
             console.warn("this method should not be called: only for vertical movement of RIGHT/LEFT endpoints");
@@ -336,15 +353,18 @@ class ConnlibEndpoint extends ConnlibPathPoint {
             this.sourceSideChangeObservable.next(this);
         }
     }
+
     validate() {
         this.componentRef.setState({
             left: this.left,
             top: this.top,
             direction: this.direction,
             type: this.type,
+            hidden: this.hidden,
             mousedown: () => this.onMousedown()
         });
     }
+
     validateInstancePosition() {
         let p = this.getInstancePosition();
         this.instanceX = p.left;
@@ -385,12 +405,15 @@ export class ConnlibObjectType implements ConnlibModelElement {
     layer: ConnlibLayerData;
     connlibInstance: ConnlibInstance;
     positionChangeObservable: Subject<any> = new Subject();
+    positionChangeStartedObservable: Subject<any> = new Subject();
+    positionChangeReadyObservable: Subject<any> = new Subject();
 
     onInit?(data?:any){
 
     }
+    
     onMousedown(event: MouseEvent){
-        console.log(event);
+        this.positionChangeStartedObservable.next(this);
         let drag = new ConnlibObjectTypeMoveWrapper();
         drag.ref = this;
         drag.diffX = event.offsetX;
@@ -401,6 +424,7 @@ export class ConnlibObjectType implements ConnlibModelElement {
     updatePosition(position: ConnlibPoint){
         this.positionChangeObservable.next({ position: position, ref: this });
     }
+    
     validate(layer: ConnlibLayerData){
         console.warn("you must overwrite this function!", this);
     }
@@ -965,6 +989,9 @@ export class Connlib {
                 case ConnlibConnectionCreateWrapper:
                     (this.dragFlag as ConnlibConnectionCreateWrapper).destroy();
                     break;
+                case ConnlibObjectTypeMoveWrapper:
+                    (this.dragFlag as ConnlibObjectTypeMoveWrapper).destroy();
+                    break;
             }
             this.dragFlag = null;
         });
@@ -1042,7 +1069,6 @@ export class Connlib {
                     source.top = Connlib.roundValueToScale(eSource.top) + connector.connlibInstance.layer.top;
                     break;
             }
-            console.log(source);
             source.source = connector.source;
             source.direction = eSource.direction;
             source.setUp(this.rootInstance);
@@ -1068,7 +1094,10 @@ export class Connlib {
             let sourceCell = this.rootInstance.getGridCellForRawEndpoint(this.getEndpointConnectionPoint(source));
             let targetCell = this.rootInstance.getGridCellForRawEndpoint(this.getEndpointConnectionPoint(target));
             let pathPoints = ConnlibExtensions.IDAStar(this.rootInstance, sourceCell, targetCell, source.direction);
-            console.log(pathPoints);
+            connector.onHideObservable.subscribe(() => source.hide());
+            connector.onShowObservable.subscribe(() => source.show());
+            connector.onHideObservable.subscribe(() => target.hide());
+            connector.onShowObservable.subscribe(() => target.show());
             connector.updatePathPoints(this.cellsArrayToPathPointArray(pathPoints), source, target);
         }
     }
@@ -1617,9 +1646,18 @@ export class ConnlibConnection {
     realTargetSubscription: Subscription;
     targetPointSubscription: Subscription;
     targetSideChangeSubscription: Subscription;
+    onHideObservable: Subject<any> = new Subject();
+    onShowObservable: Subject<any> = new Subject();
+    hidden: boolean = false;
 
     getEndpoints() {
         return this._pathPoints.filter(x => (x as ConnlibEndpoint).source != null);
+    }
+
+    hide(){
+        this.hidden = true;
+        this.validate();
+        this.onHideObservable.next();
     }
 
     lineHasZeroLength(line: ConnlibLine) {
@@ -1690,6 +1728,12 @@ export class ConnlibConnection {
         this.connlibInstance.registerLine(l);
         l.zeroLengthObservable.subscribe((line: ConnlibLine) => this.lineHasZeroLength(line));
         return l;
+    }
+
+    show(){
+        this.hidden = false;
+        this.validate();
+        this.onShowObservable.next();
     }
 
     updatePathPoints(points: ConnlibPathPoint[], realSource: ConnlibEndpoint, realTarget: ConnlibEndpoint) {
@@ -1811,7 +1855,8 @@ export class ConnlibConnection {
             realSource: this.realSource,
             realTarget: this.realTarget,
             sourcePoint: this.sourcePoint,
-            targetPoint: this.targetPoint
+            targetPoint: this.targetPoint,
+            hidden: this.hidden
         });
     }
 }
@@ -1947,57 +1992,6 @@ export class ConnlibInstance {
         }
         return false;
     }
-    /**
-     * only if Connlib should render the children!
-     * @param namespace 
-     * @param child 
-     * @param layer 
-     */
-    registerChild(namespace: string, child: any, inputLayer: ConnlibLayerData){
-        let type = ConnlibTypeMap[namespace];
-        if(!type) {
-            console.warn("cannot render " + namespace + ": this type is not registered!");
-            return;
-        }
-        let childInstance = new type.type();
-        childInstance.id = child.id;
-        childInstance.connlibInstance = this;
-        if(childInstance.onInit) childInstance.onInit(child);
-        let layer = new ConnlibLayerData();
-        layer.left = inputLayer.left;
-        layer.top = inputLayer.top;
-        layer.width = inputLayer.width;
-        layer.height = inputLayer.height;
-        layer.layerPositionObservable = new Subject();
-        layer.layerSizeObservable = new Subject();
-        layer.connlibInstance = this;
-        layer.validateSize();
-        childInstance.layer = layer;
-        this.addLayer(layer, child.id);
-        this._children[layer.guid] = childInstance;
-        if(Connlib.renderComponents && childInstance.positionChangeObservable) childInstance.positionChangeObservable.subscribe((data: any) => {
-            layer.left = data.position.left;
-            layer.top = data.position.top;
-            data.ref.validate(layer);
-        });
-    }
-    /**
-     * the method enables external libraries to register an html element for collision detection with an external id
-     * @param elementId external id (always numeric!)
-     */
-    registerElement(element: HTMLElement, elementId: number){
-        let currentLayer = new ConnlibLayerData();
-        currentLayer.left = element.offsetLeft;
-        currentLayer.top = element.offsetTop;
-        currentLayer.width = element.offsetWidth;
-        currentLayer.height = element.offsetHeight;
-        currentLayer.layerPositionObservable = new Subject();
-        currentLayer.layerSizeObservable = new Subject();
-        currentLayer.connlibInstance = this;
-        currentLayer.domElement = element;
-        currentLayer.validateSize();
-        this.addLayer(currentLayer, elementId);
-    }
 
     bind(event: string, handler: (info: ConnlibDropInfoInit) => any) {
 
@@ -2039,6 +2033,22 @@ export class ConnlibInstance {
         this._connections[c.guid] = c;
         c.source = source;
         c.target = target;
+        let changeCallback = () => {
+            console.log("HEREEE");
+            c.show();
+            /*
+            this.updateGrid();
+            Connlib.startCompletePathCalculation(c);
+            c.validate();
+            */
+        };
+        let startChangeCallback = () => {
+            c.hide();
+        };
+        source.positionChangeStartedObservable.subscribe(startChangeCallback);
+        target.positionChangeStartedObservable.subscribe(startChangeCallback);
+        source.positionChangeReadyObservable.subscribe(changeCallback);
+        target.positionChangeReadyObservable.subscribe(changeCallback);
         c.updatePathPoints([], null, null);
         return c;
     }
@@ -2134,8 +2144,65 @@ export class ConnlibInstance {
             top: point.top - this.layer.top
         };
     }
+    /**
+     * 
+     * @param connector 
+     */
     registerConnector(connector: ConnlibConnection) {
         this._connections[connector.guid] = connector;
+    }
+    /**
+     * only if Connlib should render the children!
+     * @param namespace 
+     * @param child 
+     * @param layer 
+     */
+    registerChild(namespace: string, child: any, inputLayer: ConnlibLayerData){
+        let type = ConnlibTypeMap[namespace];
+        if(!type) {
+            console.warn("cannot render " + namespace + ": this type is not registered!");
+            return;
+        }
+        let childInstance = new type.type();
+        childInstance.id = child.id;
+        childInstance.connlibInstance = this;
+        if(childInstance.onInit) childInstance.onInit(child);
+        let layer = new ConnlibLayerData();
+        layer.left = inputLayer.left;
+        layer.top = inputLayer.top;
+        layer.width = inputLayer.width;
+        layer.height = inputLayer.height;
+        layer.layerPositionObservable = new Subject();
+        layer.layerSizeObservable = new Subject();
+        layer.connlibInstance = this;
+        layer.validateSize();
+        childInstance.layer = layer;
+        this.addLayer(layer, child.id);
+        this._children[layer.guid] = childInstance;
+        if(Connlib.renderComponents && childInstance.positionChangeObservable) childInstance.positionChangeObservable.subscribe((data: any) => {
+            layer.left = data.position.left;
+            layer.top = data.position.top;
+            data.ref.validate(layer);
+        });
+        if(Connlib.renderComponents && childInstance.positionChangeStartedObservable) childInstance.positionChangeStartedObservable.subscribe(() => layer.positionChangeStartedObservable.next());
+        if(Connlib.renderComponents && childInstance.positionChangeReadyObservable) childInstance.positionChangeReadyObservable.subscribe(() => layer.positionChangeReadyObservable.next());
+    }
+    /**
+     * the method enables external libraries to register an html element for collision detection with an external id
+     * @param elementId external id (always numeric!)
+     */
+    registerElement(element: HTMLElement, elementId: number){
+        let currentLayer = new ConnlibLayerData();
+        currentLayer.left = element.offsetLeft;
+        currentLayer.top = element.offsetTop;
+        currentLayer.width = element.offsetWidth;
+        currentLayer.height = element.offsetHeight;
+        currentLayer.layerPositionObservable = new Subject();
+        currentLayer.layerSizeObservable = new Subject();
+        currentLayer.connlibInstance = this;
+        currentLayer.domElement = element;
+        currentLayer.validateSize();
+        this.addLayer(currentLayer, elementId);
     }
 
     registerEndpoint(point: ConnlibEndpoint) {
@@ -2401,6 +2468,7 @@ class ConnlibEndpointComponent extends React.Component {
      */
     render() {
         if (this.state as any) {
+            if((this.state as any).hidden) return null;
             let type = (this.state as any).type as ConnlibEndpointInterface;
             var top: number;
             var height: number;
@@ -2644,6 +2712,7 @@ class ConnlibConnectionComponent extends React.Component {
      */
     render() {
         if ((this.state as any) && Array.isArray((this.state as any).lines)) {
+            if((this.state as any).hidden) return null;
             let dragOverlays: any[] = [];
             let overlayClass = "connlib-line-overlay";
             let realSource = ((this.state as any).realSource as ConnlibEndpoint).getInstancePosition();
@@ -3007,6 +3076,10 @@ class ConnlibObjectTypeMoveWrapper implements ConnlibDragFlagInterface {
     diffX: number = null;
     diffY: number = null;
     ref: ConnlibObjectType = null;
+
+    destroy(){
+        this.ref.positionChangeReadyObservable.next();
+    }
 }
 
 // the default stencil
