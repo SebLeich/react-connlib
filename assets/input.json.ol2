@@ -292,24 +292,6 @@
                     "targetId": 52,
                     "name": ""
                 }
-            ],
-            ["io.framed.model.Aggregation", {
-                    "id": 56,
-                    "sourceId": 6,
-                    "targetId": 9,
-                    "name": "",
-                    "sourceCardinality": "1",
-                    "targetCardinality": "*"
-                }
-            ],
-            ["io.framed.model.Relationship", {
-                    "id": 57,
-                    "sourceId": 9,
-                    "targetId": 18,
-                    "name": "",
-                    "sourceCardinality": "*",
-                    "targetCardinality": "*"
-                }
             ]
         ]
     },
@@ -317,8 +299,8 @@
         "1": {
             "data": {
                 "1": {
-                    "left": 186.63306074214057,
-                    "top": 322.32804623955695,
+                    "left": 69.18514428620142,
+                    "top": 31.281954887218035,
                     "width": 1162.3702885724028,
                     "height": 525.5639097744361,
                     "autosize": true,
@@ -1144,70 +1126,6 @@
                             "top": 0,
                             "position": 0.5,
                             "id": "name"
-                        }
-                    ]
-                },
-                "56": {
-                    "left": 0,
-                    "top": 0,
-                    "width": 0,
-                    "height": 0,
-                    "autosize": true,
-                    "data": {
-                    },
-                    "labels": [
-                        {
-                            "text": "",
-                            "left": 0,
-                            "top": 0,
-                            "position": 0.5,
-                            "id": "name"
-                        },
-                        {
-                            "text": "1",
-                            "left": 0,
-                            "top": 0,
-                            "position": 31,
-                            "id": "source"
-                        },
-                        {
-                            "text": "*",
-                            "left": 0,
-                            "top": 0,
-                            "position": -30,
-                            "id": "target"
-                        }
-                    ]
-                },
-                "57": {
-                    "left": 0,
-                    "top": 0,
-                    "width": 0,
-                    "height": 0,
-                    "autosize": true,
-                    "data": {
-                    },
-                    "labels": [
-                        {
-                            "text": "",
-                            "left": 0,
-                            "top": 0,
-                            "position": 0.5,
-                            "id": "name"
-                        },
-                        {
-                            "text": "*",
-                            "left": 0,
-                            "top": 0,
-                            "position": -30,
-                            "id": "source"
-                        },
-                        {
-                            "text": "*",
-                            "left": 0,
-                            "top": 0,
-                            "position": 31,
-                            "id": "target"
                         }
                     ]
                 }

@@ -18,6 +18,13 @@ export class FramedIoDataInterface {
     layer: ConnlibLayerWrapper;
 }
 
+class FramedIoConnectionWrapper {
+    id: number;
+    sourceId: number;
+    targetId: number;
+    name: string;
+}
+
 export class FramedIoAbstractRelationship {
     id: number;
     sourceId: number;
@@ -44,6 +51,7 @@ export class FramedIoCompartment extends ConnlibAbstractStructuralType {
     methods: [[string, ConnlibMethod]];
     children: [[string, ConnlibModelElement]];
     static backgroundColor = "#ffffd3";
+    static borderRadius = 3;
 }
 
 export class FramedIoEvent extends ConnlibEvent {
@@ -95,6 +103,7 @@ export class FramedIoScene extends ConnlibAbstractStructuralType {
     name: string;
     attributes: [[string, ConnlibAttribute]];
     children: [[string, ConnlibModelElement]];
+    static borderRadius = 3;
     static backgroundColor = "rgb(239 255 238)";
 }
 
@@ -127,6 +136,18 @@ export class FramedIoModule {
 
         // afterwards, update grid
         if (Connlib.useOverlapDetection) Connlib.rootInstance.updateGrid();
+
+        for(let index in data.connections.connections){
+            let type: string = (data.connections.connections[index] as any)[0] as string;
+            let connector: FramedIoConnectionWrapper = (data.connections.connections[index] as any)[1];
+            console.log(connector.sourceId, connector.targetId);
+            if(!Connlib.rootInstance.hasRepresentation(connector.sourceId) || !Connlib.rootInstance.hasRepresentation(connector.targetId)) continue;
+            let connection = Connlib.rootInstance.connect({
+                sourceId: connector.sourceId,
+                targetId: connector.targetId
+            });
+            console.log(connection);
+        }
 
         /*
         for (let connectorId in rootLayerLayer.connectors) {
