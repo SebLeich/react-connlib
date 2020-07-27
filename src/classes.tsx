@@ -396,6 +396,7 @@ export class ConnlibObjectType implements ConnlibModelElement {
 export class ConnlibAbstractStructuralType extends ConnlibObjectType {
     static backgroundColor?: string = "#fafafa";
     static borderRadius?: number = 3;
+    static borderWidth?: number = 1;
     children?: any[] = [];
     componentRef?: ConnlibAbstractStructuralTypeComponent;
 
@@ -413,6 +414,7 @@ export class ConnlibAbstractStructuralType extends ConnlibObjectType {
             left: layer.left,
             height: layer.height,
             width: layer.width,
+            borderWidth: (this.constructor as any).borderWidth,
             backgroundColor: (this.constructor as any).backgroundColor,
             borderRadius: (this.constructor as any).borderRadius
         });
@@ -428,12 +430,14 @@ class ConnlibAbstractStructuralTypeComponent extends React.Component {
      */
     render() {
         if (this.state as any) {
+            let bW = (this.state as any).borderWidth;
             let style: React.CSSProperties = {
                 position: "absolute",
                 top: (this.state as any).top,
-                height: (this.state as any).height,
+                height: (this.state as any).height - (2*bW),
                 left: (this.state as any).left,
-                width: (this.state as any).width,
+                width: (this.state as any).width - (2*bW),
+                borderWidth: bW,
                 backgroundColor: (this.state as any).backgroundColor,
                 borderRadius: (this.state as any).borderRadius
             };
@@ -1055,6 +1059,7 @@ export class Connlib {
             let sourceCell = this.rootInstance.getGridCellForRawEndpoint(this.getEndpointConnectionPoint(source));
             let targetCell = this.rootInstance.getGridCellForRawEndpoint(this.getEndpointConnectionPoint(target));
             let pathPoints = ConnlibExtensions.IDAStar(this.rootInstance, sourceCell, targetCell, source.direction);
+            console.log(pathPoints);
             connector.updatePathPoints(this.cellsArrayToPathPointArray(pathPoints), source, target);
         }
     }
@@ -1162,14 +1167,24 @@ class ConnlibExtensions {
                     this.updateCostsAndGetAnchestors(costs, s);
                     let path = this.updateCostsAndGetAnchestors(costs, target);
                     let breakPoints = [];
+                    var lastCell: ConnlibAlgorithmGridCell = null;
                     for (let pI in path) {
                         if (path[pI].c == source.c && path[pI].r == source.r) {
                             breakPoints.push(source);
+                            console.log("source found");
                         } else if (parseInt(pI) == 0) {
                             breakPoints.push(path[(parseInt(pI)).toString()]);
+                            console.log(path[(parseInt(pI)).toString()]);
                         } else {
                             if (path[(parseInt(pI) - 1).toString()].d != path[pI].d) breakPoints.push(path[(parseInt(pI) - 1).toString()]);
                         }
+                        lastCell = path[(parseInt(pI)).toString()];
+                    }
+                    if(lastCell){
+                        if (lastCell.d == ConnlibDirection.TOP && ((target.r != (lastCell.r - Connlib.connlibGridScale))||(target.c != lastCell.c))) breakPoints.push(lastCell);
+                        else if(lastCell.d == ConnlibDirection.RIGHT && ((target.r != lastCell.r)||(target.c != (lastCell.c + Connlib.connlibGridScale)))) breakPoints.push(lastCell);
+                        else if (lastCell.d == ConnlibDirection.BOTTOM && ((target.r != (lastCell.r + Connlib.connlibGridScale))||(target.c != lastCell.c))) breakPoints.push(lastCell);
+                        else if(lastCell.d == ConnlibDirection.LEFT && ((target.r != lastCell.r)||(target.c != (lastCell.c - Connlib.connlibGridScale)))) breakPoints.push(lastCell);
                     }
                     breakPoints.push(target);
                     return breakPoints;
@@ -1507,7 +1522,6 @@ class ConnlibLine implements ConnlibDragFlagInterface {
         this.soureSubscription = this._source.positionChangeObservable.subscribe((event: ConnlibPositionChangeEvent) => {
             if (event.participants.indexOf(this) > -1) return;
             event.participants.push(this);
-            console.log(this);
             if (this.orientation != event.movementOrientation) {
                 this._target.cascadingUpdate(event);
             }
