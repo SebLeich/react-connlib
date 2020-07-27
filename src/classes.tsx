@@ -383,8 +383,23 @@ export class ConnlibObjectType implements ConnlibModelElement {
     guid: string = Guid.newGuid();
     componentRef?: any = null;
     layer: ConnlibLayerData;
+    connlibInstance: ConnlibInstance;
+    positionChangeObservable: Subject<any> = new Subject();
+
     onInit?(data?:any){
 
+    }
+    onMousedown(event: MouseEvent){
+        console.log(event);
+        let drag = new ConnlibObjectTypeMoveWrapper();
+        drag.ref = this;
+        drag.diffX = event.offsetX;
+        drag.diffY = event.offsetY;
+        Connlib.dragFlag = drag;
+    }
+    
+    updatePosition(position: ConnlibPoint){
+        this.positionChangeObservable.next({ position: position, ref: this });
     }
     validate(layer: ConnlibLayerData){
         console.warn("you must overwrite this function!", this);
@@ -416,7 +431,8 @@ export class ConnlibAbstractStructuralType extends ConnlibObjectType {
             width: layer.width,
             borderWidth: (this.constructor as any).borderWidth,
             backgroundColor: (this.constructor as any).backgroundColor,
-            borderRadius: (this.constructor as any).borderRadius
+            borderRadius: (this.constructor as any).borderRadius,
+            mousedown: (event: MouseEvent) => this.onMousedown(event)
         });
     }
 }
@@ -442,7 +458,7 @@ class ConnlibAbstractStructuralTypeComponent extends React.Component {
                 borderRadius: (this.state as any).borderRadius
             };
             return (
-                <div style={style} className="structural-type"></div>
+                <div style={style} className="structural-type" onMouseDown={() => (this.state as any).mousedown(event)}></div>
             );
         }
         return null;
@@ -469,7 +485,8 @@ export class ConnlibEvent extends ConnlibObjectType {
             height: layer.height,
             width: layer.width,
             icon: this.icon,
-            borderWidth: this.borderWidth
+            borderWidth: this.borderWidth,
+            mousedown: (event: MouseEvent) => this.onMousedown(event)
         });
     }
 }
@@ -494,7 +511,7 @@ class ConnlibEventComponent extends React.Component {
                 borderWidth: bW
             };
             return (
-                <div style={style} className="event-outer">
+                <div style={style} className="event-outer" onMouseDown={() => (this.state as any).mousedown(event)}>
                     <span className="spacer"></span>
                     {icon}
                     <span className="spacer"></span>
@@ -539,7 +556,7 @@ export class Connlib {
     static connectorColor = "#464646";
     static endpointIndent: number = 5;
     static lineOverlayWidth: number = 5;
-    static endpointSize: number = 20; // the endpoint svg's width & the height is calculated with the formula below
+    static endpointSize: number = 30; // the endpoint svg's width & the height is calculated with the formula below
     static endpointHeightFormula = function (size: number) {
         return size * 1.5;
     }
@@ -826,21 +843,6 @@ export class Connlib {
         ConnlibTypeMap[namespace] = entry;
     }
     /**
-     * the method is currently used for render debug components
-     *
-    private static renderAbstractStructuralComponent(type: ConnlibTypeMapEntry, elementId: number, layer: ConnlibLayerData, container: HTMLElement): HTMLElement {
-        let element = document.createElement("div");
-        element.classList.add(type.class, this.blockingClassName, "connlib-element");
-        element.dataset["id"] = elementId.toString();
-        element.style.top = layer.top + "px";
-        element.style.left = layer.left + "px";
-        element.style.width = layer.width + "px";
-        element.style.height = layer.height + "px";
-        element.style.backgroundColor = type.type.backgroundColor;
-        container.appendChild(element);
-        return element;
-    }
-    /**
      * the method redraws all connlib instances
      */
     public static repaintEverything() {
@@ -947,6 +949,13 @@ export class Connlib {
                     break;
                 case ConnlibConnectionCreateWrapper:
                     (this.dragFlag as ConnlibConnectionCreateWrapper).updateTarget(c.left + event.offsetX, c.top + event.offsetY);
+                    break;
+                case ConnlibObjectTypeMoveWrapper:
+                    let dF = this.dragFlag as ConnlibObjectTypeMoveWrapper;
+                    dF.ref.updatePosition({
+                        left: corr.left - dF.diffX,
+                        top: corr.top - dF.diffY
+                    });
                     break;
             }
         });
@@ -1952,6 +1961,7 @@ export class ConnlibInstance {
         }
         let childInstance = new type.type();
         childInstance.id = child.id;
+        childInstance.connlibInstance = this;
         if(childInstance.onInit) childInstance.onInit(child);
         let layer = new ConnlibLayerData();
         layer.left = inputLayer.left;
@@ -1965,6 +1975,11 @@ export class ConnlibInstance {
         childInstance.layer = layer;
         this.addLayer(layer, child.id);
         this._children[layer.guid] = childInstance;
+        if(Connlib.renderComponents && childInstance.positionChangeObservable) childInstance.positionChangeObservable.subscribe((data: any) => {
+            layer.left = data.position.left;
+            layer.top = data.position.top;
+            data.ref.validate(layer);
+        });
     }
     /**
      * the method enables external libraries to register an html element for collision detection with an external id
@@ -2986,6 +3001,12 @@ class ConnlibPanWrapper implements ConnlibDragFlagInterface {
     calculateTransform(x: number, y: number) {
         return { x: (this.initialXTransform + (x - this.mouseX)) * 1, y: (this.initialYTransform + (y - this.mouseY)) * 1 };
     }
+}
+
+class ConnlibObjectTypeMoveWrapper implements ConnlibDragFlagInterface {
+    diffX: number = null;
+    diffY: number = null;
+    ref: ConnlibObjectType = null;
 }
 
 // the default stencil
