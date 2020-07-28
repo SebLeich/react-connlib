@@ -8,7 +8,6 @@ import {
     ConnlibLayerWrapper,
     ConnlibConnectionWrapper,
     ConnlibEvent,
-    ConnlibObjectType,
     ConnlibEventTypes
 } from './classes';
 
@@ -140,28 +139,13 @@ export class FramedIoModule {
         for(let index in data.connections.connections){
             let type: string = (data.connections.connections[index] as any)[0] as string;
             let connector: FramedIoConnectionWrapper = (data.connections.connections[index] as any)[1];
-            console.log(connector.sourceId, connector.targetId);
             if(!Connlib.rootInstance.hasRepresentation(connector.sourceId) || !Connlib.rootInstance.hasRepresentation(connector.targetId)) continue;
             let connection = Connlib.rootInstance.connect({
                 sourceId: connector.sourceId,
                 targetId: connector.targetId
             });
-            console.log(connection);
         }
-
-        /*
-        for (let connectorId in rootLayerLayer.connectors) {
-            let connectorObjectArray = data.connections.connections.find(x => x[1].id === parseInt(connectorId));
-            let connectorData = rootLayerLayer.connectors[connectorId];
-            let connector = new ConnlibConnection();
-            connector.connlibInstance = rootInstance;
-            connector.source = rootInstance.getLayerByElementId(connectorObjectArray[1].sourceId);
-            connector.target = rootInstance.getLayerByElementId(connectorObjectArray[1].targetId);
-            connector.updatePathPoints(connectorData.pathPoints, null, null);
-            rootInstance.registerConnector(connector);
-        }
-        */
-
+        
         Connlib.rootInstance.render();
         let end = performance.now();
         console.log("finished in: " + (end - start).toFixed(0) + "ms")

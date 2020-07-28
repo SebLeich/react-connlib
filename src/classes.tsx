@@ -974,46 +974,51 @@ export class Connlib {
                                         let newPoint = new ConnlibPathPoint();
                                         newPoint.connlibInstance = line.connlibInstance;
                                         newPoint.left = line._source.left;
-                                        newPoint.top = line._source.top;
+                                        newPoint.top = corr.top - line.connlibInstance.layer.top;
                                         newPoint.setUp(line.connlibInstance);
                                         let source = line._source;
                                         line._source = newPoint;
                                         line.connection.setUpNewLine(source, newPoint);
-                                        line.updateTop(corr.top - line.connlibInstance.layer.top);
+                                        line._target.top = corr.top - line.connlibInstance.layer.top;
+                                        line.connection.validate();
                                     }
                                     if (line._target.createLineDirections.indexOf(ConnlibDirection.TOP) > -1) {
                                         let newPoint = new ConnlibPathPoint();
                                         newPoint.connlibInstance = line.connlibInstance;
                                         newPoint.left = line._target.left;
-                                        newPoint.top = line._target.top;
+                                        newPoint.top = corr.top - line.connlibInstance.layer.top;
                                         newPoint.setUp(line.connlibInstance);
                                         let target = line._target;
                                         line._target = newPoint;
                                         line.connection.setUpNewLine(newPoint, target);
-                                        line.updateTop(corr.top - line.connlibInstance.layer.top);
+                                        line._source.top = corr.top - line.connlibInstance.layer.top;
+                                        line.connection.validate();
                                     }
                                 } else if (diffY >= Connlib.createLineSize) {
+                                    // to bottom
                                     if (line._source.createLineDirections.indexOf(ConnlibDirection.BOTTOM) > -1) {
                                         let newPoint = new ConnlibPathPoint();
                                         newPoint.connlibInstance = line.connlibInstance;
                                         newPoint.left = line._source.left;
-                                        newPoint.top = line._source.top;
+                                        newPoint.top = corr.top - line.connlibInstance.layer.top;
                                         newPoint.setUp(line.connlibInstance);
                                         let source = line._source;
                                         line._source = newPoint;
                                         line.connection.setUpNewLine(source, newPoint);
-                                        line.updateTop(corr.top - line.connlibInstance.layer.top);
+                                        line._target.top = corr.top - line.connlibInstance.layer.top;
+                                        line.connection.validate();
                                     }
                                     if (line._target.createLineDirections.indexOf(ConnlibDirection.BOTTOM) > -1) {
                                         let newPoint = new ConnlibPathPoint();
                                         newPoint.connlibInstance = line.connlibInstance;
                                         newPoint.left = line._target.left;
-                                        newPoint.top = line._target.top;
+                                        newPoint.top = corr.top - line.connlibInstance.layer.top;
                                         newPoint.setUp(line.connlibInstance);
                                         let target = line._target;
                                         line._target = newPoint;
                                         line.connection.setUpNewLine(newPoint, target);
-                                        line.updateTop(corr.top - line.connlibInstance.layer.top);
+                                        line._source.top = corr.top - line.connlibInstance.layer.top;
+                                        line.connection.validate();
                                     }
                                 }
                             }
@@ -1022,7 +1027,9 @@ export class Connlib {
                             if (diffX == 0) return;
                             if (line._source.canMoveX && line._target.canMoveX) line.updateLeft(corr.left - line.connlibInstance.layer.left);
                             else {
+                                // move to left
                                 if (diffX <= ((-1) * (Connlib.createLineSize))) {
+                                    // source
                                     if (line._source.createLineDirections.indexOf(ConnlibDirection.LEFT) > -1) {
                                         let newPoint = new ConnlibPathPoint();
                                         newPoint.connlibInstance = line.connlibInstance;
@@ -1032,8 +1039,10 @@ export class Connlib {
                                         let source = line._source;
                                         line._source = newPoint;
                                         line.connection.setUpNewLine(source, newPoint);
-                                        line.updateLeft(corr.left - line.connlibInstance.layer.left);
+                                        line._source.left = corr.left - line.connlibInstance.layer.left;
+                                        line.connection.validate();
                                     }
+                                    // target
                                     if (line._target.createLineDirections.indexOf(ConnlibDirection.LEFT) > -1) {
                                         let newPoint = new ConnlibPathPoint();
                                         newPoint.connlibInstance = line.connlibInstance;
@@ -1043,31 +1052,36 @@ export class Connlib {
                                         let target = line._target;
                                         line._target = newPoint;
                                         line.connection.setUpNewLine(newPoint, target);
-                                        line.updateLeft(corr.left - line.connlibInstance.layer.left);
+                                        line._source.left = corr.left - line.connlibInstance.layer.left;
+                                        line.connection.validate();
                                     }
+                                    // move to right
                                 } else if (diffX >= Connlib.createLineSize) {
+                                    // source
                                     if (line._source.createLineDirections.indexOf(ConnlibDirection.RIGHT) > -1) {
                                         let newPoint = new ConnlibPathPoint();
                                         newPoint.connlibInstance = line.connlibInstance;
-                                        newPoint.left = line._source.left;
-                                        newPoint.top = line._source.top;
+                                        newPoint.left = corr.left - line.connlibInstance.layer.left;
+                                        newPoint.top = line._target.top;
                                         newPoint.setUp(line.connlibInstance);
                                         let source = line._source;
                                         line._source = newPoint;
                                         line.connection.setUpNewLine(source, newPoint);
-                                        line.updateLeft(corr.left - line.connlibInstance.layer.left);
+                                        line._source.left = corr.left - line.connlibInstance.layer.left;
+                                        line.connection.validate();
                                     }
+                                    // target
                                     if (line._target.createLineDirections.indexOf(ConnlibDirection.RIGHT) > -1) {
-                                        console.log("HEREEE");
                                         let newPoint = new ConnlibPathPoint();
                                         newPoint.connlibInstance = line.connlibInstance;
-                                        newPoint.left = line._target.left;
+                                        newPoint.left = corr.left - line.connlibInstance.layer.left;
                                         newPoint.top = line._target.top;
                                         newPoint.setUp(line.connlibInstance);
                                         let target = line._target;
                                         line._target = newPoint;
                                         line.connection.setUpNewLine(newPoint, target);
-                                        line.updateLeft(corr.left - line.connlibInstance.layer.left);
+                                        line._source.left = corr.left - line.connlibInstance.layer.left;
+                                        line.connection.validate();
                                     }
                                 }
                             }
@@ -1347,7 +1361,7 @@ class ConnlibExtensions {
                                 isTarget: false
                             });
                         } else {
-                            if (path[(parseInt(pI) - 1).toString()].d != path[pI].d){
+                            if (path[(parseInt(pI) - 1).toString()].d != path[pI].d) {
                                 let cell = path[(parseInt(pI) - 1).toString()];
                                 breakPoints.push({
                                     c: cell.c,
@@ -1967,7 +1981,7 @@ export class ConnlibConnection {
                     delete this._lines[currLine.guid];
                     this.setUpNewLine(lastLine._source, currLine._target);
                 }
-                if(lastLine) currLine._connectionIndex = lastLine._connectionIndex + 1;
+                if (lastLine) currLine._connectionIndex = lastLine._connectionIndex + 1;
                 lastLine = currLine;
             }
             if (this.realSourceSubscription) this.realSourceSubscription.unsubscribe();
@@ -2925,6 +2939,7 @@ class ConnlibConnectionComponent extends React.Component {
      * the method is called on component rendering
      */
     render() {
+        // HEREEE
         if ((this.state as any) && Array.isArray((this.state as any).lines)) {
             if ((this.state as any).hidden) return null;
             let dragOverlays: any[] = [];
@@ -2972,7 +2987,7 @@ class ConnlibConnectionComponent extends React.Component {
                         }
                         d += " L" + realTarget.left + ", " + realTarget.top;
                         return (
-                            <g>
+                            <g onDoubleClick={() => (this.state as any).doubleClick()}>
                                 <path d={d} stroke={Connlib.connectorColor} fill="transparent" strokeWidth="1" />
                                 {dragOverlays}
                             </g>
@@ -3022,6 +3037,7 @@ class ConnlibConnectionComponent extends React.Component {
                         <circle cx={prevLine.tL} cy={prevLine.tT} r="5" className="connlib-pathpoint-overlay" />
                     );
                     if (linesLongEnough) {
+                        // HEREEE
                         switch (currLine.direction) {
                             case ConnlibDirection.TOP:
                                 d += " A" + r + "," + r + " " + cW + " " + prevLine.tL + "," + (prevLine.tT - Connlib.pathCornerRadius);
