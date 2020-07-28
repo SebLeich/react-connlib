@@ -14,7 +14,8 @@ import {
     ConnlibEventRelationEndpoint,
     ConnlibDottedLineStyle,
     ConnlibAggregationEndpoint,
-    ConnlibCompositionEndpoint
+    ConnlibCompositionEndpoint,
+    ConnlibDashedLineStyle
 } from './classes';
 
 export class FramedIoDataInterface {
@@ -46,7 +47,7 @@ export class FramedIoComposition extends FramedIoAbstractRelationship {
 }
 export class FramedIoCreateRelationship extends FramedIoAbstractRelationship {
     static targetEndpointType = new ConnlibEventRelationEndpoint();
-    static lineStyle = new ConnlibDottedLineStyle();
+    static lineStyle = new ConnlibDashedLineStyle();
 }
 export class FramedIoDestroyRelationship extends FramedIoAbstractRelationship { }
 export class FramedIoFulfillmentRelationship extends FramedIoAbstractRelationship {
