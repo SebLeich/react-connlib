@@ -3,7 +3,7 @@ The repository contains Connlib, a repository for rendering connectors in the we
 - auto path calculation using automated shape-connector overlap detection
 - add custom model constructs (relations and shapes) by inheriting predefined shapes
 
-
+![Connlib demo image](./assets/demo.png)
 
 In future, we plan to implement the following features:
 - display intersections between connectors
