@@ -8,7 +8,11 @@ import {
     ConnlibLayerWrapper,
     ConnlibConnectionWrapper,
     ConnlibEvent,
-    ConnlibEventTypes
+    ConnlibEventTypes,
+    ConnlibConnection,
+    ConnlibFulfillmentEndpoint,
+    ConnlibEventRelationEndpoint,
+    ConnlibDottedLineStyle
 } from './classes';
 
 export class FramedIoDataInterface {
@@ -24,17 +28,23 @@ class FramedIoConnectionWrapper {
     name: string;
 }
 
-export class FramedIoAbstractRelationship {
+export class FramedIoAbstractRelationship extends ConnlibConnection {
     id: number;
     sourceId: number;
     targetId: number;
     name: string;
 }
 
+export class FramedIoRelationship extends FramedIoAbstractRelationship { }
 export class FramedIoComposition extends FramedIoAbstractRelationship { }
-export class FramedIoCreateRelationship extends FramedIoAbstractRelationship { }
+export class FramedIoCreateRelationship extends FramedIoAbstractRelationship {
+    static targetEndpointType = new ConnlibEventRelationEndpoint();
+    static lineStyle = new ConnlibDottedLineStyle();
+}
 export class FramedIoDestroyRelationship extends FramedIoAbstractRelationship { }
-export class FramedIoFulfillmentRelationship extends FramedIoAbstractRelationship { }
+export class FramedIoFulfillmentRelationship extends FramedIoAbstractRelationship {
+    static targetEndpointType = new ConnlibFulfillmentEndpoint();
+}
 
 export class FramedIoClass extends ConnlibAbstractStructuralType {
     id: number;
@@ -80,13 +90,6 @@ export class FramedIoPackage extends ConnlibAbstractStructuralType {
     name: string;
     metadata: ConnlibMetaData;
     children: [string, ConnlibModelElement];
-}
-
-export class FramedIoRelationship {
-    id: number;
-    sourceId: number;
-    targetId: number;
-    name: string;
 }
 
 export class FramedIoRoleType {
@@ -142,7 +145,8 @@ export class FramedIoModule {
             if(!Connlib.rootInstance.hasRepresentation(connector.sourceId) || !Connlib.rootInstance.hasRepresentation(connector.targetId)) continue;
             let connection = Connlib.rootInstance.connect({
                 sourceId: connector.sourceId,
-                targetId: connector.targetId
+                targetId: connector.targetId,
+                typeNS: type
             });
         }
         
