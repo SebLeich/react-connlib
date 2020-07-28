@@ -1,0 +1,100 @@
+.connlib-body {
+    margin: 0px;
+    padding: 0px;
+    overflow: hidden;
+    margin: 0px;
+    padding: 0px;
+    background-color: rgb(255, 255, 255);
+    overflow: hidden;
+    background-size: 20px 20px;
+    background-image: linear-gradient(to right, #eeeeee 1px, transparent 1px), linear-gradient(to bottom, #eeeeee 1px, transparent 1px);
+}
+
+#connlib-test-upload {
+    position: fixed;
+    right: 5px;
+    top: 5px;
+    padding: 5px 10px;
+    background-color: #525252;
+    z-index: 2;
+    border-radius: 2px;
+    cursor: pointer;
+    color: white;
+    font-family: monospace;
+}
+
+#connlib-test-toggle-blocking-cells {
+    position: fixed;
+    right: 5px;
+    top: 40px;
+    padding: 5px 10px;
+    background-color: #525252;
+    z-index: 2;
+    border-radius: 2px;
+    cursor: pointer;
+    color: white;
+    font-family: monospace;
+}
+
+.connlib-instance {
+    background-color: rgb(240, 240, 240);
+    position: absolute;
+}
+
+.connlib-endpoint {
+    z-index: 2;
+}
+
+.connlib-port {
+    stroke: black;
+    stroke-width: 1;
+    fill: white;
+}
+
+.connlib-element {
+    position: absolute;
+    background-color: rgb(255, 215, 215);
+    border-radius: 3px;
+    z-index: 1;
+}
+
+.connlib-line-overlay {
+    z-index: 1;
+    stroke: rgba(255, 255, 255, 0);
+    stroke-width: 6;
+}
+
+.connlib-line-overlay:hover {
+    stroke: rgba(255, 0, 0, 0.489);
+}
+
+.connlib-line-overlay.horizontal {
+    cursor: ns-resize;
+}
+
+.connlib-line-overlay.vertical {
+    cursor: ew-resize;
+}
+
+.connlib-line-overlay.target-connected {
+    
+}
+
+.connlib-pathpoint-overlay {
+    fill: rgba(255, 255, 255, 0);
+}
+
+.connlib-pathpoint-overlay:hover {
+    cursor: all-scroll;
+    z-index: 3;
+    fill: rgba(0, 0, 255, 0.625);
+}
+.event-outer {
+    border-radius: 50%;
+    background-color: white;
+    display: flex;
+    align-items: center;
+}
+.event-outer > .spacer {
+    flex: 1;
+}
