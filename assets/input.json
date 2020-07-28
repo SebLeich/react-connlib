@@ -293,7 +293,7 @@
                     "name": ""
                 }
             ],
-            ["io.framed.model.Aggregation", {
+            ["io.framed.model.Composition", {
                     "id": 56,
                     "sourceId": 6,
                     "targetId": 9,
@@ -305,6 +305,15 @@
             ["io.framed.model.Relationship", {
                     "id": 57,
                     "sourceId": 9,
+                    "targetId": 18,
+                    "name": "",
+                    "sourceCardinality": "*",
+                    "targetCardinality": "*"
+                }
+            ],
+            ["io.framed.model.Relationship", {
+                    "id": 57,
+                    "sourceId": 6,
                     "targetId": 18,
                     "name": "",
                     "sourceCardinality": "*",
@@ -473,8 +482,8 @@
                     ]
                 },
                 "18": {
-                    "left": -68.05622030237583,
-                    "top": -218.27854427645786,
+                    "left": -80.05622030237583,
+                    "top": -160.27854427645786,
                     "width": 227,
                     "height": 153,
                     "autosize": true,

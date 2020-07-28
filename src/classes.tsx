@@ -3224,6 +3224,26 @@ const ConnlibArrowType = {
         intend: (Connlib.endpointSize - (Connlib.endpointPadding * 2)),
         width: (Connlib.endpointSize - (Connlib.endpointPadding * 2)) / 2,
         isClosedArrow: true
+    },
+    "Aggregation": {
+        id: 4,
+        isRoute: true,
+        fillColor: "white",
+        borderColor: Connlib.connectorColor,
+        borderWidth: 1,
+        intend: (Connlib.endpointSize - (Connlib.endpointPadding * 2)),
+        width: (Connlib.endpointSize - (Connlib.endpointPadding * 2)) / 2,
+        isClosedArrow: true
+    },
+    "Composition": {
+        id: 5,
+        isRoute: true,
+        fillColor: "black",
+        borderColor: Connlib.connectorColor,
+        borderWidth: 1,
+        intend: (Connlib.endpointSize - (Connlib.endpointPadding * 2)),
+        width: (Connlib.endpointSize - (Connlib.endpointPadding * 2)) / 2,
+        isClosedArrow: true
     }
 }
 const ConnlibPortType = {
@@ -3367,10 +3387,26 @@ class ConnlibObjectTypeMoveWrapper implements ConnlibDragFlagInterface {
 /**
  * a default inheritance
  */
-class ConnlibInheritanceEndpoint implements ConnlibEndpointInterface {
+export class ConnlibInheritanceEndpoint implements ConnlibEndpointInterface {
     width: number = Connlib.endpointSize;
     height: number = Connlib.endpointHeightFormula(Connlib.endpointSize);
     arrowType: ConnlibArrowTypeOptions = ConnlibArrowType.Inheritance;
+}
+/**
+ * a default aggregation
+ */
+export class ConnlibAggregationEndpoint implements ConnlibEndpointInterface {
+    width: number = Connlib.endpointSize;
+    height: number = Connlib.endpointHeightFormula(Connlib.endpointSize);
+    arrowType: ConnlibArrowTypeOptions = ConnlibArrowType.Aggregation;
+}
+/**
+ * a default composition
+ */
+export class ConnlibCompositionEndpoint implements ConnlibEndpointInterface {
+    width: number = Connlib.endpointSize;
+    height: number = Connlib.endpointHeightFormula(Connlib.endpointSize);
+    arrowType: ConnlibArrowTypeOptions = ConnlibArrowType.Composition;
 }
 /**
  * a default inheritance

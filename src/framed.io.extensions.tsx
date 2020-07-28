@@ -12,7 +12,9 @@ import {
     ConnlibConnection,
     ConnlibFulfillmentEndpoint,
     ConnlibEventRelationEndpoint,
-    ConnlibDottedLineStyle
+    ConnlibDottedLineStyle,
+    ConnlibAggregationEndpoint,
+    ConnlibCompositionEndpoint
 } from './classes';
 
 export class FramedIoDataInterface {
@@ -36,7 +38,12 @@ export class FramedIoAbstractRelationship extends ConnlibConnection {
 }
 
 export class FramedIoRelationship extends FramedIoAbstractRelationship { }
-export class FramedIoComposition extends FramedIoAbstractRelationship { }
+export class FramedIoAggregation extends FramedIoAbstractRelationship {
+    static targetEndpointType = new ConnlibAggregationEndpoint();
+}
+export class FramedIoComposition extends FramedIoAbstractRelationship {
+    static targetEndpointType = new ConnlibCompositionEndpoint();
+}
 export class FramedIoCreateRelationship extends FramedIoAbstractRelationship {
     static targetEndpointType = new ConnlibEventRelationEndpoint();
     static lineStyle = new ConnlibDottedLineStyle();
@@ -166,6 +173,7 @@ export class FramedIoModule {
         Connlib.registerType("io.framed.model.Composition", { type: FramedIoComposition, class: "composition", hasChildren: false });
         Connlib.registerType("io.framed.model.CreateRelationship", { type: FramedIoCreateRelationship, class: "create-relationship", hasChildren: false });
         Connlib.registerType("io.framed.model.DestroyRelationship", { type: FramedIoDestroyRelationship, class: "destroy-relationship", hasChildren: false }),
+        Connlib.registerType("io.framed.model.Aggregation", { type: FramedIoAggregation, class: "aggregation", hasChildren: false }),
         Connlib.registerType("io.framed.model.Fulfillment", { type: FramedIoFulfillmentRelationship, class: "fulfillment", hasChildren: false });
     }
 }
