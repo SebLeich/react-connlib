@@ -2308,10 +2308,12 @@ class ConnlibConnectionComponent extends React.Component {
                                 dragOverlays.push(prevLine.JSXComponent(overlayClass + " vertical"));
                                 break;
                         }
+                        let dashArray = (this.state as any).lineStyle.dashArray;
+                        let strokeWidth = (this.state as any).lineStyle.strokeWidth;
                         d += " L" + realTarget.left + ", " + realTarget.top;
                         return (
                             <g onDoubleClick={() => (this.state as any).doubleClick()}>
-                                <path d={d} stroke={Connlib.connectorColor} fill="transparent" strokeWidth="1" />
+                                <path d={d} stroke={Connlib.connectorColor} fill="transparent" strokeWidth={strokeWidth} strokeDasharray={dashArray} />
                                 {dragOverlays}
                             </g>
                         );
