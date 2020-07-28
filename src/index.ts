@@ -5,7 +5,15 @@ import { FramedIoModule, FramedIoDataInterface } from "./framed.io.extensions";
 (window as any).Connlib = Connlib;
 FramedIoModule.registerAllConstructs();
 
-document.getElementById("upload").addEventListener("click", () => {
+Connlib.standaloneSetupObservable.subscribe(() => {
+    FramedIoModule.importData(input as any);
+    Connlib.moveX = 150;
+    Connlib.moveY = 150;
+    Connlib.applyTransform();
+    //alert("This is an alpha version of Connlib. Please use Google Chrome for maximum compatibility (such as drag functionality).");
+});
+document.addEventListener("DOMContentLoaded", function () {
+    Connlib.setUpStandalone();
     let callback = (event: Event) => {
         let target = event.target as HTMLInputElement;
         if(target.files.length == 0) {
@@ -27,20 +35,4 @@ document.getElementById("upload").addEventListener("click", () => {
         reader.readAsText(target.files[0], "utf-8");
     };
     document.getElementById("upload-input").addEventListener("change", callback);
-    document.getElementById("upload-input").click();
-});
-
-document.getElementById("toggle-blocking-cells").addEventListener("click", () => {
-    Connlib.rootInstance.toggleBlockedCells();
-});
-
-Connlib.standaloneSetupObservable.subscribe(() => {
-    FramedIoModule.importData(input as any);
-    Connlib.moveX = 150;
-    Connlib.moveY = 150;
-    Connlib.applyTransform();
-    alert("This is an alpha version of Connlib. Please use Google Chrome for maximum compatibility (such as drag functionality).");
-});
-document.addEventListener("DOMContentLoaded", function () {
-    Connlib.setUpStandalone();
 });

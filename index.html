@@ -7,12 +7,7 @@
 </head>
 
 <body>
-    <div id="upload">
-        Upload file
-    </div>
-    <div id="toggle-blocking-cells">
-        Toggle blocking cells
-    </div>
+    <div id="control-row"></div>
 
     <div id="root"></div>
 
@@ -31,13 +26,42 @@
     body {
         margin: 0px;
         padding: 0px;
+        background-color: rgb(242 242 242);
         overflow: hidden;
-        margin: 0px;
-        padding: 0px;
-        background-color: rgb(255, 255, 255);
-        overflow: hidden;
-        background-size: 20px 20px;
-        background-image: linear-gradient(to right, #eeeeee 1px, transparent 1px), linear-gradient(to bottom, #eeeeee 1px, transparent 1px);
+    }
+
+    #control-row {
+        z-index: 2;
+        position: fixed;
+        right: 1px;
+        top: 1px;
+        background-color: #373737;
+        border-radius: 2px;
+    }
+
+    #control-row>.control-row-inner {
+        display: flex;
+    }
+
+    #control-row .control {
+        padding: 5px;
+        font-size: 30px;
+        color: white;
+        cursor: pointer;
+        display: block;
+    }
+
+    #control-row .control:hover {
+        background-color: rgba(255, 255, 255, 0.463);
+        transition: all .5s;
+    }
+
+    #control-row .zoom-preview {
+        padding: 8px;
+        font-size: 20px;
+        background-color: #ffdb68;
+        font-family: monospace;
+        color: #505050;
     }
 
     #scene {
@@ -78,6 +102,11 @@
     .connlib-instance {
         position: absolute;
         z-index: 0;
+        background-image: linear-gradient(to right, #eeeeee 1px, transparent 1px), linear-gradient(to bottom, #eeeeee 1px, transparent 1px);
+        background-size: 20px 20px;
+        background-color: #fbfbfb;
+        border-radius: 3px;
+        border: 1px solid lightgray;
     }
 
     .connlib-endpoint {
@@ -119,6 +148,10 @@
 
     .connlib-line-overlay.target-connected {
         /*stroke: rgba(135, 206, 250, 0.483);*/
+    }
+
+    .connlib-line-overlay.source-connected {
+        /*stroke: rgba(135, 250, 152, 0.483);*/
     }
 
     .connlib-pathpoint-overlay {

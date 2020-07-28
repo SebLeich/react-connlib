@@ -17,6 +17,7 @@ import {
     ConnlibCompositionEndpoint,
     ConnlibDashedLineStyle
 } from './classes';
+import { number } from 'prop-types';
 
 export class FramedIoDataInterface {
     root: [string, ConnlibModelElement];
@@ -59,6 +60,7 @@ export class FramedIoClass extends ConnlibAbstractStructuralType {
     name: string;
     attributes: [];
     methods: [];
+    static backgroundColor = "rgb(239 239 239)";
 }
 
 export class FramedIoCompartment extends ConnlibAbstractStructuralType {
@@ -117,6 +119,11 @@ export class FramedIoScene extends ConnlibAbstractStructuralType {
     static backgroundColor = "rgb(239 255 238)";
 }
 
+class EmbeddedRelations {
+    parent: number = null;
+    child: number = null;
+}
+
 export class FramedIoModule {
     static importData(data: FramedIoDataInterface){
         let start = performance.now();
@@ -136,9 +143,15 @@ export class FramedIoModule {
 
         rootLayerLayer.connlibInstance = Connlib.rootInstance;
 
+        let embeddedMap: EmbeddedRelations[] = [];
+
         for (let child of rootElement.children) {
             if (Connlib.renderComponents){
                 Connlib.rootInstance.registerChild(child[0], child[1], rootLayer[child[1].id]);
+                let type = Connlib.getTypeMapEntry(child[0]);
+                if(type.hasChildren) for(let c of child[1].children){
+                    embeddedMap.push({ parent: child[1].id, child: c[1].id });
+                }
             } else {
                 throw("cannot proceed!");
             }
@@ -150,12 +163,24 @@ export class FramedIoModule {
         for(let index in data.connections.connections){
             let type: string = (data.connections.connections[index] as any)[0] as string;
             let connector: FramedIoConnectionWrapper = (data.connections.connections[index] as any)[1];
-            if(!Connlib.rootInstance.hasRepresentation(connector.sourceId) || !Connlib.rootInstance.hasRepresentation(connector.targetId)) continue;
-            let connection = Connlib.rootInstance.connect({
-                sourceId: connector.sourceId,
-                targetId: connector.targetId,
-                typeNS: type
-            });
+            if(Connlib.rootInstance.hasRepresentation(connector.sourceId) && Connlib.rootInstance.hasRepresentation(connector.targetId)){
+                let connection = Connlib.rootInstance.connect({
+                    sourceId: connector.sourceId,
+                    targetId: connector.targetId,
+                    typeNS: type
+                });   
+            } else {
+                let embedded = embeddedMap.find(x => Connlib.rootInstance.hasRepresentation(connector.sourceId) && x.child == connector.targetId);
+                if(embedded){
+                    console.log(connector);
+                    let connection = Connlib.rootInstance.connect({
+                        sourceId: connector.sourceId,
+                        targetId: embedded.parent,
+                        typeNS: type,
+                        hasPort: true
+                    });   
+                }
+            }
         }
         
         Connlib.rootInstance.render();

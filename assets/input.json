@@ -280,20 +280,13 @@
                 }
             ],
             ["io.framed.model.Fulfillment", {
-                    "id": 54,
-                    "sourceId": 27,
-                    "targetId": 9,
-                    "name": ""
-                }
-            ],
-            ["io.framed.model.Fulfillment", {
                     "id": 55,
                     "sourceId": 6,
                     "targetId": 52,
                     "name": ""
                 }
             ],
-            ["io.framed.model.Composition", {
+            ["io.framed.model.Aggregation", {
                     "id": 56,
                     "sourceId": 6,
                     "targetId": 9,
@@ -384,7 +377,7 @@
                 },
                 "6": {
                     "left": 820.0061987041042,
-                    "top": -87.43013131749456,
+                    "top": -100,
                     "width": 194,
                     "height": 111,
                     "autosize": true,

@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { MdMailOutline } from 'react-icons/md';
+import { MdMailOutline, MdFileUpload, MdZoomIn, MdZoomOut } from 'react-icons/md';
 import { Subject, Subscription } from "rxjs";
 
 /**
@@ -25,6 +25,36 @@ export interface ConnlibModelElement {
     guid: string;
     children?: any[];
     onInit?(data?: any): void;
+}
+
+/**
+ * the control row for general functionality
+ */
+class ConnlibControlRowComponent extends React.Component {
+    triggerUpload(){
+        document.getElementById("upload-input").click();
+    }
+    triggerZoomIn(){
+        if(Connlib.zoom > 3) return;
+        Connlib.zoom += .1;
+    }
+    triggerZoomOut(){
+        if(Connlib.zoom <= .1) return;
+        Connlib.zoom -= .1;
+    }
+    render(){
+        let content = (
+            <div className="control-row-inner">
+                <MdZoomOut className="control" onClick={() => this.triggerZoomOut()} />
+                <div className="zoom-preview">
+                    x {(Connlib.zoom).toFixed(1)}
+                </div>
+                <MdZoomIn className="control" onClick={() => this.triggerZoomIn()} />
+                <MdFileUpload className="control" onClick={() => this.triggerUpload()} />
+            </div>
+        )
+        return content;
+    }
 }
 
 /**
@@ -138,6 +168,13 @@ class ConnlibPathPoint extends ConnlibPoint {
     }
 }
 /**
+ * an internal class wrapping the neccessary data for side change events
+ */
+class ConnlibEndpointSideChangeData {
+    oldDirection: number = null;
+    updatedEndpoint: ConnlibEndpoint = null;
+}
+/**
  * the class contains a connlib endpoint
  */
 class ConnlibEndpoint extends ConnlibPathPoint {
@@ -151,7 +188,7 @@ class ConnlibEndpoint extends ConnlibPathPoint {
     instanceY: number;
     hidden: boolean = false;
     connectorPoint: ConnlibPathPoint = null;
-    sourceSideChangeObservable: Subject<ConnlibEndpoint> = new Subject<ConnlibEndpoint>();
+    sourceSideChangeObservable: Subject<ConnlibEndpointSideChangeData> = new Subject<ConnlibEndpointSideChangeData>();
     /**
      * this method is analogue to a path point's position change, but it should not cascade the event back!
      * thus, this method is everytime the end of a position update cascade
@@ -160,33 +197,37 @@ class ConnlibEndpoint extends ConnlibPathPoint {
         if (event.participants.indexOf(this) > -1) return;
         event.participants.push(this);
         if (event.diffX && event.diffY) throw ("corrupted update: change is only in one direction valid!");
-        if (event.diffX) {
-            this.left += event.diffX;
-        } else if (event.diffY) {
-            this.top += event.diffY;
-        } else {
-            console.log(event);
-        }
         let result = this.outOfSourceBound();
         if (!result.value) {
+            if (event.diffX) {
+                this.left += event.diffX;
+            } else if (event.diffY) {
+                this.top += event.diffY;
+            } else {
+                console.log(event);
+            }
             this.validateInstancePosition();
             this.validate();
         } else {
+            Connlib.dragFlag = null;
             this.left = result.point.left;
             this.top = result.point.top;
+            let oldDirection = this.direction;
             this.direction = result.direction;
             this.validateInstancePosition();
+            this.sourceSideChangeObservable.next({
+                oldDirection: oldDirection,
+                updatedEndpoint: this
+            });
             this.validate();
-            if (Connlib.dragFlag == this) Connlib.dragFlag = null;
-            this.sourceSideChangeObservable.next(this);
         }
     }
 
-    destroy(){
-        if(this.connlibInstance) this.connlibInstance.removeEndpoint(this);
-        if(this.connector){
-            if(this.connector.isSourceEndpoint(this)) this.connector.realSource = null;
-            if(this.connector.isTargetEndpoint(this)) this.connector.realTarget = null;
+    destroy() {
+        if (this.connlibInstance) this.connlibInstance.removeEndpoint(this);
+        if (this.connector) {
+            if (this.connector.isSourceEndpoint(this)) this.connector.realSource = null;
+            if (this.connector.isTargetEndpoint(this)) this.connector.realTarget = null;
         }
         this.sourceSideChangeObservable.unsubscribe();
     }
@@ -233,7 +274,7 @@ class ConnlibEndpoint extends ConnlibPathPoint {
                         value: true,
                         point: {
                             left: (this.source.left + this.connlibInstance.layer.left),
-                            top: (this.source.bottom + this.connlibInstance.layer.top) + 5,
+                            top: (this.source.top + this.connlibInstance.layer.top) + 5,
                         },
                         direction: ConnlibDirection.LEFT
                     }
@@ -242,7 +283,7 @@ class ConnlibEndpoint extends ConnlibPathPoint {
                         value: true,
                         point: {
                             left: (this.source.right + this.connlibInstance.layer.left),
-                            top: (this.source.bottom + this.connlibInstance.layer.top) + 5
+                            top: (this.source.top + this.connlibInstance.layer.top) + 5
                         },
                         direction: ConnlibDirection.RIGHT
                     }
@@ -327,6 +368,7 @@ class ConnlibEndpoint extends ConnlibPathPoint {
             this.validateInstancePosition();
             this.validate();
             let event = new ConnlibPositionChangeEvent();
+            event.origin = this;
             event.participants.push(this);
             event.movementOrientation = ConnlibOrientation.HORIZONTAL;
             event.diffX = diff;
@@ -334,11 +376,15 @@ class ConnlibEndpoint extends ConnlibPathPoint {
         } else {
             this.left = result.point.left;
             this.top = result.point.top;
+            let oldDirection = this.direction;
             this.direction = result.direction;
             this.validateInstancePosition();
             this.validate();
-            if (Connlib.dragFlag == this) Connlib.dragFlag = null;
-            this.sourceSideChangeObservable.next(this);
+            Connlib.dragFlag = null;
+            this.sourceSideChangeObservable.next({
+                oldDirection: oldDirection,
+                updatedEndpoint: this
+            });
         }
     }
 
@@ -354,6 +400,7 @@ class ConnlibEndpoint extends ConnlibPathPoint {
             this.validateInstancePosition();
             this.validate();
             let event = new ConnlibPositionChangeEvent();
+            event.origin = this;
             event.participants.push(this);
             event.movementOrientation = ConnlibOrientation.VERTICAL;
             event.diffY = diff;
@@ -361,23 +408,33 @@ class ConnlibEndpoint extends ConnlibPathPoint {
         } else {
             this.left = result.point.left;
             this.top = result.point.top;
+            let oldDirection = this.direction;
             this.direction = result.direction;
             this.validateInstancePosition();
             this.validate();
-            if (Connlib.dragFlag == this) Connlib.dragFlag = null;
-            this.sourceSideChangeObservable.next(this);
+            Connlib.dragFlag = null;
+            this.sourceSideChangeObservable.next({
+                oldDirection: oldDirection,
+                updatedEndpoint: this
+            });
         }
     }
 
     validate() {
-        if(!this.componentRef){
+        if (!this.componentRef) {
             this.connlibInstance.render();
             return;
         }
         let type: ConnlibEndpointInterface = new ConnlibRelationshipEndpoint();
-        if(this.connector){
-            if((this.connector.constructor as any).sourceEndpointType && this.connector.isSourceEndpoint(this)) type = (this.connector.constructor as any).sourceEndpointType;
-            else if((this.connector.constructor as any).targetEndpointType && this.connector.isTargetEndpoint(this)) type = (this.connector.constructor as any).targetEndpointType;
+        var hasPort: boolean = false;
+        if (this.connector) {
+            if ((this.connector.constructor as any).sourceEndpointType && this.connector.isSourceEndpoint(this)){
+                type = (this.connector.constructor as any).sourceEndpointType;
+            }
+            else if ((this.connector.constructor as any).targetEndpointType && this.connector.isTargetEndpoint(this)){
+                type = (this.connector.constructor as any).targetEndpointType;
+                hasPort = this.connector.toEmbedded;
+            }
         }
         type.width = Connlib.endpointSize;
         type.height = Connlib.endpointHeightFormula(Connlib.endpointSize);
@@ -387,6 +444,7 @@ class ConnlibEndpoint extends ConnlibPathPoint {
             direction: this.direction,
             type: type,
             hidden: this.hidden,
+            hasPort: hasPort,
             mousedown: () => this.onMousedown()
         });
     }
@@ -659,12 +717,13 @@ export class Connlib {
         this.scaleChangeObservable.next(scale);
     }
     // the instance's zoom level (default: 1)
-    private static _zoom = 1;
+    private static _zoom = .8;
     public static get zoom(): number {
         return this._zoom;
     }
     public static set zoom(zoom: number) {
         this._zoom = zoom;
+        this.applyTransform();
         this.zoomChangeObservable.next(zoom);
     }
     // the drag clipboard containg the current dragged element
@@ -676,7 +735,7 @@ export class Connlib {
      * the method applys the transform to all contents
      */
     public static applyTransform() {
-        this.rootInstance.container.style.transform = "translate(" + this.moveX + "px, " + this.moveY + "px)";
+        this.rootInstance.container.style.transform = "translate(" + this.moveX + "px, " + this.moveY + "px) scale(" + this.zoom + ", " + this.zoom + ")";
     }
     /**
      * the method calculates the intersection points between a layer and a linear function
@@ -813,7 +872,7 @@ export class Connlib {
      * the method returns an array of path points
      * @param cells 
      */
-    private static cellsArrayToPathPointArray(cells: ConnlibOutputGridCell[]): ConnlibPathPoint[] {
+    static cellsArrayToPathPointArray(cells: ConnlibOutputGridCell[]): ConnlibPathPoint[] {
         return cells.map(x => {
             let point = new ConnlibPathPoint();
             point.left = (x.c);
@@ -894,6 +953,13 @@ export class Connlib {
         return this.instances[guid];
     }
     /**
+     * the method returns a registered type by namespace
+     * @param namespace 
+     */
+    static getTypeMapEntry(namespace: string): ConnlibTypeMapEntry {
+        return ConnlibTypeMap[namespace];
+    }
+    /**
      * the method registers a type within the map
      * @param namespace 
      * @param entry 
@@ -934,8 +1000,23 @@ export class Connlib {
     public static setUpStandalone() {
         this.standaloneSetup = true;
         this.renderComponents = true;
+        this.renderControlBar();
         this.setUpWindowListeners();
         this.standaloneSetupObservable.next();
+    }
+    /**
+     * the method renders the control bar
+     */
+    public static renderControlBar(){
+        let controlRow = ReactDOM.render(
+            React.createElement(ConnlibControlRowComponent),
+            document.getElementById("control-row")
+        );
+        Connlib.zoomChangeObservable.subscribe(() => {
+            controlRow.setState({
+                zoom: Connlib.zoom
+            });
+        });
     }
     /**
      * the method sets the window listeners up
@@ -1803,6 +1884,7 @@ class ConnlibLine implements ConnlibDragFlagInterface {
     }
     updateLeft(left: number) {
         let event = new ConnlibPositionChangeEvent();
+        event.origin = this;
         event.participants.push(this);
         event.movementOrientation = ConnlibOrientation.HORIZONTAL;
         event.diffX = left - this.sL;
@@ -1813,6 +1895,7 @@ class ConnlibLine implements ConnlibDragFlagInterface {
     }
     updateTop(top: number) {
         let event = new ConnlibPositionChangeEvent();
+        event.origin = this;
         event.participants.push(this);
         event.movementOrientation = ConnlibOrientation.VERTICAL;
         event.diffY = top - this.sT;
@@ -1831,6 +1914,7 @@ class ConnlibPositionChangeEvent {
     diffX: number;
     diffY: number;
     participants: any[] = [];
+    origin: ConnlibDragFlagInterface = null;
 }
 /**
  * an element's orientation
@@ -1857,6 +1941,7 @@ export class ConnlibConnection {
     realSource: ConnlibEndpoint; // source endpoint!
     sourcePoint: ConnlibPathPoint; // source connection point
     static targetEndpointType: ConnlibEndpointInterface;
+    toEmbedded: boolean = false;
     realTarget: ConnlibEndpoint; // target endpoint!
     targetPoint: ConnlibPathPoint; // target connection point
     realSourceSubscription: Subscription;
@@ -1868,46 +1953,52 @@ export class ConnlibConnection {
     onHideObservable: Subject<any> = new Subject();
     onShowObservable: Subject<any> = new Subject();
     hidden: boolean = false;
-
-    destroyEndpoints(){
-        if(this.realSource) this.realSource.destroy();
+    /**
+     * the method destroys the connector's source and target endpoint
+     */
+    destroyEndpoints() {
+        if (this.realSource) this.realSource.destroy();
         this.realSource = null;
         this.sourcePoint = null;
-        if(this.sourcePointSubscription) this.sourcePointSubscription.unsubscribe();
+        if (this.sourcePointSubscription) this.sourcePointSubscription.unsubscribe();
         this.sourcePointSubscription = null;
-        if(this.sourceSideChangeSubscription) this.sourceSideChangeSubscription.unsubscribe();
+        if (this.sourceSideChangeSubscription) this.sourceSideChangeSubscription.unsubscribe();
         this.sourceSideChangeSubscription = null;
-        if(this.realSourceSubscription) this.realSourceSubscription.unsubscribe();
+        if (this.realSourceSubscription) this.realSourceSubscription.unsubscribe();
         this.realSourceSubscription = null;
-        if(this.realTarget) this.realTarget.destroy();
+        if (this.realTarget) this.realTarget.destroy();
         this.realTarget = null;
         this.targetPoint = null;
-        if(this.targetPointSubscription) this.targetPointSubscription.unsubscribe();
+        if (this.targetPointSubscription) this.targetPointSubscription.unsubscribe();
         this.targetPointSubscription = null;
-        if(this.targetSideChangeSubscription) this.targetSideChangeSubscription.unsubscribe();
+        if (this.targetSideChangeSubscription) this.targetSideChangeSubscription.unsubscribe();
         this.targetSideChangeSubscription = null;
-        if(this.realTargetSubscription) this.realTargetSubscription.unsubscribe();
+        if (this.realTargetSubscription) this.realTargetSubscription.unsubscribe();
         this.realTargetSubscription = null;
     }
-
-    getEndpoints() {
-        return this._pathPoints.filter(x => (x as ConnlibEndpoint).source != null);
-    }
-
+    /**
+     * the method hides the connector
+     */
     hide() {
         this.hidden = true;
         this.validate();
         this.onHideObservable.next();
     }
-
-    isSourceEndpoint(endPoint: ConnlibEndpoint){
+    /**
+     * the method returns whether a passed endpoint is the connector's source
+     */
+    isSourceEndpoint(endPoint: ConnlibEndpoint) {
         return this.realSource == endPoint;
     }
-
-    isTargetEndpoint(endPoint: ConnlibEndpoint){
+    /**
+     * the method returns whether a passed endpoint is the connector's target
+     */
+    isTargetEndpoint(endPoint: ConnlibEndpoint) {
         return this.realTarget == endPoint;
     }
-
+    /**
+     * the method checks whether a given line has a length of zero
+     */
     lineHasZeroLength(line: ConnlibLine) {
         let lines = Object.keys(this._lines).map(key => this._lines[key]);
         if (lines.length < 2) throw ("not implemented now ...");
@@ -1928,6 +2019,7 @@ export class ConnlibConnection {
             this.removePathPoint(next._source);
         }
         let event = new ConnlibPositionChangeEvent();
+        event.origin = this;
         event.participants.push(line);
         event.participants.push(target);
         event.movementOrientation = line.orientation;
@@ -1958,7 +2050,10 @@ export class ConnlibConnection {
             console.warn("this point is not part of the connector");
         }
     }
-
+    /**
+     * the method removes a line from the current connector
+     * @param line 
+     */
     removeLine(line: ConnlibLine): boolean {
         if (this._lines[line.guid]) {
             delete this._lines[line.guid];
@@ -1966,7 +2061,11 @@ export class ConnlibConnection {
         }
         return false;
     }
-
+    /**
+     * 
+     * @param source 
+     * @param target 
+     */
     setUpNewLine(source: ConnlibPathPoint, target: ConnlibPathPoint): ConnlibLine {
         let l = new ConnlibLine();
         l.connection = this;
@@ -1977,13 +2076,20 @@ export class ConnlibConnection {
         l.zeroLengthObservable.subscribe((line: ConnlibLine) => this.lineHasZeroLength(line));
         return l;
     }
-
+    /**
+     * the method shows the current connector (if it is hidden)
+     */
     show() {
         this.hidden = false;
         this.validate();
         this.onShowObservable.next();
     }
-
+    /**
+     * the method updates the connector's path
+     * @param points path points
+     * @param realSource real source (ConnlibEndpoint)
+     * @param realTarget real target (ConnlibEndpoint)
+     */
     updatePathPoints(points: ConnlibPathPoint[], realSource: ConnlibEndpoint, realTarget: ConnlibEndpoint) {
         if (points.length < 2) {
             console.warn("path is invalid: no path points found - started path auto calculation");
@@ -2045,28 +2151,12 @@ export class ConnlibConnection {
                 this.sourcePoint.cascadingUpdate(event);
                 this.validate();
             });
-            this.sourceSideChangeSubscription = realSource.sourceSideChangeObservable.subscribe((endpoint: ConnlibEndpoint) => {
-                let tempPoint = this.connlibInstance.rawPointToInstancePoint(Connlib.getEndpointConnectionPoint(endpoint));
-                let connPoint = new ConnlibPathPoint();
-                connPoint.left = tempPoint.left;
-                connPoint.top = tempPoint.top;
-                connPoint.setUp(this.connlibInstance);
-                let helpPoint = new ConnlibPathPoint();
-                switch (endpoint.direction) {
-                    case ConnlibDirection.LEFT:
-                    case ConnlibDirection.RIGHT:
-                        helpPoint.left = connPoint.left;
-                        helpPoint.top = this.sourcePoint.top;
-                        break;
-                    case ConnlibDirection.TOP:
-                    case ConnlibDirection.BOTTOM:
-                        helpPoint.top = connPoint.top;
-                        helpPoint.left = this.sourcePoint.left;
-                        break;
-                }
-                this.targetPoint = connPoint;
-                helpPoint.setUp(this.connlibInstance);
-                this.updatePathPoints([connPoint, helpPoint, ...this._pathPoints], this.realSource, this.realTarget);
+            // the endpoint is already moved!
+            this.sourceSideChangeSubscription = realSource.sourceSideChangeObservable.subscribe((data: ConnlibEndpointSideChangeData) => {
+                let sourceCell = this.connlibInstance.getGridCellForRawEndpoint(Connlib.getEndpointConnectionPoint(data.updatedEndpoint));
+                let targetCell = this.connlibInstance.getGridCellForRawEndpoint(Connlib.getEndpointConnectionPoint(this.realTarget));
+                let pathPoints = ConnlibExtensions.IDAStar(this.connlibInstance, sourceCell, targetCell, data.updatedEndpoint.direction);
+                this.updatePathPoints(Connlib.cellsArrayToPathPointArray(pathPoints), data.updatedEndpoint, this.realTarget);
                 this.validate();
             });
             this.sourcePointSubscription = this.sourcePoint.positionChangeObservable.subscribe((event: ConnlibPositionChangeEvent) => {
@@ -2088,28 +2178,11 @@ export class ConnlibConnection {
                 this.targetPoint.cascadingUpdate(event);
                 this.validate();
             });
-            this.targetSideChangeSubscription = realTarget.sourceSideChangeObservable.subscribe((endpoint: ConnlibEndpoint) => {
-                let tempPoint = this.connlibInstance.rawPointToInstancePoint(Connlib.getEndpointConnectionPoint(endpoint));
-                let connPoint = new ConnlibPathPoint();
-                connPoint.left = tempPoint.left;
-                connPoint.top = tempPoint.top;
-                connPoint.setUp(this.connlibInstance);
-                let helpPoint = new ConnlibPathPoint();
-                switch (endpoint.direction) {
-                    case ConnlibDirection.LEFT:
-                    case ConnlibDirection.RIGHT:
-                        helpPoint.left = connPoint.left;
-                        helpPoint.top = this.targetPoint.top;
-                        break;
-                    case ConnlibDirection.TOP:
-                    case ConnlibDirection.BOTTOM:
-                        helpPoint.top = connPoint.top;
-                        helpPoint.left = this.targetPoint.left;
-                        break;
-                }
-                this.targetPoint = connPoint;
-                helpPoint.setUp(this.connlibInstance);
-                this.updatePathPoints([...this._pathPoints, helpPoint, connPoint], this.realSource, this.realTarget);
+            this.targetSideChangeSubscription = realTarget.sourceSideChangeObservable.subscribe((data: ConnlibEndpointSideChangeData) => {
+                let sourceCell = this.connlibInstance.getGridCellForRawEndpoint(Connlib.getEndpointConnectionPoint(this.realSource));
+                let targetCell = this.connlibInstance.getGridCellForRawEndpoint(Connlib.getEndpointConnectionPoint(data.updatedEndpoint));
+                let pathPoints = ConnlibExtensions.IDAStar(this.connlibInstance, sourceCell, targetCell, data.updatedEndpoint.direction);
+                this.updatePathPoints(Connlib.cellsArrayToPathPointArray(pathPoints), data.updatedEndpoint, this.realTarget);
                 this.validate();
             });
             this.targetPointSubscription = this.targetPoint.positionChangeObservable.subscribe((event: ConnlibPositionChangeEvent) => {
@@ -2126,11 +2199,13 @@ export class ConnlibConnection {
             });
         }
     }
-
+    /**
+     * the method revalidates the endpoint's react dom view
+     */
     validate() {
         if (this._pathPoints.length < 2) return;
         let lineStyle = new ConnlibDefaultLineStyle();
-        if((this.constructor as any).lineStyle) lineStyle = (this.constructor as any).lineStyle;
+        if ((this.constructor as any).lineStyle) lineStyle = (this.constructor as any).lineStyle;
         this.componentRef.setState({
             lines: Object.keys(this._lines).map(key => this._lines[key]),
             realSource: this.realSource,
@@ -2263,7 +2338,8 @@ class ConnlibConnectionComponent extends React.Component {
                         d += " L";
                     }
                     if (linesLongEnough && prevLine.orientation == ConnlibOrientation.HORIZONTAL) {
-                        dragOverlays.push(prevLine.JSXComponent(overlayClass + " horizontal"));
+                        if (prevLine._source == sourcePoint) dragOverlays.push(prevLine.JSXComponent(overlayClass + " horizontal source-connected"));
+                        else dragOverlays.push(prevLine.JSXComponent(overlayClass + " horizontal"));
                         if (prevLine.direction == ConnlibDirection.RIGHT) {
                             d += (prevLine.tL - r) + ",";
                         } else if (prevLine.direction == ConnlibDirection.LEFT) {
@@ -2271,7 +2347,8 @@ class ConnlibConnectionComponent extends React.Component {
                         }
                         d += prevLine.sT;
                     } else if (linesLongEnough && prevLine.orientation == ConnlibOrientation.VERTICAL) {
-                        dragOverlays.push(prevLine.JSXComponent(overlayClass + " vertical"));
+                        if (prevLine._source == sourcePoint) dragOverlays.push(prevLine.JSXComponent(overlayClass + " vertical source-connected"));
+                        else dragOverlays.push(prevLine.JSXComponent(overlayClass + " vertical"));
                         d += prevLine.sL + ",";
                         if (prevLine.direction == ConnlibDirection.BOTTOM) {
                             d += (prevLine.tT - r);
@@ -2285,7 +2362,6 @@ class ConnlibConnectionComponent extends React.Component {
                         <circle cx={prevLine.tL} cy={prevLine.tT} r="5" className="connlib-pathpoint-overlay" />
                     );
                     if (linesLongEnough) {
-                        // HEREEE
                         switch (currLine.direction) {
                             case ConnlibDirection.TOP:
                                 d += " A" + r + "," + r + " " + cW + " " + prevLine.tL + "," + (prevLine.tT - Connlib.pathCornerRadius);
@@ -2504,12 +2580,13 @@ export class ConnlibInstance {
             throw ("cannot create connection: the target element has no layer registered within the instance!");
         }
         let c = new ConnlibConnection();
-        if(data.typeNS){
+        if (data.typeNS) {
             let type = ConnlibTypeMap[data.typeNS];
             if (type) {
                 c = new type.type();
             } else console.warn("cannot find type " + data.typeNS);
         }
+        c.toEmbedded = data.hasPort;
         c.connlibInstance = this;
         this._connections[c.guid] = c;
         c.source = source;
@@ -2661,7 +2738,7 @@ export class ConnlibInstance {
         if (Connlib.renderComponents && childInstance.positionChangeObservable) childInstance.positionChangeObservable.subscribe((data: any) => {
             layer.left = data.position.left - this.layer.left;
             layer.top = data.position.top - this.layer.top;
-            data.ref.validate({ left: data.position.left, top: data.position.top  });
+            data.ref.validate({ left: data.position.left, top: data.position.top });
         });
         if (Connlib.renderComponents && childInstance.positionChangeStartedObservable) childInstance.positionChangeStartedObservable.subscribe(() => layer.positionChangeStartedObservable.next());
         if (Connlib.renderComponents && childInstance.positionChangeReadyObservable) childInstance.positionChangeReadyObservable.subscribe(() => layer.positionChangeReadyObservable.next());
@@ -2695,7 +2772,7 @@ export class ConnlibInstance {
      * the method removes an endpoint from the current instance
      * @param endpoint 
      */
-    removeEndpoint(endpoint: ConnlibEndpoint){
+    removeEndpoint(endpoint: ConnlibEndpoint) {
         if (this._endPoints[endpoint.guid]) {
             delete this._endPoints[endpoint.guid];
             return true;
@@ -2813,8 +2890,8 @@ export class ConnlibInstance {
         console.log("rendered " + counter + " points");
     }
 
-    _renderLayers(){
-        for(let index in this._layers){
+    _renderLayers() {
+        for (let index in this._layers) {
             let layer = this._layers[index];
             let p = document.createElementNS("http://www.w3.org/2000/svg", "rect");
             p.setAttribute("x", layer.left + "px");
@@ -2996,7 +3073,7 @@ class ConnlibEndpointComponent extends React.Component {
                     portLeft = Connlib.endpointPadding;
                     portTop = type.height - portSize;
                     arrowPointer.left = width / 2;
-                    if (type.portType) {
+                    if ((this.state as any).hasPort) {
                         arrowPointer.top = portTop - 1;
                     } else {
                         arrowPointer.top = type.height;
@@ -3019,7 +3096,7 @@ class ConnlibEndpointComponent extends React.Component {
                     portLeft = Connlib.endpointIndent;
                     portTop = Connlib.endpointIndent;
                     arrowPointer.top = portTop + (portSize / 2);
-                    if (type.portType) {
+                    if ((this.state as any).hasPort) {
                         arrowPointer.left = Connlib.endpointIndent + portSize;
                     } else {
                         arrowPointer.left = Connlib.endpointIndent;
@@ -3042,7 +3119,7 @@ class ConnlibEndpointComponent extends React.Component {
                     portLeft = Connlib.endpointPadding;
                     portTop = Connlib.endpointIndent;
                     arrowPointer.left = width / 2;
-                    if (type.portType) {
+                    if ((this.state as any).hasPort) {
                         arrowPointer.top = portTop + portSize + 1;
                     } else {
                         arrowPointer.top = Connlib.endpointIndent;
@@ -3065,7 +3142,7 @@ class ConnlibEndpointComponent extends React.Component {
                     portLeft = type.height - portSize;
                     portTop = Connlib.endpointPadding;
                     arrowPointer.top = portTop + (portSize / 2);
-                    if (type.portType) {
+                    if ((this.state as any).hasPort) {
                         arrowPointer.left = type.height - portSize;
                     } else {
                         arrowPointer.left = type.height;
@@ -3088,16 +3165,17 @@ class ConnlibEndpointComponent extends React.Component {
                 width: width
             };
             var inner: any[] = [];
-            if (type.portType) {
+            if ((this.state as any).hasPort) {
                 inner.push(
-                    <rect x={portLeft} y={portTop} height={portSize} width={portSize} strokeWidth={type.portType.portBorderWidth} stroke={type.portType.portBorderColor} fill={type.portType.portColor} className="connlib-port" />
+                    <rect x={portLeft} y={portTop} height={portSize} width={portSize} strokeWidth="1" stroke="black" fill="white" className="connlib-port" />
                 );
             }
             if (type.arrowType) {
                 var d = "M" + arrowFooter1.left + "," + arrowFooter1.top + " L" + arrowPointer.left + "," + arrowPointer.top + " L" + arrowFooter2.left + "," + arrowFooter2.top;
                 if (type.arrowType.isRoute) {
                     d += " L" + routeEnd.left + "," + routeEnd.top;
-                } else if (type.arrowType.isClosedArrow) {
+                }
+                if (type.arrowType.isClosedArrow || type.arrowType.isRoute) {
                     d += " L" + arrowFooter1.left + "," + arrowFooter1.top;
                 }
                 inner.push(
@@ -3187,6 +3265,7 @@ class ConnlibConnectInit {
     overlays?: [];
     endpoint?: string;
     paintStyle?: ConnlibPaintStyle;
+    hasPort?: boolean;
 }
 
 class ConnlibDragOptionsInit {
