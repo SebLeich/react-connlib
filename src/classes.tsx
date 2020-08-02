@@ -2000,6 +2000,7 @@ export class ConnlibConnection {
      * the method checks whether a given line has a length of zero
      */
     lineHasZeroLength(line: ConnlibLine) {
+        console.log(line, this);
         let lines = Object.keys(this._lines).map(key => this._lines[key]);
         if (lines.length < 2) throw ("not implemented now ...");
         var source: ConnlibPathPoint;
@@ -2018,6 +2019,7 @@ export class ConnlibConnection {
             target = next._target;
             this.removePathPoint(next._source);
         }
+        console.log(source, target);
         let event = new ConnlibPositionChangeEvent();
         event.origin = this;
         event.participants.push(line);
@@ -2038,6 +2040,7 @@ export class ConnlibConnection {
         if (prev) prev.destroy();
         if (next) next.destroy();
         this.validate();
+        console.log(this);
     }
     /**
      * this method is only used within lines (a line is destroyed and ensures that the "snapped" pathpoint is not longer existent)

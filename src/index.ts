@@ -10,7 +10,7 @@ Connlib.standaloneSetupObservable.subscribe(() => {
     Connlib.moveX = 150;
     Connlib.moveY = 150;
     Connlib.applyTransform();
-    alert("This is an alpha version of Connlib. Please use Google Chrome for maximum compatibility (such as drag functionality).");
+    //alert("This is an alpha version of Connlib. Please use Google Chrome for maximum compatibility (such as drag functionality).");
 });
 document.addEventListener("DOMContentLoaded", function () {
     Connlib.setUpStandalone();
