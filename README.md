@@ -31,11 +31,10 @@ Before your code calls the `Connlib.setUpStandalone()` method, you need to liste
 
 `Connlib.standaloneSetupObservable.subscribe(onSettedUpHandle)`
 
-After Connlib is initialized, the `standaloneSetupObservable` is fired and your `onSettedUpHandle` is called.
+After Connlib is initialized, the `standaloneSetupObservable` is fired and your `onSettedUpHandle` is called. 
+
 
 ### Connlib as integrated library
-
-## using Connlib with a custom framework
 
 Connlib provides connection-shape overlap prevention. 
 Therefore, we implemented an IDA* algorithm. 
@@ -57,6 +56,7 @@ Alternatively, the static method `Connlib.render()` renders all Connlib instance
 | Property | TS type | Description |
 | --- | --- | --- |
 | connectorColor | string | the connector's and arrow colors |
+| connlibGridScale | number | the internal collision grid's scale |
 | disableConnectorDrag | boolean | is the connector drag functionality disabled? |
 | endpointIndent | number | model element endpoint's indent |
 | endpointPadding | number | the endpoint's padding |
@@ -77,4 +77,10 @@ Alternatively, the static method `Connlib.render()` renders all Connlib instance
 | Method | Parameters | Return type | Description
 | --- | --- | --- | --- |
 | applyTransform | | | the method applies the current viewpoint's transform (moveX, moveY, zoom) |
+| clear | | | the method clears all rendered connlib instances |
+| createRootInstance | | | the method creates a new connlib root instance |
+| getEndpointConnectionPoint | endpoint: ConnlibEndpoint | ConnlibEndpoint | the method returns an endpoint's connection point |
+| getTypeMapEntry | namespace: string | ConnlibTypeMapEntry | the method returns a ConnlibTypeMapEntry by namespace | 
+| getInstanceByGuid | guid: string | ConnlibInstance | the method returns an Connlib instance by guid |
+| registerType | namespace: string, entry: ConnlibTypeMapEntry | | the method registers a ConnlibTypeMapEntry |
 | setUpWindowListeners | | | the method adds the window listeners for the pan & arrow key navigation (if `useConnlibPanAndKeyup == true`) and the connector drag functionality |
