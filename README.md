@@ -27,6 +27,8 @@ Alternatively, the static method `Connlib.render()` renders all Connlib instance
 
 ## the static Connlib object
 
+### properties
+
 | Property | TS type | Description |
 | --- | --- | --- |
 | connectorColor | string | the connector's and arrow colors |
@@ -38,3 +40,8 @@ Alternatively, the static method `Connlib.render()` renders all Connlib instance
 | moveStep | number | if the integrated pan functionality is activated: how many pixels should the viewpoint move on arrow key press? |
 | rootContainer | HTMLElement | the root html element |
 | rootInstance | ConnlibInstance | the Connlib root instance, available after initalization `Connlib.createRootInstance()` |
+
+### methods
+
+| Method | Parameters | Return type | Description
+| --- | --- | --- | --- |
