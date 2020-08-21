@@ -46,6 +46,7 @@ Alternatively, the static method `Connlib.render()` renders all Connlib instance
 | Property | TS type | Description |
 | --- | --- | --- |
 | connectorColor | string | the connector's and arrow colors |
+| disableConnectorDrag | boolean | is the connector drag functionality disabled? |
 | endpointIndent | number | model element endpoint's indent |
 | endpointPadding | number | the endpoint's padding |
 | instancePadding | number | the created Connlib instance's SVG padding |
@@ -55,8 +56,10 @@ Alternatively, the static method `Connlib.render()` renders all Connlib instance
 | rootContainer | HTMLElement | the root html element |
 | rootInstance | ConnlibInstance | the Connlib root instance, available after initalization `Connlib.createRootInstance()` |
 | standaloneSetup | boolean | is Connlib running in the standalone mode? |
+| useConnlibPanAndKeyup | boolean | should Connlib use it's own pan and keyup navigation? |
 
 ### methods
 
 | Method | Parameters | Return type | Description
 | --- | --- | --- | --- |
+| setUpWindowListeners | | | the method adds the window listeners for the pan & arrow key navigation (if `useConnlibPanAndKeyup == true`) and the connector drag functionality |
