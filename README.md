@@ -7,6 +7,8 @@ The repository contains Connlib, a repository for rendering connectors and model
 
 In the future, we plan to implement the following features:
 - display intersections between connectors
+- cross browser support (currently we work with Google Chrome exclusively)
+- bugfixes, especially for drag around the corner
 
 A demo is available under https://sebleich.github.io/react-connlib/ (please use with Google Chrome)
 
