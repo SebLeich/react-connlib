@@ -109,4 +109,8 @@ Within the following section, we present the predefined elements your classes ca
 
 | Name | Description | Customizable attributes |
 | --- | --- | --- |
-| ConnlibAbstractStructuralType | an abstract model element (such as a class or a scene), that is registered as a cell blocking element (Connlib recognizes such elements for collision detection) and visualized by default as a rectangular shape |- backgroundColor: string? - borderRadius: string? - borderWidth: string?|
+| ConnlibAbstractStructuralType | an abstract model element (such as a class or a scene), that is registered as a cell blocking element (Connlib recognizes such elements for collision detection) and visualized by default as a rectangular shape |<ul>
+  <li>backgroundColor: string?</li>
+  <li>borderRadius: string?</li>
+  <li>borderWidth: string?</li>
+</ul>|
