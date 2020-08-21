@@ -14,3 +14,5 @@ A demo is available under: https://sebleich.github.io/react-connlib/ (please use
 
 Connlib provides connection-shape overlap prevention. 
 Therefore, we implemented an IDA* algorithm. 
+
+![Connlib activity](./assets/activity.JPG)
