@@ -83,4 +83,22 @@ Alternatively, the static method `Connlib.render()` renders all Connlib instance
 | getTypeMapEntry | namespace: string | ConnlibTypeMapEntry | the method returns a ConnlibTypeMapEntry by namespace | 
 | getInstanceByGuid | guid: string | ConnlibInstance | the method returns an Connlib instance by guid |
 | registerType | namespace: string, entry: ConnlibTypeMapEntry | | the method registers a ConnlibTypeMapEntry |
+| renderControlBar | | | the method renders the control bar containing the options as presented in the demo version |
+| repaintEverything | | | the method repaints all Connlib instances |
+| roundToScale | point: ConnlibPoint | ConnlibPoint | the method rounds a given ConnlibPoint following the predefined scale and returns a new point with the rounded coordinates |
+| roundValueToScale | value: number | number | the method rounds a passed point following the predefined scale and returns the rounded value |
 | setUpWindowListeners | | | the method adds the window listeners for the pan & arrow key navigation (if `useConnlibPanAndKeyup == true`) and the connector drag functionality |
+| startCompletePathCalculation | connector: ConnlibConnection | | the method calculates the path of the passed connector and updates the connector's path points |
+
+### observables
+
+The observables are implemented using rxjs. 
+Thus, you can subscribe the observables by calling `subscription: Subscription = {observable}.subscribe(callback)`. 
+If you want to unsubscribe, you need to call `subscription.unsubscribe()`.
+
+| Observable | Description |
+| --- | --- |
+| scaleChangeObservable | is fired, when the grid scale changes |
+| standaloneSetupObservable | is fired, when Connlib is initialized in standalone mode |
+| viewPointChangeObservable | is fired, when the current viewpoint position changes |
+| zoomChangeObservable | is fired, when the zoom level changes |
