@@ -142,6 +142,10 @@ A Connlib instance can be understood as a kind of container that embeds a set of
 
 ### observables
 
+The observables, implemented with rxjs. 
+Thus, you can subscribe the observables by calling `subscription: Subscription = {observable}.subscribe(callback)`. 
+If you want to unsubscribe, you need to call `subscription.unsubscribe()`.
+
 | Observable | Description |
 | --- | --- |
 | deepthChangeObservable | is fired, when the instance's deepth changes |
