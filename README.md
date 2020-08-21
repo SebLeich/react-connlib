@@ -31,7 +31,10 @@ Alternatively, the static method `Connlib.render()` renders all Connlib instance
 | --- | --- | --- |
 | connectorColor | string | the connector's and arrow colors |
 | endpointIndent | number | model element endpoint's indent |
+| endpointPadding | number | the endpoint's padding |
 | instancePadding | number | the created Connlib instance's SVG padding |
+| invertMoveDirection | boolean | if the integrated pan functionality is activated: is the moving direction inverted? |
 | lineOverlayWidth | number | width of the line overlay drag handles |
+| moveStep | number | if the integrated pan functionality is activated: how many pixels should the viewpoint move on arrow key press? |
 | rootContainer | HTMLElement | the root html element |
 | rootInstance | ConnlibInstance | the Connlib root instance, available after initalization `Connlib.createRootInstance()` |
