@@ -10,6 +10,20 @@ In future, we plan to implement the following features:
 
 A demo is available under: https://sebleich.github.io/react-connlib/ (please use with Google Chrome)
 
+## getting started with Connlib
+
+Initially, developers needs to decide whether they want to setup Connlib in standalone mode and use the predefined interfaces and functionalities or as integrated library. 
+If you are not sure which mode is the best solution for your use-case follow the procedure below. 
+
+However, you need to start by listening on the DOMContentLoaded event by adding `document.addEventListener("DOMContentLoaded", callbackFunction)`.
+
+### Connlib as standalone application
+
+In that case, your `callbackFunction()` must call the function `Connlib.setUpStandalone()`. 
+Thereby, 
+
+### Connlib as integrated library
+
 ## using Connlib with a custom framework
 
 Connlib provides connection-shape overlap prevention. 
@@ -40,6 +54,7 @@ Alternatively, the static method `Connlib.render()` renders all Connlib instance
 | moveStep | number | if the integrated pan functionality is activated: how many pixels should the viewpoint move on arrow key press? |
 | rootContainer | HTMLElement | the root html element |
 | rootInstance | ConnlibInstance | the Connlib root instance, available after initalization `Connlib.createRootInstance()` |
+| standaloneSetup | boolean | is Connlib running in the standalone mode? |
 
 ### methods
 
