@@ -110,5 +110,7 @@ Within the following section, we present the predefined elements your classes ca
 | Name | Description | Customizable attributes |
 | --- | --- | --- |
 | ConnlibAbstractStructuralType | an abstract model element (such as a class or a scene), that is registered as a cell blocking element (Connlib recognizes such elements for collision detection) and visualized by default as a rectangular shape |<ul><li>backgroundColor: string?</li><li>borderRadius: string?</li><li>borderWidth: string?</li></ul>|
-| ConnlibConnection | a default connection with a source and target endpoint style and a line style | <ul><li>lineStyle: ConnlibLineStyle</li><li>sourceEndpointType: ConnlibEndpointInterface</li><li>targetEndpointType: ConnlibEndpointInterface</li></ul>
+| ConnlibConnection | a default connection with a source and target endpoint style and a line style | <ul><li>lineStyle: ConnlibLineStyle</li><li>sourceEndpointType: ConnlibEndpointInterface</li><li>targetEndpointType: ConnlibEndpointInterface</li></ul> |
+| ConnlibEndpointInterface | an endpoint type | <ul><li>fill?: string</li><li>portType?: ConnlibPortTypeOptions</li><li>arrowType?: ConnlibArrowTypeOptions;</li></ul> |
 | ConnlibEvent | a default event as known from BPMN visualized by a circle with an icon (material design icon) | <ul><li>icon: JSX.Element</li><li>borderWidth: number</li></ul> |
+| ConnlibLineStyle | a line style used by connectors | <ul><li>dashArray?: string</li><li>strokeWidth?: number</li></ul> |
