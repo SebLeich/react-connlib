@@ -33,3 +33,5 @@ Alternatively, the static method `Connlib.render()` renders all Connlib instance
 | endpointIndent | number | model element endpoint's indent |
 | instancePadding | number | the created Connlib instance's SVG padding |
 | lineOverlayWidth | number | width of the line overlay drag handles |
+| rootContainer | HTMLElement | the root html element |
+| rootInstance | ConnlibInstance | the Connlib root instance, available after initalization `Connlib.createRootInstance()` |
