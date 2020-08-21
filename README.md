@@ -15,7 +15,7 @@ A demo is available under: https://sebleich.github.io/react-connlib/ (please use
 Initially, developers needs to decide whether they want to setup Connlib in standalone mode and use the predefined interfaces and functionalities or as integrated library. 
 If you are not sure which mode is the best solution for your use-case follow the procedure below. 
 
-<img src="./assets/standalonevsintegratedconnlib.png" width="400px" />
+<img src="./assets/standalonevsintegratedconnlib.png" width="500px" />
 
 However, you need to start by listening on the DOMContentLoaded event by adding `document.addEventListener("DOMContentLoaded", callbackFunction)`.
 
@@ -39,7 +39,7 @@ Afterwards, the Connlib root instance can be accessed by calling `Connlib.rootIn
 Finally, all created Connlib istances should be rendered by calling the instance's method `instance.render()`. 
 Alternatively, the static method `Connlib.render()` renders all Connlib instances. 
 
-![Connlib activity](./assets/activity.JPG)
+<img src="./assets/activity.JPG" width="500px" />
 
 ## the static Connlib object
 
