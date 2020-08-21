@@ -92,7 +92,7 @@ Alternatively, the static method `Connlib.render()` renders all Connlib instance
 
 ### observables
 
-The observables are implemented using rxjs. 
+The observables, implemented with rxjs. 
 Thus, you can subscribe the observables by calling `subscription: Subscription = {observable}.subscribe(callback)`. 
 If you want to unsubscribe, you need to call `subscription.unsubscribe()`.
 
