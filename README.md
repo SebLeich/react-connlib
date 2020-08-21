@@ -22,7 +22,7 @@ However, you need to start by listening on the DOMContentLoaded event by adding 
 ### Connlib as standalone application
 
 In that case, your `callbackFunction()` must call the function `Connlib.setUpStandalone()`. 
-Thereby, Connlib is proceeding with the following tasks:
+Thereby, Connlib is proceeding the following tasks:
 - using integrated pan functionality (+ setting the listeners)
 - enabling the integrated model element rendering
 - calling the standalone setup observable
