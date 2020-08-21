@@ -85,7 +85,7 @@ Alternatively, the static method `Connlib.render()` renders all Connlib instance
 | getTypeMapEntry | namespace: string | ConnlibTypeMapEntry | the method returns a ConnlibTypeMapEntry by namespace | 
 | getInstanceByGuid | guid: string | ConnlibInstance | the method returns an Connlib instance by guid |
 | registerType | namespace: string, entry: ConnlibTypeMapEntry | | the method registers a ConnlibTypeMapEntry |
-| render | | the method renders all Connlib instances | 
+| render | | | the method renders all Connlib instances | 
 | renderControlBar | | | the method renders the control bar containing the options as presented in the demo version |
 | repaintEverything | | | the method repaints all Connlib instances |
 | roundToScale | point: ConnlibPoint | ConnlibPoint | the method rounds a given ConnlibPoint following the predefined scale and returns a new point with the rounded coordinates |
