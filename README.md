@@ -102,3 +102,15 @@ If you want to unsubscribe, you need to call `subscription.unsubscribe()`.
 | standaloneSetupObservable | is fired, when Connlib is initialized in standalone mode |
 | viewPointChangeObservable | is fired, when the current viewpoint position changes |
 | zoomChangeObservable | is fired, when the zoom level changes |
+
+## predefined model elements
+
+Within the following section, we present the predefined elements your classes can inherit from.
+
+| Name | Description | Customizable attributes |
+| --- | --- | --- |
+| ConnlibAbstractStructuralType | an abstract model element (such as a class or a scene), that is registered as a cell blocking element (Connlib recognizes such elements for collision detection) and visualized by default as a rectangular shape |
+- backgroundColor: string?
+- borderRadius: string?
+- borderWidth: string?
+|
