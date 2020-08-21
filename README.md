@@ -29,4 +29,7 @@ Alternatively, the static method `Connlib.render()` renders all Connlib instance
 
 | Property | TS type | Description |
 | --- | --- | --- |
-| instancePadding | number | the created SVG 
+| connectorColor | string | the connector's and arrow colors |
+| endpointIndent | number | model element endpoint's indent |
+| instancePadding | number | the created Connlib instance's SVG padding |
+| lineOverlayWidth | number | width of the line overlay drag handles |
