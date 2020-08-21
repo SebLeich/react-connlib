@@ -110,3 +110,4 @@ Within the following section, we present the predefined elements your classes ca
 | Name | Description | Customizable attributes |
 | --- | --- | --- |
 | ConnlibAbstractStructuralType | an abstract model element (such as a class or a scene), that is registered as a cell blocking element (Connlib recognizes such elements for collision detection) and visualized by default as a rectangular shape |<ul><li>backgroundColor: string?</li><li>borderRadius: string?</li><li>borderWidth: string?</li></ul>|
+| ConnlibEvent | a default event as known from BPMN visualized by a circle with an icon (material design icon) | <ul><li>icon: JSX.Element</li><li>borderWidth: number</li></ul> |
