@@ -74,7 +74,7 @@ Alternatively, the static method `Connlib.render()` renders all Connlib instance
 
 ### methods
 
-| Method | Parameters | Return type | Description
+| Method | Parameters | Return type | Description |
 | --- | --- | --- | --- |
 | applyTransform | | | the method applies the current viewpoint's transform (moveX, moveY, zoom) |
 | clear | | | the method clears all rendered connlib instances |
@@ -123,10 +123,28 @@ A Connlib instance can be understood as a kind of container that embeds a set of
 ### methods
 
 
+| Method | Parameters | Return type | Description |
+| --- | --- | --- | --- |
+| containsElement | elementId: number | boolean | returns whether the Connlib instance contains the element with the passed foreign identifier |
+| registerConnector | connector: ConnlibConnection | | the method registers a new connector |
+| registerElement | element: HTMLElement, elementId: number | | registers a html element at the Connlib instance |
+| registerEndpoint | point: ConnlibEndpoint | | the method registers a new endpoint |
+| registerLine | line: ConnlibLine | | the method registers a new line at the current instance with the passed identifier |
+| remove | | | the method removes the current instance and the DOM representation |
+| removeEndpoint | endpoint: ConnlibEndpoint | boolean | the method removes an endpoint from the instance |
+| removeLine | line: ConnlibLine | boolean | the method removes a line from the Connlib instance |
+| render | | | the method renders the current instance |
+| setContainer | element: HTMLElement | | the method sets the Connlib instance's root container |
+| toggleBlockedCells | | | the method hides all rendered elements and shows the blocked cells |
+| updateGrid | | | the method updates the internal grid and sets the blocking state for all cells |
 
 ### observables
 
-
+| Observable | Description |
+| --- | --- |
+| deepthChangeObservable | is fired, when the instance's deepth changes |
+| gridChangeObservable | is fired, when the instance's internal grid changes |
+| renderedObservable | is fired, when the instance's is rendered or removed |
 
 ## predefined model elements
 
