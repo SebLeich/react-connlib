@@ -12,8 +12,8 @@ A demo is available under: https://sebleich.github.io/react-connlib/ (please use
 
 ## getting started with Connlib
 
-Initially, developers needs to decide whether they want to setup Connlib in standalone mode and use the predefined interfaces and functionalities or as integrated library. 
-If you are not sure which mode is the best solution for your use-case follow the instruction below. 
+Initially, you need to decide whether you want to setup Connlib in standalone mode and use the predefined interfaces and functionalities or as integrated library. 
+If you are not sure which mode is the best solution for your use-case, follow the instruction below. 
 
 <img src="./assets/standalonevsintegratedconnlib.png" width="500px" />
 
@@ -23,12 +23,11 @@ However, you need to start by listening on the DOMContentLoaded event by adding 
 
 In that case, your `callbackFunction()` must call the function `Connlib.setUpStandalone()`. 
 Thereby, Connlib is proceeding with the following tasks:
-- remember the standalone mode
 - using integrated pan functionality (+ setting the listeners)
 - enabling the integrated model element rendering
 - calling the standalone setup observable
 
-Before a developer calls the `Connlib.setUpStandalone()` method, you need to listen to the `Connlib.standaloneSetupObservable` by adding the following command:
+Before your code calls the `Connlib.setUpStandalone()` method, you need to listen to the `Connlib.standaloneSetupObservable` by adding the following command:
 
 `Connlib.standaloneSetupObservable.subscribe(onSettedUpHandle)`
 
@@ -46,7 +45,7 @@ By default, Connlib searches for a root element (a div HTML element) with the id
 Developers can change the root container by overwriting the public property `rootContainer` at the static `Connlib` object. 
 Therefore, we recommend to use the JavaScript call `Connlib.rootContainer = document.getElementById('fooContainer')`. 
 Afterwards, the Connlib root instance can be accessed by calling `Connlib.rootInstance`. 
-Finally, all created Connlib istances should be rendered by calling the instance's method `instance.render()`. 
+Finally, all created Connlib instances should be rendered by calling the instance's method `instance.render()`. 
 Alternatively, the static method `Connlib.render()` renders all Connlib instances. 
 
 <img src="./assets/activity.JPG" width="500px" />
@@ -65,13 +64,17 @@ Alternatively, the static method `Connlib.render()` renders all Connlib instance
 | invertMoveDirection | boolean | if the integrated pan functionality is activated: is the moving direction inverted? |
 | lineOverlayWidth | number | width of the line overlay drag handles |
 | moveStep | number | if the integrated pan functionality is activated: how many pixels should the viewpoint move on arrow key press? |
+| moveX | number | the current viewpoint's x-transform value |
+| moveY | number | the current viewpoint's y-transform value |
 | rootContainer | HTMLElement | the root html element |
 | rootInstance | ConnlibInstance | the Connlib root instance, available after initalization `Connlib.createRootInstance()` |
 | standaloneSetup | boolean | is Connlib running in the standalone mode? |
 | useConnlibPanAndKeyup | boolean | should Connlib use it's own pan and keyup navigation? |
+| zoom | number | the current viewpoint's zoom level |
 
 ### methods
 
 | Method | Parameters | Return type | Description
 | --- | --- | --- | --- |
+| applyTransform | | | the method applies the current viewpoint's transform (moveX, moveY, zoom) |
 | setUpWindowListeners | | | the method adds the window listeners for the pan & arrow key navigation (if `useConnlibPanAndKeyup == true`) and the connector drag functionality |
