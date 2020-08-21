@@ -13,7 +13,7 @@ A demo is available under: https://sebleich.github.io/react-connlib/ (please use
 ## getting started with Connlib
 
 Initially, developers needs to decide whether they want to setup Connlib in standalone mode and use the predefined interfaces and functionalities or as integrated library. 
-If you are not sure which mode is the best solution for your use-case follow the procedure below. 
+If you are not sure which mode is the best solution for your use-case follow the instruction below. 
 
 <img src="./assets/standalonevsintegratedconnlib.png" width="500px" />
 
