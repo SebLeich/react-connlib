@@ -671,8 +671,10 @@ export class Connlib {
      * 
      */
     static instancePadding = 200;
+    static disableConnectorDrag = false;
     static windowListenersSettedUp = false;
     static useOverlapDetection = true;
+    static useConnlibPanAndKeyup = true;
     static blockingClassName = "connlib-connection-blocked";
     static connectableClassName = "connlib-connectable";
     static endpointStack = 15;
@@ -686,13 +688,8 @@ export class Connlib {
         return size * 1.5;
     }
     static endpointPadding: number = 5;
-
-    static elementDOMElementMapLambda = (conatiner: HTMLElement, elementId: number) => {
-        return conatiner.querySelector("[data-id='" + elementId + "']");
-    };
     static overwriteConnectionOnValidation = true;
     static moveStep = 50; // the step size of the window move events
-    static endpointCopyTolerance = 20; // how far should endpoints be distanced until the library creates a new endpoint?
     static invertMoveDirection = false;
     // should connlib render components at the dom?
     static renderComponents = false;
@@ -972,6 +969,12 @@ export class Connlib {
         ConnlibTypeMap[namespace] = entry;
     }
     /**
+     * the method renders all Connlib instances
+     */
+    public static render(){
+        for(let index in this.instances) this.instances[index].render();
+    }
+    /**
      * the method redraws all connlib instances
      */
     public static repaintEverything() {
@@ -999,6 +1002,7 @@ export class Connlib {
      */
     public static setUpStandalone() {
         this.standaloneSetup = true;
+        this.useConnlibPanAndKeyup = true;
         this.renderComponents = true;
         this.renderControlBar();
         this.setUpWindowListeners();
@@ -1023,27 +1027,29 @@ export class Connlib {
      */
     public static setUpWindowListeners() {
         // arrow keys for pan
-        window.addEventListener("keyup", (event) => {
-            switch (event.keyCode) {
-                case 37:
-                    if (this.invertMoveDirection) this.moveX -= this.moveStep;
-                    this.moveX += this.moveStep;
-                    break;
-                case 38:
-                    if (this.invertMoveDirection) this.moveY -= this.moveStep;
-                    this.moveY += this.moveStep;
-                    break;
-                case 39:
-                    if (this.invertMoveDirection) this.moveX += this.moveStep;
-                    this.moveX -= this.moveStep;
-                    break;
-                case 40:
-                    if (this.invertMoveDirection) this.moveY += this.moveStep;
-                    this.moveY -= this.moveStep;
-                    break;
-            }
-            this.applyTransform();
-        });
+        if(this.useConnlibPanAndKeyup){
+            window.addEventListener("keyup", (event) => {
+                switch (event.keyCode) {
+                    case 37:
+                        if (this.invertMoveDirection) this.moveX -= this.moveStep;
+                        else this.moveX += this.moveStep;
+                        break;
+                    case 38:
+                        if (this.invertMoveDirection) this.moveY -= this.moveStep;
+                        else this.moveY += this.moveStep;
+                        break;
+                    case 39:
+                        if (this.invertMoveDirection) this.moveX += this.moveStep;
+                        else this.moveX -= this.moveStep;
+                        break;
+                    case 40:
+                        if (this.invertMoveDirection) this.moveY += this.moveStep;
+                        else this.moveY -= this.moveStep;
+                        break;
+                }
+                this.applyTransform();
+            });
+        }
         window.addEventListener("mousedown", (event) => {
             if (this.dragFlag == null) {
                 event.preventDefault();
@@ -1051,7 +1057,7 @@ export class Connlib {
                 if ((event.target as HTMLElement).classList.contains("connlib-connectable")) {
                     let c = ConnlibExtensions.cumulativeOffset(event.target as HTMLElement);
                     this.dragFlag = new ConnlibConnectionCreateWrapper((c.left + event.offsetX), (c.top + event.offsetY), (event.target as HTMLElement));
-                } else {
+                } else if(this.useConnlibPanAndKeyup) {
                     this.dragFlag = new ConnlibPanWrapper(event.clientX, event.clientY, Connlib.moveX, Connlib.moveY);
                 }
             }
@@ -1062,6 +1068,7 @@ export class Connlib {
             let corr = { left: event.offsetX + c.left, top: event.offsetY + c.top };
             switch (this.dragFlag.constructor) {
                 case ConnlibLine:
+                    if(Connlib.disableConnectorDrag) return;
                     var line = (this.dragFlag as ConnlibLine);
                     let diffX = corr.left - line.connlibInstance.layer.left - line.sL;
                     let diffY = corr.top - line.connlibInstance.layer.top - line.sT;
@@ -1190,6 +1197,7 @@ export class Connlib {
                     }
                     break;
                 case ConnlibEndpoint:
+                    if(Connlib.disableConnectorDrag) return;
                     var endpoint = this.dragFlag as ConnlibEndpoint;
                     switch (endpoint.direction) {
                         case ConnlibDirection.TOP:
@@ -1344,6 +1352,7 @@ export class Connlib {
     // static observables afterwards
     public static scaleChangeObservable: Subject<number> = new Subject();
     public static standaloneSetupObservable: Subject<any> = new Subject();
+    public static viewPointChangeObservable: Subject<any> = new Subject();
     public static zoomChangeObservable: Subject<number> = new Subject();
 }
 /**
@@ -3391,7 +3400,12 @@ const ConnlibPortType = {
         portBorderColor: Connlib.connectorColor,
         portBorderWidth: 1,
         portColor: "white"
-    }
+    } as ConnlibPortTypeOptions,
+    "FilledPort": {
+        portBorderColor: Connlib.connectorColor,
+        portBorderWidth: 1,
+        portColor: Connlib.connectorColor
+    } as ConnlibPortTypeOptions
 }
 class ConnlibArrowTypeOptions {
     id: number;
@@ -3586,7 +3600,7 @@ export class ConnlibPortInheritanceEndpoint implements ConnlibEndpointInterface 
     width: number = Connlib.endpointSize;
     height: number = Connlib.endpointHeightFormula(Connlib.endpointSize);
     arrowType: ConnlibArrowTypeOptions = ConnlibArrowType.Inheritance;
-    portType: ConnlibPortTypeOptions = ConnlibPortType.Default;
+    portType: ConnlibPortTypeOptions = ConnlibPortType.FilledPort;
 }
 /**
  * a default relation with a port
@@ -3594,7 +3608,7 @@ export class ConnlibPortInheritanceEndpoint implements ConnlibEndpointInterface 
 export class ConnlibPortRelationshipEndpoint implements ConnlibEndpointInterface {
     width: number = Connlib.endpointSize;
     height: number = Connlib.endpointHeightFormula(Connlib.endpointSize);
-    portType: ConnlibPortTypeOptions = ConnlibPortType.Default;
+    portType: ConnlibPortTypeOptions = ConnlibPortType.FilledPort;
 }
 
 export class ConnlibDefaultLineStyle implements ConnlibLineStyle {

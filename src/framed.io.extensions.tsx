@@ -88,7 +88,7 @@ export class FramedIoEvent extends ConnlibEvent {
     }
 }
 
-export class FramedIoInheritance {
+export class FramedIoInheritance extends FramedIoAbstractRelationship {
     id: number;
     sourceId: number;
     targetId: number;
