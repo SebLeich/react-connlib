@@ -15,14 +15,18 @@ A demo is available under: https://sebleich.github.io/react-connlib/ (please use
 Connlib provides connection-shape overlap prevention. 
 Therefore, we implemented an IDA* algorithm. 
 The recommended flow is represented within the activity diagram below. 
-Initially, a new Connlib instance should be initialized by calling 
-
-`Connlib.createRootInstance()`. 
+Initially, a new Connlib instance should be initialized by calling `Connlib.createRootInstance()`. 
 By default, Connlib searches for a root element (a div HTML element) with the identifer `id = 'root'`. 
 Developers can change the root container by overwriting the public property `rootContainer` at the static `Connlib` object. 
-Therefore, we recommend to use the JavaScript call 
-
-`Connlib.rootContainer = document.getElementById('fooContainer')`. 
+Therefore, we recommend to use the JavaScript call `Connlib.rootContainer = document.getElementById('fooContainer')`. 
 Afterwards, the Connlib root instance can be accessed by calling `Connlib.rootInstance`. 
+Finally, all created Connlib istances should be rendered by calling the instance's method `instance.render()`. 
+Alternatively, the static method `Connlib.render()` renders all Connlib instances. 
 
 ![Connlib activity](./assets/activity.JPG)
+
+## the static Connlib object
+
+| Property | TS type | Description |
+| --- | --- | --- |
+| instancePadding | number | the created SVG 
