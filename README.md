@@ -113,4 +113,3 @@ Within the following section, we present the predefined elements your classes ca
 | ConnlibConnection | a default connection with a source and target endpoint style and a line style | <ul><li>lineStyle: ConnlibLineStyle</li><li>sourceEndpointType: ConnlibEndpointInterface</li><li>targetEndpointType: ConnlibEndpointInterface</li></ul> |
 | ConnlibEndpointInterface | an endpoint type | <ul><li>fill?: string</li><li>portType?: ConnlibPortTypeOptions</li><li>arrowType?: ConnlibArrowTypeOptions;</li></ul> |
 | ConnlibEvent | a default event as known from BPMN visualized by a circle with an icon (material design icon) | <ul><li>icon: JSX.Element</li><li>borderWidth: number</li></ul> |
-| ConnlibLineStyle | a line style used by connectors | <ul><li>dashArray?: string</li><li>strokeWidth?: number</li></ul> |
